@@ -21,6 +21,9 @@ namespace RenGageAPI
 			case Severity::Info:
 				return "Info : ";
 
+			case Severity::Error:
+				return "Error : ";
+
 			case Severity::Warning:
 				return "Warning : ";
 
@@ -46,7 +49,7 @@ namespace RenGageAPI
 			}
 
 			//TODO: Write function that logs messages to file 
-			//ex) write to file at path "$(executable dir)/logs/RenGageAPI.log"
+			//ex) write to file at path "$(current directory)/logs/RenGageAPI.log"
 		};
 	}
 }
