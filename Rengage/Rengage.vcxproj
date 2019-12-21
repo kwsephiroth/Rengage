@@ -136,6 +136,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\RenGage\Logger.h" />
     <ClInclude Include="include\RenGage\Model.h" />
   </ItemGroup>
   <ItemGroup>
