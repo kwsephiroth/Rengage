@@ -136,15 +136,23 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\RenGage\Light.h" />
     <ClInclude Include="include\RenGage\Logger.h" />
     <ClInclude Include="include\RenGage\Model.h" />
     <ClInclude Include="include\RenGage\ModelLoader.h" />
+    <ClInclude Include="include\RenGage\Shader.h" />
+    <ClInclude Include="include\RenGage\ShaderLoader.h" />
     <ClInclude Include="include\RenGage\Texture.h" />
+    <ClInclude Include="include\RenGage\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ModelLoader.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\ShaderLoader.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
