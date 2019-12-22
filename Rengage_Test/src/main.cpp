@@ -3,7 +3,7 @@
 int main()
 {
 	{
-		RenGageAPI::Model m;
+		RenGageAPI::Objects::Model m;
 	}
 	std::cin.get();
 	return 0;
