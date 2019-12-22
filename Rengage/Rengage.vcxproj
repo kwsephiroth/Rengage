@@ -138,9 +138,13 @@
   <ItemGroup>
     <ClInclude Include="include\RenGage\Logger.h" />
     <ClInclude Include="include\RenGage\Model.h" />
+    <ClInclude Include="include\RenGage\ModelLoader.h" />
+    <ClInclude Include="include\RenGage\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ModelLoader.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

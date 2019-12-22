@@ -7,6 +7,7 @@
 //#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 //#include <SOIL2/soil2.h>
 //#include <iostream>
+#include <RenGage\Logger.h>
 
 namespace RenGageAPI
 {

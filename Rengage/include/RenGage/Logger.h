@@ -1,4 +1,5 @@
 #pragma once
+#include <GL/glew.h>
 #include <iostream>
 #include <string>
 
@@ -14,7 +15,7 @@ namespace RenGageAPI
 			Critical
 		};
 
-		std::string GetSeverityStr(const Severity severity)
+		static std::string GetSeverityStr(const Severity severity)
 		{
 			switch (severity)
 			{
@@ -43,13 +44,16 @@ namespace RenGageAPI
 		public:
 			~Logger() = default;
 
-			static void WriteMessageToConsole(const std::string& msg, const Severity severity = Severity::Info)
+			static void WriteMessageToConsole(const std::string& msg, const Severity severity = Severity::Info)//, const char* file = "", const int line = 0)
 			{
+				//std::cout << file << " : line(" << line << ") : " << GetSeverityStr(severity) << msg << std::endl;
 				std::cout << GetSeverityStr(severity) << msg << std::endl;
 			}
 
 			//TODO: Write function that logs messages to file 
 			//ex) write to file at path "$(current directory)/logs/RenGageAPI.log"
 		};
+
+		//#define	LOG_TO_CONSOLE( message, severity ) Logger::WriteMessageToConsole(message, severity, __FILE__, __LINE__)
 	}
 }
