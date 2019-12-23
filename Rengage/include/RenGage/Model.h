@@ -12,10 +12,10 @@
 #include <glm/mat4x4.hpp>
 #include <RenGage\Logger.h>
 
+namespace RenGageAPI { namespace Utilities{ class ModelLoader; } }
+
 namespace RenGageAPI
 {
-	namespace Utilities{class ModelLoader;}
-
 	namespace Objects
 	{
 		class Model
@@ -39,7 +39,7 @@ namespace RenGageAPI
 			bool IsSmoothed() const { return m_smoothed; }
 			bool IsInitialized() const { return m_initialized; }
 			
-			friend class Utilities::ModelLoader;
+			friend class RenGageAPI::Utilities::ModelLoader;
 		};
 	}
 }

@@ -12,7 +12,7 @@ namespace RenGageAPI
 			{
 				if (line[i] == delimiter)
 				{
-					++j;
+					//++j;
 					//std::cout << "Segment [" << j << "] : " << segment << std::endl;
 					destination.push(segment);
 					segment.clear();
@@ -298,12 +298,11 @@ namespace RenGageAPI
 			if (!modelFileStream.good())
 			{
 				std::cout << "ERROR: Failed to open file at path '" << modelFilePath << "'" << std::endl;
-				loadedModel.m_initialized = false;
+				return nullptr;
 			}
 			else
 			{
-
-				int i = 1;
+				//int i = 1;
 				std::string line;
 				Vec3 tempPositions;
 				Vec2 tempTexCoords;
@@ -323,132 +322,132 @@ namespace RenGageAPI
 
 					switch (lineTag)
 					{
-						/*case Tag::ObjectName:
-						{
-							if (!lineSegments.empty())
+							/*case Tag::ObjectName:
 							{
-								loadedModel.m_name = lineSegments.front();
-								lineSegments.pop();
+								if (!lineSegments.empty())
+								{
+									loadedModel.m_name = lineSegments.front();
+									lineSegments.pop();
+								}
+								//else
+								//{
+									//TODO: Assign a default object name based on the model file name.
+								//}
 							}
-							//else
-							//{
-								//TODO: Assign a default object name based on the model file name.
-							//}
-						}
-						break;*/
+							break;*/
 
-					case Tag::Vertex:
-					{
-						try
+						case Tag::Vertex:
 						{
-							if (lineSegments.empty() || lineSegments.size() < 3)
+							try
 							{
-								//TODO: Log error and return nullptr?
-								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
-								return nullptr;
+								if (lineSegments.empty() || lineSegments.size() < 3)
+								{
+									//TODO: Log error and return nullptr?
+									std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+									return nullptr;
+								}
+
+								StoreVertexLocation(lineSegments, tempPositions);
+
+								if (tempPositions.empty())
+								{
+									return nullptr;
+								}
 							}
-
-							StoreVertexLocation(lineSegments, tempPositions);
-
-							if (tempPositions.empty())
+							catch (std::exception e)
 							{
-								return nullptr;
-							}
-						}
-						catch (std::exception e)
-						{
-							std::cout << "ERROR: Failed to store model vertex: " << e.what() << std::endl;
-							return nullptr;
-						}
-					}
-					break;
-
-					case Tag::TextureCoordinate:
-					{
-						try
-						{
-							if (lineSegments.empty() || lineSegments.size() < 3)
-							{
-								//TODO: Log error and return nullptr?
-								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
-								return nullptr;
-							}
-
-							StoreTextureCoordinate(lineSegments, tempTexCoords);
-							if (tempTexCoords.empty())
-							{
+								std::cout << "ERROR: Failed to store model vertex: " << e.what() << std::endl;
 								return nullptr;
 							}
 						}
-						catch (std::exception e)
-						{
-							std::cout << "ERROR: Failed to store model texture coordinate: " << e.what() << std::endl;
-							return nullptr;
-						}
-					}
-					break;
+						break;
 
-					case Tag::VertexNormal:
-					{
-						try
+						case Tag::TextureCoordinate:
 						{
-							if (lineSegments.empty() || lineSegments.size() < 3)
+							try
 							{
-								//TODO: Log error and return nullptr?
-								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+								if (lineSegments.empty() || lineSegments.size() < 3)
+								{
+									//TODO: Log error and return nullptr?
+									std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+									return nullptr;
+								}
+
+								StoreTextureCoordinate(lineSegments, tempTexCoords);
+								if (tempTexCoords.empty())
+								{
+									return nullptr;
+								}
+							}
+							catch (std::exception e)
+							{
+								std::cout << "ERROR: Failed to store model texture coordinate: " << e.what() << std::endl;
 								return nullptr;
 							}
+						}
+						break;
 
-							StoreVertexNormal(lineSegments, tempNormals);
-							if (tempNormals.empty())
+						case Tag::VertexNormal:
+						{
+							try
 							{
+								if (lineSegments.empty() || lineSegments.size() < 3)
+								{
+									//TODO: Log error and return nullptr?
+									std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+									return nullptr;
+								}
+
+								StoreVertexNormal(lineSegments, tempNormals);
+								if (tempNormals.empty())
+								{
+									return nullptr;
+								}
+							}
+							catch (std::exception e)
+							{
+								std::cout << "ERROR: Failed to store model vertex normal: " << e.what() << std::endl;
 								return nullptr;
 							}
 						}
-						catch (std::exception e)
+						break;
+
+						case Tag::Face:
 						{
-							std::cout << "ERROR: Failed to store model vertex normal: " << e.what() << std::endl;
-							return nullptr;
+							try
+							{
+								++numFaces;
+								StoreFace(lineSegments, loadedModel, tempPositions, tempTexCoords, tempNormals);
+							}
+							catch (std::exception e)
+							{
+								std::cout << "ERROR: Failed to store model face: " << e.what() << std::endl;
+								return nullptr;
+							}
 						}
-					}
-					break;
+						break;
 
-					case Tag::Face:
-					{
-						try
+						case Tag::Smoothed:
 						{
-							++numFaces;
-							StoreFace(lineSegments, loadedModel, tempPositions, tempTexCoords, tempNormals);
+							if (lineSegments.front() == "on")
+								loadedModel.m_smoothed = true;
+							else
+								loadedModel.m_smoothed = false;
+
+							lineSegments.pop();
 						}
-						catch (std::exception e)
+						break;
+
+						default:
 						{
-							std::cout << "ERROR: Failed to store model face: " << e.what() << std::endl;
-							return nullptr;
+							//std::cout << "Ignoring the following line:\n" << line << std::endl;
+							//std::cout << "lineTag = " << (unsigned short)lineTag << std::endl;
+							//std::cout << "lineTagString = \"" << lineTagString << "\"" << std::endl << std::endl;
 						}
-					}
-					break;
-
-					case Tag::Smoothed:
-					{
-						if (lineSegments.front() == "off")
-							loadedModel.m_smoothed = false;
-						else
-							loadedModel.m_smoothed = true;
-
-						lineSegments.pop();
-					}
-					break;
-
-					default:
-					{
-						//std::cout << "Ignoring the following line:\n" << line << std::endl;
-						//std::cout << "lineTag = " << (unsigned short)lineTag << std::endl;
-						//std::cout << "lineTagString = \"" << lineTagString << "\"" << std::endl << std::endl;
-					}
-					break;
+						break;
 					}
 
-					++i;
+					//++i;
 				}
 			}
 
