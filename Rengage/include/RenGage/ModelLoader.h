@@ -4,17 +4,16 @@
 #include <string>
 #include <queue>
 #include <memory>
-#include <SOIL2/soil2.h>
-#include <glm/vec2.hpp> 
-#include <glm/vec3.hpp>
-#include <RenGage/Model.h>
+#include <SOIL2\soil2.h>
+#include <glm\vec2.hpp> 
+#include <glm\vec3.hpp>
+#include <RenGage\Model.h>
+#include <RenGage\Logger.h>
 
 namespace RenGageAPI
 {
 	namespace Utilities
 	{
-		//using namespace RenGageAPI::Objects;
-
 		enum class Tag
 		{
 			None,
@@ -45,7 +44,7 @@ namespace RenGageAPI
 			static void StoreTextureCoordinate(std::queue<std::string>&, Vec2&);
 			static void StoreVertexNormal(std::queue<std::string>&, Vec3&);
 			static void StoreFace(std::queue<std::string>&, RenGageAPI::Objects::Model&, const Vec3&, const Vec2&, const Vec3&);
-			static void LoadTexture(const char *, RenGageAPI::Objects::Model&);
+			//static void LoadTexture(const char *, RenGageAPI::Objects::Model&);
 
 			ModelLoader(void);
 		public:

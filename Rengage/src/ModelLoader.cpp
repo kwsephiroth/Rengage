@@ -1,4 +1,4 @@
-#include <RenGage/ModelLoader.h>
+#include <RenGage\ModelLoader.h>
 
 namespace RenGageAPI
 {
@@ -79,16 +79,9 @@ namespace RenGageAPI
 
 		void ModelLoader::StoreVertexLocation(std::queue<std::string>& vertexSegments, Vec3& positionDest)
 		{
-			if (vertexSegments.empty())
+			if (vertexSegments.empty() || vertexSegments.size() < 3)
 			{
-				//destinationModel.m_initialized = false;
-				return;
-			}
-
-			if (vertexSegments.size() != 3)
-			{
-				std::cout << "ERROR: Failed to store model vertex : Exactly three components expected." << std::endl;
-				//destinationModel.m_initialized = false;
+				std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
 				return;
 			}
 
@@ -154,16 +147,9 @@ namespace RenGageAPI
 
 		void ModelLoader::StoreVertexNormal(std::queue<std::string>& vertexNormalSegments, Vec3& normalDest)
 		{
-			if (vertexNormalSegments.empty())
+			if (vertexNormalSegments.empty() || vertexNormalSegments.size() < 3)
 			{
-				//destinationModel.m_initialized = false;
-				return;
-			}
-
-			if (vertexNormalSegments.size() != 3)
-			{
-				std::cout << "ERROR: Failed to store model vertex normal: Exactly three components expected." << std::endl;
-				//destinationModel.m_initialized = false;
+				std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
 				return;
 			}
 
@@ -194,13 +180,9 @@ namespace RenGageAPI
 
 		void ModelLoader::StoreFace(std::queue<std::string>& faceSegments, RenGageAPI::Objects::Model & destinationModel, const Vec3& positions, const Vec2& textureCoords, const Vec3& normals)
 		{
-			if (faceSegments.empty())
-				return;
-
-			if (faceSegments.size() < 3)
+			if (faceSegments.empty() || faceSegments.size() < 3)
 			{
 				std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
-				//destinationModel.m_initialized = false;
 				return;
 			}
 
@@ -307,7 +289,6 @@ namespace RenGageAPI
 
 			std::unique_ptr<RenGageAPI::Objects::Model> loadedModelPtr(new RenGageAPI::Objects::Model());//Allocate blank Model on heap first
 			auto& loadedModel = *loadedModelPtr;
-			loadedModel.m_initialized = true;
 			loadedModel.m_name = modelName;
 			//loadedModel.m_initialWorldPosition = initalWorldPosition;
 
@@ -360,12 +341,23 @@ namespace RenGageAPI
 					{
 						try
 						{
+							if (lineSegments.empty() || lineSegments.size() < 3)
+							{
+								//TODO: Log error and return nullptr?
+								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+								return nullptr;
+							}
+
 							StoreVertexLocation(lineSegments, tempPositions);
+
+							if (tempPositions.empty())
+							{
+								return nullptr;
+							}
 						}
 						catch (std::exception e)
 						{
 							std::cout << "ERROR: Failed to store model vertex: " << e.what() << std::endl;
-							loadedModel.m_initialized = false;
 							return nullptr;
 						}
 					}
@@ -375,12 +367,22 @@ namespace RenGageAPI
 					{
 						try
 						{
+							if (lineSegments.empty() || lineSegments.size() < 3)
+							{
+								//TODO: Log error and return nullptr?
+								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+								return nullptr;
+							}
+
 							StoreTextureCoordinate(lineSegments, tempTexCoords);
+							if (tempTexCoords.empty())
+							{
+								return nullptr;
+							}
 						}
 						catch (std::exception e)
 						{
 							std::cout << "ERROR: Failed to store model texture coordinate: " << e.what() << std::endl;
-							loadedModel.m_initialized = false;
 							return nullptr;
 						}
 					}
@@ -390,12 +392,22 @@ namespace RenGageAPI
 					{
 						try
 						{
+							if (lineSegments.empty() || lineSegments.size() < 3)
+							{
+								//TODO: Log error and return nullptr?
+								std::cout << "ERROR: Failed to store model face: At least three components expected." << std::endl;
+								return nullptr;
+							}
+
 							StoreVertexNormal(lineSegments, tempNormals);
+							if (tempNormals.empty())
+							{
+								return nullptr;
+							}
 						}
 						catch (std::exception e)
 						{
 							std::cout << "ERROR: Failed to store model vertex normal: " << e.what() << std::endl;
-							loadedModel.m_initialized = false;
 							return nullptr;
 						}
 					}
@@ -411,7 +423,6 @@ namespace RenGageAPI
 						catch (std::exception e)
 						{
 							std::cout << "ERROR: Failed to store model face: " << e.what() << std::endl;
-							loadedModel.m_initialized = false;
 							return nullptr;
 						}
 					}
@@ -446,28 +457,26 @@ namespace RenGageAPI
 				//TODO: Assign a default object name based on the model file name.
 			//}
 
-			if (!textureFilePath.empty())
-			{
+			//if (!textureFilePath.empty())
+			//{
 				//Attempt to load texture
-				LoadTexture(textureFilePath.c_str(), loadedModel);
-			}
+				//LoadTexture(textureFilePath.c_str(), loadedModel);
+			//}
 
-			if (loadedModel.IsInitialized())
-			{
-				//loadedModel.SetupVBOs();
-				//loadedModel.InitializeModelMatrix();
 
-				std::cout << "Model Name: " << loadedModel.m_name << std::endl;
-				std::cout << "Number of positions: " << loadedModel.m_positions.size() << std::endl;
-				std::cout << "Number of texture coordinates: " << loadedModel.m_textureCoords.size() << std::endl;
-				std::cout << "Number of normals: " << loadedModel.m_normals.size() << std::endl;
-				std::cout << "Number of faces: " << numFaces << std::endl;
-				std::cout << "Number of vertices: " << loadedModel.GetNumberOfVertices() << std::endl;
-				std::cout << "ModelLoader::LoadModelFromOBJFile - Model loaded complete." << std::endl;
-				return loadedModelPtr;
-			}
+			//loadedModel.SetupVBOs();
+			//loadedModel.InitializeModelMatrix();
 
-			return nullptr;
+			std::cout << "Model Name: " << loadedModel.m_name << std::endl;
+			std::cout << "Number of positions: " << loadedModel.m_positions.size() << std::endl;
+			std::cout << "Number of texture coordinates: " << loadedModel.m_textureCoords.size() << std::endl;
+			std::cout << "Number of normals: " << loadedModel.m_normals.size() << std::endl;
+			std::cout << "Number of faces: " << numFaces << std::endl;
+			std::cout << "Number of vertices: " << loadedModel.GetNumberOfVertices() << std::endl;
+			std::cout << "ModelLoader::LoadModelFromOBJFile - Model loaded complete." << std::endl;
+			loadedModel.m_initialized = true;
+			return loadedModelPtr;
+
 		}
 	}
 }
