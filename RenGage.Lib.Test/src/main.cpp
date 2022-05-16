@@ -105,6 +105,7 @@ int main()
 	for (int i = 0; i < 4; ++i)
 	{
 		logger.LogMsgToConsole(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
+		logger.LogMsgToFile(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
 	}
 
 	return 0;
