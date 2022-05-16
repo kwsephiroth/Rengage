@@ -67,7 +67,9 @@ namespace RenGage
 
 	void Logger::LogMsgToFile(const LogSeverity severity, const std::string msg, std::string caller)
 	{
-		m_logFile << GetLogPrefix(severity, caller) << "{ " << msg << " }\n";
+		auto logPrefix = GetLogPrefix(severity, caller);
+		std::unique_lock<std::mutex>(m_logFileMutex);
+		m_logFile <<  logPrefix << "{ " << msg << " }\n";
 	}
 
 	void Logger::LogMsgToConsole(const LogSeverity severity, const std::string msg, std::string caller)

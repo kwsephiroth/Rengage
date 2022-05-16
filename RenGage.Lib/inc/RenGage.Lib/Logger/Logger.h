@@ -64,6 +64,7 @@ namespace RenGage
 		std::ofstream m_logFile;
 		std::string m_logFileDirectory;
 		std::once_flag m_fileInitFlag;
+		static std::mutex m_logFileMutex;
 	};
 }
 
