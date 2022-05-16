@@ -95,3 +95,17 @@
 //
 //	return 0;
 //}
+
+#include <RenGage.Lib/Logger/Logger.h>
+
+int main()
+{
+	RenGage::Logger logger;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		logger.LogMsgToConsole(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
+	}
+
+	return 0;
+}
