@@ -1,1 +1,0 @@
-[ Sat May 28 12:47:19 2022 | 1653767239487 (ms) | InitializeWindow | INFO ] : { Initializing rendering window }

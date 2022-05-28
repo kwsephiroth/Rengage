@@ -13,7 +13,7 @@
 namespace RenGage
 {
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";
-	const std::string LOG_FILE_NAME_SUFFIX = ".txt";
+	const std::string LOG_FILE_NAME_SUFFIX = ".log";
 
 	enum class LogSeverity
 	{
@@ -55,6 +55,7 @@ namespace RenGage
 		}
 	}
 
+	//TODO: Make this class log to file only, not console.
 	class Logger //Should this class actually be a Singleton instead? TODO: Determine.
 	{
 	public:
@@ -63,7 +64,6 @@ namespace RenGage
 		void LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
 		void LogMsgToFile(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
 		void LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
-		;
 
 	private:
 		void InitLogFile();
@@ -74,6 +74,6 @@ namespace RenGage
 		std::string m_logFileDirectory;
 		std::once_flag m_fileInitFlag;
 		static std::mutex m_logFileMutex;
-	};																\
+	};																
 }
 

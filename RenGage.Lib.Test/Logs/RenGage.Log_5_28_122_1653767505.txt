@@ -1,3 +1,0 @@
-[ Sat May 28 12:51:45 2022 | 1653767505905 (ms) | InitializeWindow | INFO ] : { Initializing rendering window. }
-[ Sat May 28 12:51:45 2022 | 1653767505905 (ms) | InitializeWindow | WARNING ] : { GLFW window could not be found. }
-[ Sat May 28 12:51:45 2022 | 1653767505905 (ms) | InitializeWindow | ERROR ] : { Window could not be initialized. }
