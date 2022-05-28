@@ -97,16 +97,17 @@
 //}
 
 #include <RenGage.Lib/Logger/Logger.h>
+#include <RenGage.Lib/RenderWindow.h>
 
 int main()
 {
 	RenGage::Logger logger;
-
-	for (int i = 0; i < 4; ++i)
-	{
-		logger.LogMsgToConsole(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
-		logger.LogMsgToFile(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
-	}
+	RenGage::RenderWindow(1920, 1080);
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	//logger.LogMsgToConsole(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
+	//	logger.LogMsgToFile(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");
+	//}
 
 	return 0;
 }

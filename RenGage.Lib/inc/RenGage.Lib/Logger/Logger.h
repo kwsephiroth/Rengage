@@ -8,6 +8,7 @@
 #include <ctime>
 #include <mutex>
 #include <filesystem>
+#include "LoggerMacros.h"
 
 namespace RenGage
 {
@@ -19,6 +20,12 @@ namespace RenGage
 		INFO,
 		WARNING,
 		ERROR
+	};
+
+	enum class LogDestination
+	{
+		CONSOLE,
+		FILE
 	};
 
 	static std::string GetLogSeverityString(const LogSeverity severity)
@@ -48,13 +55,15 @@ namespace RenGage
 		}
 	}
 
-	class Logger
+	class Logger //Should this class actually be a Singleton instead? TODO: Determine.
 	{
 	public:
 		Logger(std::string logDirectory = "Logs/");
 		~Logger();
-		void LogMsgToFile(const LogSeverity severity, const std::string msg, std::string caller = __builtin_FUNCTION());
-		void LogMsgToConsole(const LogSeverity severity, const std::string msg, std::string caller = __builtin_FUNCTION());
+		void LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
+		void LogMsgToFile(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
+		void LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
+		;
 
 	private:
 		void InitLogFile();
@@ -65,6 +74,6 @@ namespace RenGage
 		std::string m_logFileDirectory;
 		std::once_flag m_fileInitFlag;
 		static std::mutex m_logFileMutex;
-	};
+	};																\
 }
 

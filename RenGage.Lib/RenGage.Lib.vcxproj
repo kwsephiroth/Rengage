@@ -20,9 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\RenGage.Lib\Logger\Logger.h" />
+    <ClInclude Include="inc\RenGage.Lib\Logger\LoggerMacros.h" />
+    <ClInclude Include="inc\RenGage.Lib\RenderWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\Logger.cpp" />
+    <ClCompile Include="src\RenderWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fragment_shader.glsl" />
+    <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -129,6 +136,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +148,10 @@
       <Command>xcopy /y /d "$(SolutionDir)dependencies\lib\release\x64\glew32.dll" "$(OutDir)"
 xcopy /y /d "$(SolutionDir)dependencies\lib\release\x64\assimp-vc142-mt.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\lib\release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;assimp-vc142-mt.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

@@ -65,14 +65,32 @@ namespace RenGage
 		return ss.str();
 	}
 
-	void Logger::LogMsgToFile(const LogSeverity severity, const std::string msg, std::string caller)
+	void Logger::LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller)
+	{
+		switch (destination)
+		{
+			case LogDestination::CONSOLE:
+			{
+				LogMsgToConsole(severity, std::move(msg), std::move(caller));
+			}
+			break;
+
+			case LogDestination::FILE:
+			{
+				LogMsgToFile(severity, std::move(msg), std::move(caller));
+			}
+			break;
+		}
+	}
+
+	void Logger::LogMsgToFile(LogSeverity severity, std::string msg, std::string caller)
 	{
 		auto logPrefix = GetLogPrefix(severity, caller);
 		std::unique_lock<std::mutex>(m_logFileMutex);
 		m_logFile <<  logPrefix << "{ " << msg << " }\n";
 	}
 
-	void Logger::LogMsgToConsole(const LogSeverity severity, const std::string msg, std::string caller)
+	void Logger::LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller)
 	{
 		std::cout << GetLogPrefix(severity, caller) << "{ " << msg << " }\n";
 	}

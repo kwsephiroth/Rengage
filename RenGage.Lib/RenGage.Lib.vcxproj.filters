@@ -18,10 +18,23 @@
     <ClInclude Include="inc\RenGage.Lib\Logger\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\RenGage.Lib\RenderWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\RenGage.Lib\Logger\LoggerMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\fragment_shader.glsl" />
+    <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
 </Project>
