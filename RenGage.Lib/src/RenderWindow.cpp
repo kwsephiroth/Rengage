@@ -2,19 +2,21 @@
 
 namespace RenGage
 {
-	RenderWindow::RenderWindow() :
+	RenderWindow::RenderWindow(bool fullscreen) :
 		m_window(nullptr),
-		m_initialized(false)
+		m_initialized(false),
+		m_start_fullscreen(fullscreen)
 	{
-		InitializeWindow();
+		Initialize();
 	}
 
-	RenderWindow::RenderWindow(WindowAttributes attributes) :
+	RenderWindow::RenderWindow(WindowAttributes attributes, bool fullscreen) :
 		m_window(nullptr),
 		m_initialized(false), 
-		m_attributes(attributes)
+		m_attributes(attributes),
+		m_start_fullscreen(fullscreen)
 	{
-		InitializeWindow();
+		Initialize();
 	}
 
 	RenderWindow::~RenderWindow()
@@ -22,7 +24,7 @@ namespace RenGage
 		glfwTerminate();
 	}
 
-	void RenderWindow::InitializeWindow()
+	void RenderWindow::Initialize()
 	{
 		LOG_INFO(m_logger, "Initializing rendering window.");
 		
@@ -44,7 +46,15 @@ namespace RenGage
 
 		//Attempt to create the window
 		//m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), glfwGetPrimaryMonitor(), NULL);
-		m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), NULL, NULL);
+		GLFWmonitor* mainMonitor = nullptr;
+
+		if (m_start_fullscreen)
+		{
+			mainMonitor = glfwGetPrimaryMonitor();
+		}
+
+		//glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);//make initial window invisible
+		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), mainMonitor, NULL);
 		if (!m_window)
 		{
 			glfwTerminate();

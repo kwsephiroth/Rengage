@@ -14,8 +14,8 @@ namespace RenGage
 	struct WindowAttributes
 	{
 		std::string name = "";
-		int width = 800;
-		int height = 800;
+		int min_width = 800;
+		int min_height = 800;
 		glm::vec4 rgba = { 0.0f, 0.0f, 0.0f, 1.0f};
 		int swap_interval = 1;
 	};
@@ -23,20 +23,22 @@ namespace RenGage
 	class RenderWindow//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
 	public:
-		RenderWindow();
-		RenderWindow(WindowAttributes);
+		RenderWindow(bool fullscreen = true);
+		RenderWindow(WindowAttributes, bool fullscreen = false);
 		~RenderWindow();
 
 		GLFWwindow* operator()(){ return m_window; }
 
 		inline std::string GetName() const { return m_attributes.name; }
-		inline int GetWidth() const { return m_attributes.width; }
-		inline int GetHeight() const { return m_attributes.height; }
+		inline int GetWidth() const { return m_attributes.min_width; }
+		inline int GetHeight() const { return m_attributes.min_height; }
 		glm::vec4 GetColor() const { return m_attributes.rgba; }
 		GLFWwindow* GetGLFWWindow() const { return m_window; }
+		void HideWindow() { glfwHideWindow(m_window); }
+		void ShowWindow() { glfwShowWindow(m_window); }
 
 	private:
-		void InitializeWindow();
+		void Initialize();
 		bool CreateDefaultWindow();
 		bool CreateCustomWindow();
 
@@ -45,5 +47,6 @@ namespace RenGage
 		bool m_initialized;
 		WindowAttributes m_attributes;
 		bool m_is_default;
+		bool m_start_fullscreen;
 	};
 }
