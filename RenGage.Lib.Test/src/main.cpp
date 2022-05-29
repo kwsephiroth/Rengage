@@ -108,8 +108,19 @@ int main()
 	//int height = 0;
 	//glm::vec3 rgb_color = { 0.0f, 0.0f, 0.0f };
 	//int swap_interval = 1;
-	RenGage::WindowAttributes window_attribs = { "", 1920,1080 };
+	RenGage::WindowAttributes window_attribs = { "Test", 1920, 1080};
 	auto window = RenGage::RenderWindow(std::move(window_attribs));
+	auto windowColor = window.GetColor();
+	while (!glfwWindowShouldClose(window()))
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glClearColor(windowColor.r, windowColor.g, windowColor.b, windowColor.a);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(window());
+		glfwPollEvents();
+	}
+	glfwTerminate();
+	//auto window = RenGage::RenderWindow();
 	//for (int i = 0; i < 4; ++i)
 	//{
 	//	//logger.LogMsgToConsole(RenGage::LogSeverity::INFO, "Testing " + std::to_string(i) + " ...");

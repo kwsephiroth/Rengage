@@ -49,7 +49,7 @@ namespace RenGage
 
 		ctime_s(timeStr, sizeof timeStr, &timenow);
 
-		for (int i = 0; i < 26; ++i)
+		for (int i = 0; i < sizeof(timeStr); ++i)
 		{
 			if (timeStr[i] == '\n')
 			{

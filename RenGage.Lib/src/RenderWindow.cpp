@@ -2,7 +2,9 @@
 
 namespace RenGage
 {
-	RenderWindow::RenderWindow()
+	RenderWindow::RenderWindow() :
+		m_window(nullptr),
+		m_initialized(false)
 	{
 		InitializeWindow();
 	}
@@ -41,6 +43,7 @@ namespace RenGage
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
 
 		//Attempt to create the window
+		//m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), glfwGetPrimaryMonitor(), NULL);
 		m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), NULL, NULL);
 		if (!m_window)
 		{
