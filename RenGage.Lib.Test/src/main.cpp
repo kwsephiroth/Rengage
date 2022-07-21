@@ -103,11 +103,10 @@ int main()
 {
 	RenGage::Logger logger;
 	RenGage::WindowAttributes window_attribs = { "Test", 1920, 1080};
-	auto window = RenGage::RenderWindow(std::move(window_attribs));
+	auto window = RenGage::RenderWindow(std::move(window_attribs), true);
 	auto windowColor = window.GetColor();
 
-	while (!glfwWindowShouldClose(window()))
-	{
+	while (!glfwWindowShouldClose(window())) {
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glClearColor(windowColor.r, windowColor.g, windowColor.b, windowColor.a);
 		glClear(GL_COLOR_BUFFER_BIT);

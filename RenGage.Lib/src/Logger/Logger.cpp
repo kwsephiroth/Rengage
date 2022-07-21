@@ -3,15 +3,15 @@
 namespace RenGage
 {
 	Logger::Logger(std::string logDirectory) :
-		m_logFileDirectory(logDirectory)
+		m_log_file_directory(logDirectory)
 	{
-		std::call_once(m_fileInitFlag, &Logger::InitLogFile, this);
+		std::call_once(m_file_init_flag, &Logger::InitLogFile, this);
 	}
 
 	Logger::~Logger()
 	{
-		if (m_logFile.is_open())
-			m_logFile.close();
+		if (m_log_file.is_open())
+			m_log_file.close();
 	}
 
 	void Logger::InitLogFile()
@@ -24,41 +24,41 @@ namespace RenGage
 			<< now->tm_year << "_"
 			<< t;
 
-		std::filesystem::create_directory(m_logFileDirectory);
+		std::filesystem::create_directory(m_log_file_directory);
 		std::string filename = LOG_FILE_NAME_PREFIX + filenameMid.str() + LOG_FILE_NAME_SUFFIX;
 		OpenLogFile(filename);
 	}
 
 	void Logger::OpenLogFile(const std::string filename)
 	{
-		std::string full_filename = m_logFileDirectory + filename;
+		std::string full_filename = m_log_file_directory + filename;
 
-		m_logFile.open(full_filename, std::ios::app);
+		m_log_file.open(full_filename, std::ios::app);
 
-		if (m_logFile.fail())
+		if (m_log_file.fail()) {
 			LogMsgToConsole(LogSeverity::ERROR, "Failed to open file \"" + full_filename + "\"");
+		}
 	}
 
 	std::string Logger::GetLogPrefix(const LogSeverity severity, std::string caller)
 	{
 		auto sys_time_now = std::chrono::system_clock::now();
-		auto timenow = std::chrono::system_clock::to_time_t(sys_time_now);
+		auto time_now = std::chrono::system_clock::to_time_t(sys_time_now);
 		auto ms_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(sys_time_now.time_since_epoch());
 		std::stringstream ss;
-		char timeStr[26];
+		char time_str[26];
 
-		ctime_s(timeStr, sizeof timeStr, &timenow);
+		ctime_s(time_str, sizeof time_str, &time_now);
 
-		for (int i = 0; i < sizeof(timeStr); ++i)
-		{
-			if (timeStr[i] == '\n')
+		for (int i = 0; i < sizeof(time_str); ++i) {
+			if (time_str[i] == '\n')
 			{
-				timeStr[i] = '\0';
+				time_str[i] = '\0';
 				break;
 			}
 		}
 
-		ss << "[ " << timeStr << " | "  << ms_since_epoch.count() << " (ms) | "
+		ss << "[ " << time_str << " | "  << ms_since_epoch.count() << " (ms) | "
 			<<  caller << " | "
 			<<  GetLogSeverityString(severity) << " ] : ";
 
@@ -69,17 +69,13 @@ namespace RenGage
 	{
 		switch (destination)
 		{
-			case LogDestination::CONSOLE:
-			{
+			case LogDestination::CONSOLE: 
 				LogMsgToConsole(severity, std::move(msg), std::move(caller));
-			}
-			break;
+				break;
 
-			case LogDestination::FILE:
-			{
+			case LogDestination::FILE: 
 				LogMsgToFile(severity, std::move(msg), std::move(caller));
-			}
-			break;
+				break;
 		}
 	}
 
@@ -87,7 +83,7 @@ namespace RenGage
 	{
 		auto logPrefix = GetLogPrefix(severity, caller);
 		std::unique_lock<std::mutex>(m_logFileMutex);
-		m_logFile <<  logPrefix << "{ " << msg << " }\n";
+		m_log_file <<  logPrefix << "{ " << msg << " }\n";
 	}
 
 	void Logger::LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller)

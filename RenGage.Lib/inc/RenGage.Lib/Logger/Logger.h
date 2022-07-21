@@ -33,22 +33,13 @@ namespace RenGage
 		switch (severity)
 		{
 			case LogSeverity::INFO:
-			{
 				return "INFO";
-			}
-			break;
 
 			case LogSeverity::WARNING:
-			{
 				return "WARNING";
-			}
-			break;
 
 			case LogSeverity::ERROR:
-			{
 				return "ERROR";
-			}
-			break;
 
 			default:
 				return "UNKNOWN";
@@ -59,7 +50,7 @@ namespace RenGage
 	class Logger //Should this class actually be a Singleton instead? TODO: Determine.
 	{
 	public:
-		Logger(std::string logDirectory = "Logs/");
+		Logger(std::string log_directory = "Logs/");
 		~Logger();
 		void LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
 		void LogMsgToFile(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
@@ -67,13 +58,13 @@ namespace RenGage
 
 	private:
 		void InitLogFile();
-		void OpenLogFile(const std::string filename);
+		void OpenLogFile(const std::string file_name);
 		std::string GetLogPrefix(const LogSeverity severity, std::string caller);
 
-		std::ofstream m_logFile;
-		std::string m_logFileDirectory;
-		std::once_flag m_fileInitFlag;
-		static std::mutex m_logFileMutex;
+		std::ofstream m_log_file;
+		std::string m_log_file_directory;
+		std::once_flag m_file_init_flag;
+		static std::mutex m_log_file_mutex;
 	};																
 }
 

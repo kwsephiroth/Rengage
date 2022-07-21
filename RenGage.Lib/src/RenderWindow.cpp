@@ -28,14 +28,12 @@ namespace RenGage
 	{
 		LOG_INFO(m_logger, "Initializing rendering window.");
 		
-		if (m_initialized)
-		{
+		if (m_initialized) {
 			LOG_INFO(m_logger, "Rendering window is already initialized.");
 			return;
 		}
 
-		if (!glfwInit())
-		{
+		if (!glfwInit()) {
 			LOG_ERROR(m_logger, "Failed to initialize the GLFW library.");
 			return;
 		}
@@ -48,15 +46,13 @@ namespace RenGage
 		//m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), glfwGetPrimaryMonitor(), NULL);
 		GLFWmonitor* mainMonitor = nullptr;
 
-		if (m_start_fullscreen)
-		{
+		if (m_start_fullscreen) {
 			mainMonitor = glfwGetPrimaryMonitor();
 		}
 
 		//glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);//make initial window invisible
 		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), mainMonitor, NULL);
-		if (!m_window)
-		{
+		if (!m_window) {
 			glfwTerminate();
 			LOG_ERROR(m_logger, "Failed to create GLFW window with given context.");
 			return;
@@ -67,8 +63,7 @@ namespace RenGage
 
 		//Must have a valid OpenGL context before initializing glew
 		auto errorCode = glewInit();
-		if (errorCode != GLEW_OK)
-		{
+		if (errorCode != GLEW_OK) {
 			LOG_ERROR(m_logger, "Failed to initialize GlEW with error code(" + std::to_string(errorCode) + ").");
 			return;
 		}
