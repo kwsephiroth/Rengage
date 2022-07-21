@@ -1,46 +1,46 @@
-#include "Logger/Logger.h"
+#include "logger/logger.h"
 
-namespace RenGage
+namespace rengage
 {
-	Logger::Logger(std::string logDirectory) :
-		m_log_file_directory(logDirectory)
+	logger::logger(std::string log_directory) :
+		m_log_file_directory(log_directory)
 	{
-		std::call_once(m_file_init_flag, &Logger::InitLogFile, this);
+		std::call_once(m_file_init_flag, &logger::init_log_file, this);
 	}
 
-	Logger::~Logger()
+	logger::~logger()
 	{
 		if (m_log_file.is_open())
 			m_log_file.close();
 	}
 
-	void Logger::InitLogFile()
+	void logger::init_log_file()
 	{
 		std::time_t t = std::time(0);
 		std::tm* now = std::localtime(&t);
-		std::stringstream filenameMid;
-		filenameMid << (now->tm_mon + 1) << "_"
+		std::stringstream filename_mid;
+		filename_mid << (now->tm_mon + 1) << "_"
 			<< now->tm_mday << "_"
 			<< now->tm_year << "_"
 			<< t;
 
 		std::filesystem::create_directory(m_log_file_directory);
-		std::string filename = LOG_FILE_NAME_PREFIX + filenameMid.str() + LOG_FILE_NAME_SUFFIX;
-		OpenLogFile(filename);
+		std::string file_name = LOG_FILE_NAME_PREFIX + filename_mid.str() + LOG_FILE_NAME_SUFFIX;
+		open_log_file(file_name);
 	}
 
-	void Logger::OpenLogFile(const std::string filename)
+	void logger::open_log_file(const std::string file_name)
 	{
-		std::string full_filename = m_log_file_directory + filename;
+		std::string full_filename = m_log_file_directory + file_name;
 
 		m_log_file.open(full_filename, std::ios::app);
 
 		if (m_log_file.fail()) {
-			LogMsgToConsole(LogSeverity::ERROR, "Failed to open file \"" + full_filename + "\"");
+			log_to_console(log_severity::ERROR, "Failed to open file \"" + full_filename + "\"");
 		}
 	}
 
-	std::string Logger::GetLogPrefix(const LogSeverity severity, std::string caller)
+	std::string logger::get_log_prefix(const log_severity severity, std::string caller)
 	{
 		auto sys_time_now = std::chrono::system_clock::now();
 		auto time_now = std::chrono::system_clock::to_time_t(sys_time_now);
@@ -60,35 +60,35 @@ namespace RenGage
 
 		ss << "[ " << time_str << " | "  << ms_since_epoch.count() << " (ms) | "
 			<<  caller << " | "
-			<<  GetLogSeverityString(severity) << " ] : ";
+			<<  get_log_severity_str(severity) << " ] : ";
 
 		return ss.str();
 	}
 
-	void Logger::LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller)
+	void logger::log(log_severity severity, log_destination destination, std::string msg, std::string caller)
 	{
 		switch (destination)
 		{
-			case LogDestination::CONSOLE: 
-				LogMsgToConsole(severity, std::move(msg), std::move(caller));
+			case log_destination::CONSOLE: 
+				log_to_console(severity, std::move(msg), std::move(caller));
 				break;
 
-			case LogDestination::FILE: 
-				LogMsgToFile(severity, std::move(msg), std::move(caller));
+			case log_destination::FILE: 
+				log_to_file(severity, std::move(msg), std::move(caller));
 				break;
 		}
 	}
 
-	void Logger::LogMsgToFile(LogSeverity severity, std::string msg, std::string caller)
+	void logger::log_to_file(log_severity severity, std::string msg, std::string caller)
 	{
-		auto logPrefix = GetLogPrefix(severity, caller);
-		std::unique_lock<std::mutex>(m_logFileMutex);
-		m_log_file <<  logPrefix << "{ " << msg << " }\n";
+		auto log_prefix = get_log_prefix(severity, caller);
+		std::unique_lock<std::mutex>(m_log_file_mutex);
+		m_log_file <<  log_prefix << "{ " << msg << " }\n";
 	}
 
-	void Logger::LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller)
+	void logger::log_to_console(log_severity severity, std::string msg, std::string caller)
 	{
-		std::cout << GetLogPrefix(severity, caller) << "{ " << msg << " }\n";
+		std::cout << get_log_prefix(severity, caller) << "{ " << msg << " }\n";
 	}
 
 

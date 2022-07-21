@@ -1,30 +1,30 @@
-#include <RenderWindow.h>
+#include <rendering_window.h>
 
-namespace RenGage
+namespace rengage
 {
-	RenderWindow::RenderWindow(bool fullscreen) :
+	rendering_window::rendering_window(bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false),
-		m_start_fullscreen(fullscreen)
+		m_start_fullscreen(full_screen)
 	{
-		Initialize();
+		initialize();
 	}
 
-	RenderWindow::RenderWindow(WindowAttributes attributes, bool fullscreen) :
+	rendering_window::rendering_window(window_attributes attributes, bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false), 
 		m_attributes(attributes),
-		m_start_fullscreen(fullscreen)
+		m_start_fullscreen(full_screen)
 	{
-		Initialize();
+		initialize();
 	}
 
-	RenderWindow::~RenderWindow()
+	rendering_window::~rendering_window()
 	{
 		glfwTerminate();
 	}
 
-	void RenderWindow::Initialize()
+	void rendering_window::initialize()
 	{
 		LOG_INFO(m_logger, "Initializing rendering window.");
 		
@@ -43,15 +43,13 @@ namespace RenGage
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
 
 		//Attempt to create the window
-		//m_window = glfwCreateWindow(m_attributes.width, m_attributes.height, m_attributes.name.c_str(), glfwGetPrimaryMonitor(), NULL);
-		GLFWmonitor* mainMonitor = nullptr;
+		GLFWmonitor* main_monitor = nullptr;
 
 		if (m_start_fullscreen) {
-			mainMonitor = glfwGetPrimaryMonitor();
+			main_monitor = glfwGetPrimaryMonitor();
 		}
 
-		//glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);//make initial window invisible
-		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), mainMonitor, NULL);
+		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), main_monitor, NULL);
 		if (!m_window) {
 			glfwTerminate();
 			LOG_ERROR(m_logger, "Failed to create GLFW window with given context.");
@@ -62,9 +60,9 @@ namespace RenGage
 		glfwSwapInterval(m_attributes.swap_interval);//Set vsync
 
 		//Must have a valid OpenGL context before initializing glew
-		auto errorCode = glewInit();
-		if (errorCode != GLEW_OK) {
-			LOG_ERROR(m_logger, "Failed to initialize GlEW with error code(" + std::to_string(errorCode) + ").");
+		auto error_code = glewInit();
+		if (error_code != GLEW_OK) {
+			LOG_ERROR(m_logger, "Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
 			return;
 		}
 
@@ -73,12 +71,12 @@ namespace RenGage
 		m_initialized = true;
 	}
 
-	bool RenderWindow::CreateDefaultWindow()
+	bool rendering_window::create_default_window()
 	{
 		return false;
 	}
 
-	bool RenderWindow::CreateCustomWindow()
+	bool rendering_window::create_custom_window()
 	{
 		return false;
 	}

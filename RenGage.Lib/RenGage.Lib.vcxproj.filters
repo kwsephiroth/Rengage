@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\RenGage.Lib\Logger\Logger.h">
+    <ClInclude Include="inc\RenGage.Lib\Logger\logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\RenGage.Lib\RenderWindow.h">
+    <ClInclude Include="inc\RenGage.Lib\rendering_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\RenGage.Lib\Logger\LoggerMacros.h">
+    <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Logger\Logger.cpp">
+    <ClCompile Include="src\Logger\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderWindow.cpp">
+    <ClCompile Include="src\rendering_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

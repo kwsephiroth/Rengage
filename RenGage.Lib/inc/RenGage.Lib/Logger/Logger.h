@@ -8,37 +8,37 @@
 #include <ctime>
 #include <mutex>
 #include <filesystem>
-#include "LoggerMacros.h"
+#include "logger_macros.h"
 
-namespace RenGage
+namespace rengage
 {
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";
 	const std::string LOG_FILE_NAME_SUFFIX = ".log";
 
-	enum class LogSeverity
+	enum class log_severity
 	{
 		INFO,
 		WARNING,
 		ERROR
 	};
 
-	enum class LogDestination
+	enum class log_destination
 	{
 		CONSOLE,
 		FILE
 	};
 
-	static std::string GetLogSeverityString(const LogSeverity severity)
+	static std::string get_log_severity_str(const log_severity severity)
 	{
 		switch (severity)
 		{
-			case LogSeverity::INFO:
+			case log_severity::INFO:
 				return "INFO";
 
-			case LogSeverity::WARNING:
+			case log_severity::WARNING:
 				return "WARNING";
 
-			case LogSeverity::ERROR:
+			case log_severity::ERROR:
 				return "ERROR";
 
 			default:
@@ -47,19 +47,19 @@ namespace RenGage
 	}
 
 	//TODO: Make this class log to file only, not console.
-	class Logger //Should this class actually be a Singleton instead? TODO: Determine.
+	class logger //Should this class actually be a Singleton instead? TODO: Determine.
 	{
 	public:
-		Logger(std::string log_directory = "Logs/");
-		~Logger();
-		void LogMsg(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
-		void LogMsgToFile(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
-		void LogMsgToConsole(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
+		logger(std::string log_directory = "Logs/");
+		~logger();
+		void log(log_severity severity, log_destination destination, std::string msg, std::string caller = __builtin_FUNCTION());
+		void log_to_file(log_severity severity, std::string msg, std::string caller = __builtin_FUNCTION());
+		void log_to_console(log_severity severity, std::string msg, std::string caller = __builtin_FUNCTION());
 
 	private:
-		void InitLogFile();
-		void OpenLogFile(const std::string file_name);
-		std::string GetLogPrefix(const LogSeverity severity, std::string caller);
+		void init_log_file();
+		void open_log_file(const std::string file_name);
+		std::string get_log_prefix(const log_severity severity, std::string caller);
 
 		std::ofstream m_log_file;
 		std::string m_log_file_directory;

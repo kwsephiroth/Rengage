@@ -96,19 +96,19 @@
 //	return 0;
 //}
 
-#include <RenGage.Lib/Logger/Logger.h>
-#include <RenGage.Lib/RenderWindow.h>
+#include <rengage.lib/logger/logger.h>
+#include <rengage.lib/rendering_window.h>
 
 int main()
 {
-	RenGage::Logger logger;
-	RenGage::WindowAttributes window_attribs = { "Test", 1920, 1080};
-	auto window = RenGage::RenderWindow(std::move(window_attribs), true);
-	auto windowColor = window.GetColor();
+	rengage::logger logger;
+	rengage::window_attributes window_attribs = { "Test", 1920, 1080};
+	auto window = rengage::rendering_window(std::move(window_attribs), true);
+	auto window_color = window.get_color();
 
 	while (!glfwWindowShouldClose(window())) {
 		glClear(GL_DEPTH_BUFFER_BIT);
-		glClearColor(windowColor.r, windowColor.g, windowColor.b, windowColor.a);
+		glClearColor(window_color.r, window_color.g, window_color.b, window_color.a);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window());
 		glfwPollEvents();
