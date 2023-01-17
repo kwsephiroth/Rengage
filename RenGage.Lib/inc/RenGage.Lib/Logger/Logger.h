@@ -12,6 +12,7 @@
 
 namespace rengage
 {
+	const std::string LOG_FILE_DIRECTORY = "Logs/";
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";
 	const std::string LOG_FILE_NAME_SUFFIX = ".log";
 
@@ -46,11 +47,10 @@ namespace rengage
 		}
 	}
 
-	//TODO: Make this class log to file only, not console.
-	class logger //Should this class actually be a Singleton instead? TODO: Determine.
+	class logger//TODO: Should this class be a singleton??
 	{
 	public:
-		logger(std::string log_directory = "Logs/");
+		logger(std::string log_directory = LOG_FILE_DIRECTORY);
 		~logger();
 		void log(log_severity severity, log_destination destination, std::string msg, std::string caller = __builtin_FUNCTION());
 		void log_to_file(log_severity severity, std::string msg, std::string caller = __builtin_FUNCTION());

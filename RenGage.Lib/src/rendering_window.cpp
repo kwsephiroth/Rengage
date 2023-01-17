@@ -7,7 +7,7 @@ namespace rengage
 		m_initialized(false),
 		m_start_fullscreen(full_screen)
 	{
-		initialize();
+		init();
 	}
 
 	rendering_window::rendering_window(window_attributes attributes, bool full_screen) :
@@ -16,7 +16,7 @@ namespace rengage
 		m_attributes(attributes),
 		m_start_fullscreen(full_screen)
 	{
-		initialize();
+		init();
 	}
 
 	rendering_window::~rendering_window()
@@ -24,7 +24,7 @@ namespace rengage
 		glfwTerminate();
 	}
 
-	void rendering_window::initialize()
+	void rendering_window::init()
 	{
 		LOG_INFO(m_logger, "Initializing rendering window.");
 		
@@ -41,9 +41,9 @@ namespace rengage
 		//Set OpenGL version
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
-
+		
 		//Attempt to create the window
-		GLFWmonitor* main_monitor = nullptr;
+		glfw_monitor* main_monitor = nullptr;
 
 		if (m_start_fullscreen) {
 			main_monitor = glfwGetPrimaryMonitor();

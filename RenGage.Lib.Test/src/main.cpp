@@ -98,18 +98,63 @@
 
 #include <rengage.lib/logger/logger.h>
 #include <rengage.lib/rendering_window.h>
+#include <functional>
+#include <iostream>
+
+enum class ErrorCode
+{
+	FAIL=0,
+	SUCCESS=1
+};
+
+struct GLResult
+{
+	ErrorCode error_code = ErrorCode::FAIL;
+	std::string error_msg;
+};
+
+template<class ReturnType, class... Args>
+static void GLCall(std::function<ReturnType(Args&&...)> func, Args&&... args)
+{
+	func(std::forward<Args>(args)...);
+	int glError = glGetError();
+	bool closeProgram = (glError == GL_NO_ERROR) ? false : true ;
+	while (glError != GL_NO_ERROR)
+	{
+		std::cout << glError << '\n';
+		glError = glGetError();
+	}
+	if (closeProgram)
+		exit(0);
+
+}
+
+template<class... Args>
+static void GLCall(std::function<void(Args&&...)> func, Args&&... args)
+{
+	func(std::forward<Args>(args)...);
+	int glError = glGetError();
+	bool closeProgram = (glError == GL_NO_ERROR) ? false : true;
+	while (glError != GL_NO_ERROR)
+	{
+		std::cout << glError << '\n';
+		glError = glGetError();
+	}
+	if (closeProgram)
+		exit(0);
+}
 
 int main()
 {
 	rengage::logger logger;
 	rengage::window_attributes window_attribs = { "Test", 1920, 1080};
-	auto window = rengage::rendering_window(std::move(window_attribs), true);
+	auto window = rengage::rendering_window(std::move(window_attribs));
 	auto window_color = window.get_color();
 
 	while (!glfwWindowShouldClose(window())) {
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glClearColor(window_color.r, window_color.g, window_color.b, window_color.a);
-		glClear(GL_COLOR_BUFFER_BIT);
+		GLCall({ glClear }, 199999999);//GL_DEPTH_BUFFER_BIT);
+		GLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
+		GLCall({ glClear }, GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window());
 		glfwPollEvents();
 	}
