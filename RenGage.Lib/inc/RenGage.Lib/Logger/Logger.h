@@ -63,8 +63,8 @@ namespace rengage
 
 		std::ofstream m_log_file;
 		std::string m_log_file_directory;
-		std::once_flag m_file_init_flag;
-		static std::mutex m_log_file_mutex;
+		inline static std::once_flag m_file_init_flag;//inline static OK since C++17
+		inline static std::mutex m_log_file_mutex;//inline OK since C++17
 	};																
 }
 

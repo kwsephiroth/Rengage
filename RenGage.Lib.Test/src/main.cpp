@@ -130,11 +130,11 @@ static void GLCall(std::function<ReturnType(Args&&...)> func, Args&&... args)
 }
 
 template<class... Args>
-static void GLCall(std::function<void(Args&&...)> func, Args&&... args)
+void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 {
 	func(std::forward<Args>(args)...);
 	int glError = glGetError();
-	bool closeProgram = (glError == GL_NO_ERROR) ? false : true;
+	bool closeProgram = (glError == GL_NO_ERROR) ? false : true;//TODO: Should the program be closed (exception thrown) if even a single error is detected?
 	while (glError != GL_NO_ERROR)
 	{
 		std::cout << glError << '\n';
@@ -147,12 +147,12 @@ static void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 int main()
 {
 	rengage::logger logger;
-	rengage::window_attributes window_attribs = { "Test", 1920, 1080};
-	auto window = rengage::rendering_window(std::move(window_attribs));
+	rengage::window_attributes window_attribs = {"Test", 1920, 1080};
+	auto window = rengage::rendering_window(std::move(window_attribs), true);
 	auto window_color = window.get_color();
 
 	while (!glfwWindowShouldClose(window())) {
-		GLCall({ glClear }, 199999999);//GL_DEPTH_BUFFER_BIT);
+		GLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
 		GLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
 		GLCall({ glClear }, GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window());

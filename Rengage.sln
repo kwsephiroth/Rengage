@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenGage.Lib", "RenGage.Lib\RenGage.Lib.vcxproj", "{13C6FAA0-BC97-4E9E-AFDB-F93AEDFCD754}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenGage.Lib.Test", "RenGage.Lib.Test\RenGage.Lib.Test.vcxproj", "{97651D24-2F23-4B28-92C9-03A6847C985C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13C6FAA0-BC97-4E9E-AFDB-F93AEDFCD754} = {13C6FAA0-BC97-4E9E-AFDB-F93AEDFCD754}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

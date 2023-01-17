@@ -21,7 +21,7 @@ namespace rengage
 		std::stringstream filename_mid;
 		filename_mid << (now->tm_mon + 1) << "_"
 			<< now->tm_mday << "_"
-			<< now->tm_year << "_"
+			<< now->tm_year + 1900 << "_"
 			<< t;
 
 		std::filesystem::create_directory(m_log_file_directory);
