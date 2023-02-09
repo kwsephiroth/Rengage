@@ -96,6 +96,4 @@ namespace rengage
 	{
 		std::cout << get_log_prefix(severity, caller) << "{ " << msg << " }\n";
 	}
-
-
 }

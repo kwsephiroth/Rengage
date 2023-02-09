@@ -137,11 +137,14 @@ void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 	bool closeProgram = (glError == GL_NO_ERROR) ? false : true;//TODO: Should the program be closed (exception thrown) if even a single error is detected?
 	while (glError != GL_NO_ERROR)
 	{
-		std::cout << glError << '\n';
+		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")")
 		glError = glGetError();
 	}
 	if (closeProgram)
+	{
+		std::cout << "Program closed unexpectedly. Please check log for errors.\n";
 		exit(0);
+	}
 }
 
 int main()

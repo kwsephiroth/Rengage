@@ -10,13 +10,25 @@ namespace rengage
 	const int GL_VERSION_MINOR = 6;
 	const int MIN_WINDOW_WIDTH = 800;
 	const int MIN_WINDOW_HEIGHT = 800;
+	
+	struct resolution
+	{
+		unsigned int horizontal;
+		unsigned int vertical;
+	};
+
+	const resolution RES_1080P{ 1920, 1080 };
+	const resolution RES_1440P{ 2560, 1440 };
+	const resolution RES_2160P{ 3840, 2160 };
+	const resolution RES_2K = RES_1440P;
+	const resolution RES_4k = RES_2160P;
 
 	struct window_attributes
 	{
 		std::string name = "";
 		int min_width = 800;
 		int min_height = 800;
-		glm::vec4 rgba = { 0.0f, 0.0f, 0.0f, 1.0f};
+		glm::vec4 color = { 0.0f, 0.0f, 0.0f, 1.0f};
 		int swap_interval = 1;
 	};
 
@@ -30,12 +42,12 @@ namespace rengage
 		rendering_window(window_attributes, bool full_screen = false);
 		~rendering_window();
 
-		glfw_window* operator()(){ return m_window; }
+		glfw_window* operator()(){ return m_window; }//TODO: Switch to QT instead of GLFW for window management?
 
 		inline std::string get_name() const { return m_attributes.name; }
 		inline int get_width() const { return m_attributes.min_width; }
 		inline int get_height() const { return m_attributes.min_height; }
-		glm::vec4 get_color() const { return m_attributes.rgba; }
+		glm::vec4 get_color() const { return m_attributes.color; }
 		glfw_window* get_glfw_window() const { return m_window; }
 		void hide_window() { glfwHideWindow(m_window); }
 		void show_window() { glfwShowWindow(m_window); }
