@@ -146,7 +146,7 @@ void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 
 int main()
 {
-	//LOG_INFO("Hello from RenGage.Lib.Test!");
+	LOG_INFO("Hello from RenGage.Lib.Test!");
 	//rengage::logger::get().log_to_file(rengage::log_severity::INFO, "Hello from RenGage.Lib.Test!");
 	rengage::window_attributes window_attribs = {"Test", 1920, 1080};
 	auto window = rengage::rendering_window(std::move(window_attribs));

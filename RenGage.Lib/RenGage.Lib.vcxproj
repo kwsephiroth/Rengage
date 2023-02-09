@@ -27,10 +27,6 @@
     <ClCompile Include="src\Logger\logger.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\fragment_shader.glsl" />
-    <None Include="res\shaders\vertex_shader.glsl" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
