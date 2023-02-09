@@ -8,7 +8,6 @@
 #include <ctime>
 #include <mutex>
 #include <filesystem>
-#include "logger_macros.h"
 
 namespace rengage
 {
