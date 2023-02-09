@@ -14,6 +14,12 @@ namespace rengage
 			m_log_file.close();
 	}
 
+	logger& logger::get()
+	{
+		static logger log;
+		return log;
+	}
+
 	void logger::init_log_file()
 	{
 		std::time_t t = std::time(0);

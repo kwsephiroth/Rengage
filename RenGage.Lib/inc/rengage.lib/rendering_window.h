@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
-#include "Logger/Logger.h"
+#include "logger/logger.h"
 
 namespace rengage
 {
@@ -45,7 +45,6 @@ namespace rengage
 		bool create_default_window();
 		bool create_custom_window();
 
-		logger m_logger;
 		glfw_window* m_window;
 		bool m_initialized;
 		window_attributes m_attributes;

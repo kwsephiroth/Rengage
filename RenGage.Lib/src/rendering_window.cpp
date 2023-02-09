@@ -26,15 +26,15 @@ namespace rengage
 
 	void rendering_window::init()
 	{
-		LOG_INFO(m_logger, "Initializing rendering window.");
+		LOG_INFO("Initializing rendering window.");
 		
 		if (m_initialized) {
-			LOG_INFO(m_logger, "Rendering window is already initialized.");
+			LOG_INFO("Rendering window is already initialized.");
 			return;
 		}
 
 		if (!glfwInit()) {
-			LOG_ERROR(m_logger, "Failed to initialize the GLFW library.");
+			LOG_ERROR("Failed to initialize the GLFW library.");
 			return;
 		}
 
@@ -52,7 +52,7 @@ namespace rengage
 		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), main_monitor, NULL);
 		if (!m_window) {
 			glfwTerminate();
-			LOG_ERROR(m_logger, "Failed to create GLFW window with given context.");
+			LOG_ERROR("Failed to create GLFW window with given context.");
 			return;
 		}
 
@@ -62,12 +62,12 @@ namespace rengage
 		//Must have a valid OpenGL context before initializing glew
 		auto error_code = glewInit();
 		if (error_code != GLEW_OK) {
-			LOG_ERROR(m_logger, "Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
+			LOG_ERROR("Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
 			return;
 		}
 
-		LOG_INFO(m_logger, "GLFW window initialization successful.");
-		LOG_INFO(m_logger, "OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
+		LOG_INFO("GLFW window initialization successful.");
+		LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 		m_initialized = true;
 	}
 
