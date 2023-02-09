@@ -2,14 +2,6 @@
 
 namespace rengage
 {
-	rendering_window::rendering_window(bool full_screen) :
-		m_window(nullptr),
-		m_initialized(false),
-		m_start_fullscreen(full_screen)
-	{
-		init();
-	}
-
 	rendering_window::rendering_window(window_attributes attributes, bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false), 

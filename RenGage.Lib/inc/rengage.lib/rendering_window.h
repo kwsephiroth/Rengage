@@ -6,31 +6,34 @@
 
 namespace rengage
 {
-	const int GL_VERSION_MAJOR = 4;
-	const int GL_VERSION_MINOR = 6;
-	const int MIN_WINDOW_WIDTH = 800;
-	const int MIN_WINDOW_HEIGHT = 800;
-	
 	struct resolution
 	{
 		unsigned int horizontal;
 		unsigned int vertical;
 	};
 
+	struct window_attributes
+	{
+		std::string name;
+		int min_width;
+		int min_height;
+		glm::vec4 color;
+		int swap_interval;
+	};
+
+	const int GL_VERSION_MAJOR = 4;
+	const int GL_VERSION_MINOR = 6;
+	const int MIN_WINDOW_WIDTH = 800;
+	const int MIN_WINDOW_HEIGHT = 800;
 	const resolution RES_1080P{ 1920, 1080 };
 	const resolution RES_1440P{ 2560, 1440 };
 	const resolution RES_2160P{ 3840, 2160 };
 	const resolution RES_2K = RES_1440P;
 	const resolution RES_4k = RES_2160P;
-
-	struct window_attributes
-	{
-		std::string name = "";
-		int min_width = 800;
-		int min_height = 800;
-		glm::vec4 color = { 0.0f, 0.0f, 0.0f, 1.0f};
-		int swap_interval = 1;
-	};
+	const glm::vec4 DEFAULT_WINDOW_COLOR = { 0.0f, 0.0f, 0.0f, 1.0f };
+	const unsigned int DEFAULT_SWAP_INTERVAL = 1;
+	const std::string DEFAULT_WINDOW_NAME = "";
+	const window_attributes DEFAULT_WINDOW_ATTRIBS{ DEFAULT_WINDOW_NAME, MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, DEFAULT_WINDOW_COLOR, DEFAULT_SWAP_INTERVAL };
 
 	using glfw_window = GLFWwindow;
 	using glfw_monitor = GLFWmonitor;
@@ -38,8 +41,7 @@ namespace rengage
 	class rendering_window//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
 	public:
-		rendering_window(bool full_screen = true);
-		rendering_window(window_attributes, bool full_screen = false);
+		explicit rendering_window(window_attributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~rendering_window();
 
 		glfw_window* operator()(){ return m_window; }//TODO: Switch to QT instead of GLFW for window management?
