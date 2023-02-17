@@ -24,12 +24,21 @@
     <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\rengage.lib\shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\shader_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader_factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

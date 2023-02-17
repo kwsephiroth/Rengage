@@ -22,10 +22,13 @@
     <ClInclude Include="inc\RenGage.Lib\Logger\logger.h" />
     <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h" />
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h" />
+    <ClInclude Include="inc\rengage.lib\shader.h" />
+    <ClInclude Include="inc\rengage.lib\shader_factory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\logger.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />
+    <ClCompile Include="src\shader_factory.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -150,9 +150,9 @@ void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 int main()
 {
 	LOG_ERROR("Hello from RenGage.Lib.Test!");
-	rengage::window_attributes window_attribs = { "Test", 1920, 1080, {0.0f, 0.0f, 0.0f, 1.0f}, 1 };
-	auto window = rengage::rendering_window(std::move(window_attribs));
-	auto window_color = window.get_color();
+	rengage::WindowAttributes window_attribs = { "Test", 1920, 1080, {0.0f, 0.0f, 0.0f, 1.0f}, 1 };
+	auto window = rengage::RenderingWindow(std::move(window_attribs));
+	auto window_color = window.color();
 
 	while (!glfwWindowShouldClose(window())) {
 		GLCall({ glClear }, GL_DEPTH_BUFFER_BIT);

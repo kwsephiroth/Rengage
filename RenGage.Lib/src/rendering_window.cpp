@@ -1,8 +1,8 @@
-#include <rendering_window.h>
+#include "../inc/rengage.lib/rendering_window.h"
 
 namespace rengage
 {
-	rendering_window::rendering_window(window_attributes attributes, bool full_screen) :
+	RenderingWindow::RenderingWindow(WindowAttributes attributes, bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false), 
 		m_attributes(attributes),
@@ -11,12 +11,12 @@ namespace rengage
 		init();
 	}
 
-	rendering_window::~rendering_window()
+	RenderingWindow::~RenderingWindow()
 	{
 		glfwTerminate();
 	}
 
-	void rendering_window::init()
+	void RenderingWindow::init()
 	{
 		LOG_INFO("Initializing rendering window.");
 		
@@ -35,7 +35,7 @@ namespace rengage
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
 		
 		//Attempt to create the window
-		glfw_monitor* main_monitor = nullptr;
+		GLFWmonitor* main_monitor = nullptr;
 
 		if (m_start_fullscreen) {
 			main_monitor = glfwGetPrimaryMonitor();
@@ -63,12 +63,12 @@ namespace rengage
 		m_initialized = true;
 	}
 
-	bool rendering_window::create_default_window()
+	bool RenderingWindow::create_default_window()
 	{
 		return false;
 	}
 
-	bool rendering_window::create_custom_window()
+	bool RenderingWindow::create_custom_window()
 	{
 		return false;
 	}
