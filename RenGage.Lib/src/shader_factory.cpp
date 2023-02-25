@@ -2,7 +2,7 @@
 
 namespace rengage 
 {
-	std::unique_ptr<Shader> ShaderFactory::load_shader_from_file(const GLuint type, const char* filename)
+	std::unique_ptr<Shader> ShaderFactory::load_shader_from_file(const GLuint type, const std::string& filename)
 	{
 		std::ifstream input_file;
 		std::unique_ptr<Shader> shader_ptr = nullptr;
@@ -25,21 +25,55 @@ namespace rengage
 
 		auto shader_id = glCreateShader(type);
 		auto shader_source_ptr = shader_source.c_str();
-		compile_shader_source(shader_id, shader_source_ptr);
+		auto success = compile_shader_source(shader_id, shader_source_ptr, filename);
+
+		if (success != GL_TRUE) {
+			//TODO: Initialize shader object
+		}
 
 		return shader_ptr;
 	}
 
-	std::unique_ptr<Shader> ShaderFactory::load_shader_from_source(const GLuint type, const char* source)
+	std::unique_ptr<Shader> ShaderFactory::load_shader_from_source(const GLuint type, const std::string& source)
 	{
+		std::unique_ptr<Shader> shader_ptr = nullptr;
 		auto shader_id = glCreateShader(type);
-		compile_shader_source(shader_id, source);
-		return nullptr;
+		auto success = compile_shader_source(shader_id, source);
+
+		if (success != GL_TRUE) {
+			//TODO: Initialize shader object
+		}
+
+		return shader_ptr;
 	}
 
-	GLuint ShaderFactory::compile_shader_source(const GLuint shader_id, const char* source)
+	GLint ShaderFactory::compile_shader_source(const GLuint shader_id, const std::string& source, const std::string& filename)
 	{
-		glShaderSource(shader_id, 1, &source, NULL);
+		const char* source_cstr = source.c_str();
+		glShaderSource(shader_id, 1, &source_cstr, NULL);
 		glCompileShader(shader_id);
+		GLint success;
+		glGetShaderiv(shader_id, GL_COMPILE_STATUS, &success);
+		
+		if (success != GL_TRUE) {
+			GLsizei actual_log_length = 0;
+			const unsigned int MAX_LOG_LENGTH = 1024;
+			GLchar info_log[MAX_LOG_LENGTH];
+
+			glGetShaderInfoLog(shader_id, MAX_LOG_LENGTH, &actual_log_length, info_log);
+
+			std::stringstream ss;
+			ss << "SHADER COMPILATION FAILURE: \n";
+			if (!filename.empty()) {
+				ss << "Filename: '" << filename << "'\n";
+			}
+			else {
+				ss << "Source: \"" << source << "\"\n";
+			}
+			ss << "Log: " << info_log << "\n";
+			LOG_ERROR(ss.str())
+		}
+
+		return success;
 	}
 }
