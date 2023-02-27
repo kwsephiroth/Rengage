@@ -13,22 +13,27 @@ namespace rengage
 			return shader_ptr;
 		}
 
-		std::string shader_source;
+		std::string source;
 		std::string line;
 
 		while (!input_file.eof())
 		{
 			getline(input_file, line);
-			shader_source.append(line + "\n");
+			source.append(line + "\n");
 		}
 		input_file.close();
 
 		auto shader_id = glCreateShader(type);
-		auto shader_source_ptr = shader_source.c_str();
+		auto shader_source_ptr = source.c_str();
 		auto success = compile_shader_source(shader_id, shader_source_ptr, filename);
 
 		if (success != GL_TRUE) {
-			//TODO: Initialize shader object
+			shader_ptr = std::make_unique<Shader>();
+			shader_ptr->m_id = shader_id;
+			shader_ptr->m_is_valid = true;
+			shader_ptr->m_source = source;
+			shader_ptr->m_type = type;
+			shader_ptr->m_file_name = filename;
 		}
 
 		return shader_ptr;
@@ -41,7 +46,11 @@ namespace rengage
 		auto success = compile_shader_source(shader_id, source);
 
 		if (success != GL_TRUE) {
-			//TODO: Initialize shader object
+			shader_ptr = std::make_unique<Shader>();
+			shader_ptr->m_id = shader_id;
+			shader_ptr->m_is_valid = true;
+			shader_ptr->m_source = source;
+			shader_ptr->m_type = type;
 		}
 
 		return shader_ptr;
