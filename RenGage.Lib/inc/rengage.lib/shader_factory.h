@@ -11,7 +11,6 @@ namespace rengage {
 		~ShaderFactory() = default;
 		static std::unique_ptr<Shader> load_shader_from_file(const GLuint type, const std::string& source);
 		static std::unique_ptr<Shader> load_shader_from_source(const GLuint type, const std::string& source);
-		//static void initialize_shader_ptr(std::unique_ptr<Shader>& shader_ptr);
 
 	private:
 		ShaderFactory() = default;
