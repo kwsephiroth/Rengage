@@ -98,6 +98,7 @@
 
 #include <rengage.lib/logger/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
+#include <rengage.lib/shader_factory.h>
 #include <functional>
 #include <iostream>
 
@@ -147,13 +148,21 @@ void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 	}
 }
 
+const char* VERTEX_SHADER_SOURCE = 
+"#version 430\n\n\
+void main(void)\n\
+{\n\
+	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n\
+}";
+
 int main()
 {
 	LOG_ERROR("Hello from RenGage.Lib.Test!");
 	rengage::WindowAttributes window_attribs = { "Test", 1920, 1080, {0.0f, 0.0f, 0.0f, 1.0f}, 1 };
 	auto window = rengage::RenderingWindow(std::move(window_attribs));
 	auto window_color = window.color();
-
+	auto vertex_shader = rengage::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized before this point, else exception will occur
+	
 	while (!glfwWindowShouldClose(window())) {
 		GLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
 		GLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);

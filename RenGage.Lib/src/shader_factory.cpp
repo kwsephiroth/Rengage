@@ -2,7 +2,7 @@
 
 namespace rengage 
 {
-	std::unique_ptr<Shader> ShaderFactory::load_shader_from_file(const GLuint type, const std::string& filename)
+	std::unique_ptr<Shader> ShaderFactory::load_shader_from_file(const GLenum type, const std::string& filename)
 	{
 		std::ifstream input_file;
 		std::unique_ptr<Shader> shader_ptr = nullptr;
@@ -39,10 +39,10 @@ namespace rengage
 		return shader_ptr;
 	}
 
-	std::unique_ptr<Shader> ShaderFactory::load_shader_from_source(const GLuint type, const std::string& source)
+	std::unique_ptr<Shader> ShaderFactory::load_shader_from_source(const GLenum type, const std::string& source)
 	{
 		std::unique_ptr<Shader> shader_ptr = nullptr;
-		auto shader_id = glCreateShader(type);
+		GLenum shader_id = glCreateShader(type);
 		auto success = compile_shader_source(shader_id, source);
 
 		if (success != GL_TRUE) {
@@ -72,15 +72,16 @@ namespace rengage
 			glGetShaderInfoLog(shader_id, MAX_LOG_LENGTH, &actual_log_length, info_log);
 
 			std::stringstream ss;
-			ss << "SHADER COMPILATION FAILURE: \n";
+			ss << "\nSHADER COMPILATION FAILURE: \n";
 			if (!filename.empty()) {
 				ss << "Filename: '" << filename << "'\n";
 			}
 			else {
-				ss << "Source: \"" << source << "\"\n";
+				ss << "Source:\n\"" << source << "\"\n";
 			}
 			ss << "Log: " << info_log << "\n";
 			LOG_ERROR(ss.str())
+			std::cerr << ss.str() << "\n";
 		}
 
 		return success;

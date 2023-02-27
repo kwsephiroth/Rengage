@@ -2,13 +2,20 @@
 #include <GL/glew.h>
 #include <string>
 
-namespace rengage {
-	class Shader
+namespace rengage 
+{
+	struct ShaderFileInfo
+	{
+		GLenum type;
+		std::string file_name;
+	};
+
+	class Shader 
 	{
 	public:
 		~Shader() = default;
 		inline GLuint id() const { return m_id; }
-		inline GLuint type() const { return m_type; }
+		inline GLenum type() const { return m_type; }
 		inline bool is_valid() const { return m_is_valid; }
 		inline std::string source() const { return m_source; }
 		inline std::string file_name() const { return m_file_name; }
@@ -18,7 +25,7 @@ namespace rengage {
 		Shader() = default;
 		bool m_is_valid = false;
 		GLuint m_id;
-		GLuint m_type;
+		GLenum m_type;
 		std::string m_file_name;
 		std::string m_source;
 	};

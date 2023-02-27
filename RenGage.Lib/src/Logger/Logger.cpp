@@ -5,7 +5,7 @@ namespace rengage
 	Logger::Logger(std::string log_directory) :
 		m_log_file_directory(log_directory)
 	{
-		std::call_once(m_file_init_flag, &Logger::init_log_file, this);
+		//std::call_once(m_file_init_flag, &Logger::init_log_file, this);
 	}
 
 	Logger::~Logger()
@@ -87,6 +87,7 @@ namespace rengage
 
 	void Logger::log_to_file(LogSeverity severity, std::string msg, std::string caller)
 	{
+		std::call_once(m_file_init_flag, &Logger::init_log_file, this);
 		auto log_prefix = get_log_prefix(severity, caller);
 		std::unique_lock<std::mutex>(m_log_file_mutex);
 		m_log_file <<  log_prefix << "{ " << msg << " }\n";

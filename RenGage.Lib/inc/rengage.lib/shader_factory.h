@@ -5,12 +5,14 @@
 #include <sstream>
 #include <string>
 
-namespace rengage {
-	class ShaderFactory {
+namespace rengage 
+{
+	class ShaderFactory 
+	{
 	public:
 		~ShaderFactory() = default;
-		static std::unique_ptr<Shader> load_shader_from_file(const GLuint type, const std::string& source);
-		static std::unique_ptr<Shader> load_shader_from_source(const GLuint type, const std::string& source);
+		static std::unique_ptr<Shader> load_shader_from_file(const GLenum type, const std::string& source);
+		static std::unique_ptr<Shader> load_shader_from_source(const GLenum type, const std::string& source);
 
 	private:
 		ShaderFactory() = default;
