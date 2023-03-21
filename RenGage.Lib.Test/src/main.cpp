@@ -166,7 +166,8 @@ int main()
 		return -1;
 	}
 	//TODO: Maybe setting the OpenGL context and initializing glew SHOULDN'T be the responsibility of a rendering window object.
-	glfwMakeContextCurrent(window());//TODO: Overload the ampersand operator or add a get() function that returns the raw pointer.
+	auto window_ptr = window.get();
+	glfwMakeContextCurrent(window_ptr);//TODO: Overload the ampersand operator or add a get() function that returns the raw pointer.
 	glfwSwapInterval(window.swap_interval());//Set vsync
 
 	//Must have a valid OpenGL context before initializing glew - TODO: Make sure this happens only once
@@ -180,11 +181,12 @@ int main()
 	auto window_color = window.color();
 	auto vertex_shader = rengage::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
 	
-	while (!glfwWindowShouldClose(window())) {
+
+	while (!glfwWindowShouldClose(window_ptr)) {
 		GLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
 		GLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
 		GLCall({ glClear }, GL_COLOR_BUFFER_BIT);
-		glfwSwapBuffers(window());
+		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}
 	glfwTerminate();

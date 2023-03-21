@@ -41,6 +41,7 @@ namespace rengage
 		explicit RenderingWindow(WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~RenderingWindow();
 		GLFWwindow* operator()(){ return m_window; }//TODO: Switch to QT instead of GLFW for window management?
+		GLFWwindow* get() const { return m_window; }
 		inline bool initialized() const { return m_initialized; }
 		inline std::string name() const { return m_attributes.name; }
 		inline int width() const { return m_attributes.min_width; }
