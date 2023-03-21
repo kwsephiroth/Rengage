@@ -48,18 +48,7 @@ namespace rengage
 			return;
 		}
 
-		glfwMakeContextCurrent(m_window);
-		glfwSwapInterval(m_attributes.swap_interval);//Set vsync
-
-		//Must have a valid OpenGL context before initializing glew
-		auto error_code = glewInit();
-		if (error_code != GLEW_OK) {
-			LOG_ERROR("Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
-			return;
-		}
-
 		LOG_INFO("GLFW window initialization successful.");
-		LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 		m_initialized = true;
 	}
 
