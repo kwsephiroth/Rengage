@@ -134,16 +134,17 @@ template<class... Args>
 void GLCall(std::function<void(Args&&...)> func, Args&&... args)
 {
 	func(std::forward<Args>(args)...);
-	int glError = glGetError();
-	bool closeProgram = (glError == GL_NO_ERROR) ? false : true;//TODO: Should the program be closed (exception thrown) if even a single error is detected?
-	while (glError != GL_NO_ERROR)
+	unsigned int errorCount = 0;
+	for (GLenum glError = glGetError(); glError != GL_NO_ERROR;)
 	{
+		errorCount++;
 		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")")
 		glError = glGetError();
 	}
-	if (closeProgram)
+
+	if (errorCount > 0)
 	{
-		std::cout << "Program closed unexpectedly. Please check log for errors.\n";
+		std::cout << "Program closed due to OpenGL error(s). Please check log for error code(s).\n";
 		exit(0);
 	}
 }
@@ -167,7 +168,7 @@ int main()
 	}
 	//TODO: Maybe setting the OpenGL context and initializing glew SHOULDN'T be the responsibility of a rendering window object.
 	auto window_ptr = window.get();
-	glfwMakeContextCurrent(window_ptr);//TODO: Overload the ampersand operator or add a get() function that returns the raw pointer.
+	glfwMakeContextCurrent(window_ptr);
 	glfwSwapInterval(window.swap_interval());//Set vsync
 
 	//Must have a valid OpenGL context before initializing glew - TODO: Make sure this happens only once

@@ -21,7 +21,7 @@ namespace rengage
 		int swap_interval;
 	};
 
-	const int GL_VERSION_MAJOR = 4;
+	const int GL_VERSION_MAJOR = 4;//TODO: Determine if version information should be hardcoded or variable.
 	const int GL_VERSION_MINOR = 6;
 	const int MIN_WINDOW_WIDTH = 800;
 	const int MIN_WINDOW_HEIGHT = 800;

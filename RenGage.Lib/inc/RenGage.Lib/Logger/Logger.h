@@ -28,7 +28,7 @@ namespace rengage
 		FILE
 	};
 
-	static std::string get_log_severity_str(const LogSeverity severity)
+	static std::string log_severity_to_str(const LogSeverity severity)
 	{
 		switch (severity)
 		{

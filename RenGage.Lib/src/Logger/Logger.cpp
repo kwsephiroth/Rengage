@@ -66,7 +66,7 @@ namespace rengage
 
 		ss << "[ " << time_str << " | "  << ms_since_epoch.count() << " (ms) | "
 			<<  caller << " | "
-			<<  get_log_severity_str(severity) << " ] : ";
+			<<  log_severity_to_str(severity) << " ] : ";
 
 		return ss.str();
 	}
