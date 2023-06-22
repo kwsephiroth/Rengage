@@ -131,7 +131,7 @@ static void GLCall(std::function<ReturnType(Args&&...)> func, Args&&... args)
 }
 
 template<class... Args>
-void GLCall(std::function<void(Args&&...)> func, Args&&... args)
+void OpenGLCall(std::function<void(Args&&...)> func, Args&&... args)
 {
 	func(std::forward<Args>(args)...);
 	unsigned int errorCount = 0;
@@ -184,9 +184,9 @@ int main()
 	
 
 	while (!glfwWindowShouldClose(window_ptr)) {
-		GLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
-		GLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
-		GLCall({ glClear }, GL_COLOR_BUFFER_BIT);
+		OpenGLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
+		OpenGLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
+		OpenGLCall({ glClear }, GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}
