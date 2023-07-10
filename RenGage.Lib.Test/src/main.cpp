@@ -114,36 +114,21 @@ struct GLResult
 	std::string error_msg;
 };
 
-template<class ReturnType, class... Args>
-static void GLCall(std::function<ReturnType(Args&&...)> func, Args&&... args)
-{
-	func(std::forward<Args>(args)...);
-	int glError = glGetError();
-	bool closeProgram = (glError == GL_NO_ERROR) ? false : true ;
-	while (glError != GL_NO_ERROR)
-	{
-		std::cout << glError << '\n';
-		glError = glGetError();
-	}
-	if (closeProgram)
-		exit(0);
-
-}
-
 template<typename OpenGLFunc, typename ... Args>
 void OpenGLCall(OpenGLFunc func, Args&&... args)
 {
 	func(std::forward<Args>(args)...);
 	unsigned int errorCount = 0;
-	for (GLenum glError = glGetError(); glError != GL_NO_ERROR;)
-	{
+	for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
 		errorCount++;
+
+		//TODO: Need to log more helpful info about error (e.g. function name, which file, line number)
 		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")")
+
 		glError = glGetError();
 	}
 
-	if (errorCount > 0)
-	{
+	if (errorCount > 0) {
 		std::cout << "Program closed due to OpenGL error(s). Please check log for error code(s).\n";
 		exit(0);
 	}

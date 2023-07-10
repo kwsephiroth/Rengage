@@ -33,9 +33,6 @@ namespace rengage
 	{
 		switch (severity)
 		{
-			case LogSeverity::INFO:
-				return "INFO";
-
 			case LogSeverity::WARNING:
 				return "WARNING";
 
@@ -45,6 +42,7 @@ namespace rengage
 			case LogSeverity::DEBUG:
 				return "DEBUG";
 
+			case LogSeverity::INFO:
 			default:
 				return "INFO";
 		}
