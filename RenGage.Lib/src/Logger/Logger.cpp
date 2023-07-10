@@ -10,8 +10,9 @@ namespace rengage
 
 	Logger::~Logger()
 	{
-		if (m_log_file.is_open())
+		if (m_log_file.is_open()) {
 			m_log_file.close();
+		}
 	}
 
 	Logger& Logger::get()

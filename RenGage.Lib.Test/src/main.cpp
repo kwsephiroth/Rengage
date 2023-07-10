@@ -130,8 +130,8 @@ static void GLCall(std::function<ReturnType(Args&&...)> func, Args&&... args)
 
 }
 
-template<class... Args>
-void OpenGLCall(std::function<void(Args&&...)> func, Args&&... args)
+template<typename OpenGLFunc, typename ... Args>
+void OpenGLCall(OpenGLFunc func, Args&&... args)
 {
 	func(std::forward<Args>(args)...);
 	unsigned int errorCount = 0;
@@ -153,7 +153,7 @@ const char* VERTEX_SHADER_SOURCE =
 "#version 430\n\n\
 void main(void)\n\
 {\n\
-	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n\
+	gl_Position = ec4(0.0, 0.0, 0.0, 1.0);\n\
 }";
 
 int main()
@@ -172,7 +172,7 @@ int main()
 	glfwSwapInterval(window.swap_interval());//Set vsync
 
 	//Must have a valid OpenGL context before initializing glew - TODO: Make sure this happens only once
-	auto error_code = glewInit();
+	auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 	if (error_code != GLEW_OK) {
 		LOG_ERROR("Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
 		return -1;
@@ -184,9 +184,9 @@ int main()
 	
 
 	while (!glfwWindowShouldClose(window_ptr)) {
-		OpenGLCall({ glClear }, GL_DEPTH_BUFFER_BIT);
-		OpenGLCall({ glClearColor }, window_color.r, window_color.g, window_color.b, window_color.a);
-		OpenGLCall({ glClear }, GL_COLOR_BUFFER_BIT);
+		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
+		OpenGLCall(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
+		OpenGLCall(glClear, GL_COLOR_BUFFER_BIT);
 		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}

@@ -19,7 +19,8 @@ namespace rengage
 	{
 		INFO,
 		WARNING,
-		ERROR
+		ERROR,
+		DEBUG
 	};
 
 	enum class LogDestination
@@ -41,8 +42,11 @@ namespace rengage
 			case LogSeverity::ERROR:
 				return "ERROR";
 
+			case LogSeverity::DEBUG:
+				return "DEBUG";
+
 			default:
-				return "UNKNOWN";
+				return "INFO";
 		}
 	}
 
