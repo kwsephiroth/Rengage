@@ -153,7 +153,7 @@ const char* VERTEX_SHADER_SOURCE =
 "#version 430\n\n\
 void main(void)\n\
 {\n\
-	gl_Position = ec4(0.0, 0.0, 0.0, 1.0);\n\
+	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n\
 }";
 
 int main()
