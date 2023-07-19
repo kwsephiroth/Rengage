@@ -26,7 +26,7 @@ namespace rengage
 		auto shader_source_ptr = source.c_str();
 		auto success = compile_shader_source(shader_id, shader_source_ptr, filename);
 
-		if (success != GL_TRUE) {
+		if (success == GL_TRUE) {
 			shader_ptr = std::unique_ptr<Shader>(new Shader());
 			shader_ptr->m_id = shader_id;
 			shader_ptr->m_is_valid = true;
@@ -44,7 +44,7 @@ namespace rengage
 		GLenum shader_id = glCreateShader(type);
 		auto success = compile_shader_source(shader_id, source);
 
-		if (success != GL_TRUE) {
+		if (success == GL_TRUE) {
 			shader_ptr = std::unique_ptr<Shader>(new Shader());//Can't use make_unique here due to private constructor.
 			shader_ptr->m_id = shader_id;
 			shader_ptr->m_is_valid = true;

@@ -144,7 +144,7 @@ void main(void)\n\
 int main()
 {
 	LOG_ERROR("Hello from RenGage.Lib.Test!");
-	rengage::WindowAttributes window_attribs = { "Test", 1920, 1080, {0.0f, 0.0f, 0.0f, 1.0f}, 1 };
+	rengage::WindowAttributes window_attribs = { .name="Test", .min_width=1920, .min_height=1080, .color={0.0f, 0.0f, 0.0f, 1.0f}, .swap_interval=1 };//designated initializer since C++20
 	auto window = rengage::RenderingWindow(std::move(window_attribs));
 	
 	if (!window.initialized()) {
@@ -159,7 +159,7 @@ int main()
 	//Must have a valid OpenGL context before initializing glew - TODO: Make sure this happens only once
 	auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 	if (error_code != GLEW_OK) {
-		LOG_ERROR("Failed to initialize GlEW with error code(" + std::to_string(error_code) + ").");
+		LOG_ERROR("Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
 		return -1;
 	}
 	LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
@@ -167,7 +167,11 @@ int main()
 	auto window_color = window.color();
 	auto vertex_shader = rengage::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
 	
-
+	if (vertex_shader == nullptr || !vertex_shader->is_valid()) {
+		LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
+		return -1;
+	}
+	
 	while (!glfwWindowShouldClose(window_ptr)) {
 		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
 		OpenGLCall(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
