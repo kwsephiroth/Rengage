@@ -60,7 +60,9 @@ namespace rengage
 		Logger(Logger&&) = delete;
 		Logger& operator=(const Logger&) = delete;
 		Logger& operator=(Logger&&) = delete;
-		
+
+		//TODO: Determine how portable GCC builtin function is
+		//TODO: Add support for caller's line number and file name
 		void log(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
 		void log_to_file(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
 		void log_to_console(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());

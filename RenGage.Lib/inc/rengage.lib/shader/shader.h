@@ -24,8 +24,8 @@ namespace rengage
 	private:		
 		Shader() = default;
 		bool m_is_valid = false;
-		GLuint m_id;
-		GLenum m_type;
+		GLuint m_id = 0;
+		GLenum m_type = 0;
 		std::string m_file_name;
 		std::string m_source;
 	};

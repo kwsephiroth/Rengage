@@ -22,13 +22,14 @@
     <ClInclude Include="inc\RenGage.Lib\Logger\logger.h" />
     <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h" />
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h" />
-    <ClInclude Include="inc\rengage.lib\shader.h" />
-    <ClInclude Include="inc\rengage.lib\shader_factory.h" />
+    <ClInclude Include="inc\rengage.lib\shader\shader.h" />
+    <ClInclude Include="inc\rengage.lib\shader\shader_factory.h" />
+    <ClInclude Include="inc\rengage.lib\mesh\vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Logger\logger.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />
-    <ClCompile Include="src\shader_factory.cpp" />
+    <ClCompile Include="src\shader\shader_factory.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -92,7 +93,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)RenGage.Lib\inc\RenGage.Lib\</IncludePath>
+    <IncludePath>$(SolutionDir)RenGage.Lib\inc\rengage.Lib\</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

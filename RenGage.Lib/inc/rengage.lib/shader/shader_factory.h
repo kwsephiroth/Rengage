@@ -1,6 +1,6 @@
 #pragma once
 #include "shader.h"
-#include "logger/logger_macros.h"
+#include "../logger/logger_macros.h"
 #include <fstream>
 #include <sstream>
 #include <string>

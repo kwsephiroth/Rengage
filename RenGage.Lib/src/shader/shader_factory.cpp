@@ -1,4 +1,4 @@
-#include "../inc/rengage.lib/shader_factory.h"
+#include "../../inc/rengage.lib/shader/shader_factory.h"//TODO: Improve file include structure.
 
 namespace rengage 
 {

@@ -98,7 +98,7 @@
 
 #include <rengage.lib/logger/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
-#include <rengage.lib/shader_factory.h>
+#include <rengage.lib/shader/shader_factory.h>
 #include <functional>
 #include <iostream>
 
@@ -123,7 +123,8 @@ void OpenGLCall(OpenGLFunc func, Args&&... args)
 		errorCount++;
 
 		//TODO: Need to log more helpful info about error (e.g. function name, which file, line number)
-		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")")
+		//std::string caller = __builtin_FUNCTION();
+		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")");// from function \"" + caller + "\"")
 
 		glError = glGetError();
 	}
