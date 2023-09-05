@@ -1,11 +1,11 @@
 #pragma once
 #include "shader.h"
-#include "../logger/logger_macros.h"
+#include "../logging/logger_macros.h"
 #include <fstream>
 #include <sstream>
 #include <string>
 
-namespace rengage 
+namespace rengage::shader
 {
 	class ShaderFactory 
 	{

@@ -1,6 +1,6 @@
 #include "../../inc/rengage.lib/shader/shader_factory.h"//TODO: Improve file include structure.
 
-namespace rengage 
+namespace rengage::shader
 {
 	std::unique_ptr<Shader> ShaderFactory::load_shader_from_file(const GLenum type, const std::string& filename)
 	{

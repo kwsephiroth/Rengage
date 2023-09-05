@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\RenGage.Lib\Logger\logger.h">
+    <ClInclude Include="inc\rengage.lib\logging\logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h">
+    <ClInclude Include="inc\rengage.lib\logging\logger_macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\rengage.lib\shader\shader.h">
@@ -35,7 +35,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Logger\logger.cpp">
+    <ClCompile Include="src\logging\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering_window.cpp">

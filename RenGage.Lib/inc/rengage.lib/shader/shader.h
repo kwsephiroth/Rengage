@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <string>
 
-namespace rengage 
+namespace rengage::shader
 {
 	struct ShaderFileInfo
 	{

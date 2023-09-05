@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
-#include "logger/logger_macros.h"
+#include "logging/logger_macros.h"
 
 namespace rengage
 {
@@ -49,8 +49,8 @@ namespace rengage
 		inline glm::vec4 color() const { return m_attributes.color; }
 		inline int swap_interval() const { return m_attributes.swap_interval; }
 		inline GLFWwindow* glfw_window() const { return m_window; }
-		void hide_window() { glfwHideWindow(m_window); }
-		void show_window() { glfwShowWindow(m_window); }
+		void hide() { glfwHideWindow(m_window); }
+		void show() { glfwShowWindow(m_window); }
 
 	private:
 		void init();

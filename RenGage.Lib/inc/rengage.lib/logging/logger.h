@@ -9,7 +9,7 @@
 #include <mutex>
 #include <filesystem>
 
-namespace rengage
+namespace rengage::logging
 {
 	const std::string LOG_FILE_DIRECTORY = "Logs/";
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";

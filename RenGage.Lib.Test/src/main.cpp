@@ -96,7 +96,7 @@
 //	return 0;
 //}
 
-#include <rengage.lib/logger/logger_macros.h>
+#include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_factory.h>
 #include <functional>
@@ -166,7 +166,7 @@ int main()
 	LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 
 	auto window_color = window.color();
-	auto vertex_shader = rengage::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
+	auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
 	
 	if (vertex_shader == nullptr || !vertex_shader->is_valid()) {
 		LOG_ERROR("Failed to load shader(s). Check logs for error(s).");

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-namespace rengage {
+namespace rengage::mesh {
 	struct Vertex
 	{
 		std::vector<float> m_position;//a 2D or 3D collection of floats - required

@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\RenGage.Lib\Logger\logger.h" />
-    <ClInclude Include="inc\RenGage.Lib\Logger\logger_macros.h" />
+    <ClInclude Include="inc\rengage.lib\logging\logger.h" />
+    <ClInclude Include="inc\rengage.lib\logging\logger_macros.h" />
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_factory.h" />
     <ClInclude Include="inc\rengage.lib\mesh\vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Logger\logger.cpp" />
+    <ClCompile Include="src\logging\logger.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />
     <ClCompile Include="src\shader\shader_factory.cpp" />
   </ItemGroup>
