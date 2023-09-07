@@ -30,7 +30,13 @@
     <ClInclude Include="inc\rengage.lib\shader\shader_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\rengage.lib\mesh\vertex.h">
+    <ClInclude Include="inc\rengage.lib\model\vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\model\mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\model\model_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

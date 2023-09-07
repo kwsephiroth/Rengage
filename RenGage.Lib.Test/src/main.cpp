@@ -99,6 +99,7 @@
 #include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_factory.h>
+#include <rengage.lib/model/model_loader.h>
 #include <functional>
 #include <iostream>
 
@@ -172,6 +173,11 @@ int main()
 		LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
 		return -1;
 	}
+
+	if (!rengage::model::import_model("res/models/pine_tree.obj")) {
+		return -1;
+	}
+		
 	
 	while (!glfwWindowShouldClose(window_ptr)) {
 		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
