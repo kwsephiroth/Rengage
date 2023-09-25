@@ -11,7 +11,7 @@ namespace rengage::shader
 	{
 	public:
 		~ShaderFactory() = default;
-		static std::unique_ptr<Shader> load_shader_from_file(const GLenum type, const std::string& source);
+		static std::unique_ptr<Shader> load_shader_from_file(const GLenum type, const std::string& filename);
 		static std::unique_ptr<Shader> load_shader_from_source(const GLenum type, const std::string& source);
 
 	private:

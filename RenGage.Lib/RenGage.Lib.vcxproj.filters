@@ -36,7 +36,10 @@
     <ClInclude Include="inc\rengage.lib\model\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\rengage.lib\model\model_loader.h">
+    <ClInclude Include="inc\rengage.lib\model\model_factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\model\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\shader\shader_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\model_factory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

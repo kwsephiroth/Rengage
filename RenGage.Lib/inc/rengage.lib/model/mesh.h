@@ -1,9 +1,15 @@
 #pragma once
+#include <vector>
 #include "vertex.h"
 
-class Mesh
-{
-public:
-	Mesh() = default;
-	~Mesh() = default;
-};
+namespace rengage::model {
+	class Mesh
+	{
+	private:
+		std::vector<Vertex> m_vertices;
+
+	public:
+		Mesh() = default;
+		~Mesh() = default;
+	};
+}

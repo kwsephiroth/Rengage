@@ -1,12 +1,13 @@
 #pragma once
-#include <vector>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
 namespace rengage::model {
 	struct Vertex
 	{
-		std::vector<float> m_position;//a 2D or 3D collection of floats - required
-		std::vector<float> m_normal;//a 2D or 3D collection of floats - required
-		std::vector<float> m_uv;//a 2D collection of floats - texture coordinates are not required
+		glm::vec3 m_position;//a 3D collection of floats - required
+		glm::vec3 m_normal;//a 3D collection of floats - required
+		glm::vec2 m_uv;//a 2D collection of floats - texture coordinates are not required - TODO: Determine if preallocating this is a waste of space.
 
 		/*Vertices are "equal" if all their attributes (position, UVs, normals) match*/
 		bool operator == (const Vertex& rhs) {

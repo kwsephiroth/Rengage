@@ -99,9 +99,12 @@
 #include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_factory.h>
-#include <rengage.lib/model/model_loader.h>
+#include <rengage.lib/model/model_factory.h>
 #include <functional>
 #include <iostream>
+#include <glm/vec2.hpp>
+#include <vector>
+#include <rengage.lib/model/vertex.h>
 
 enum class ErrorCode
 {
@@ -174,10 +177,20 @@ int main()
 		return -1;
 	}
 
-	if (!rengage::model::import_model("res/models/pine_tree.obj")) {
+	if (!rengage::model::ModelFactory::import_model("res/models/pine_tree.obj")) {
 		return -1;
 	}
-		
+
+	std::vector<float> vec;
+	glm::vec2 vec2;
+	rengage::model::Vertex vertex;
+	//vertex.m_position.x = (1);
+	//vertex.m_position.y = (2.3);
+	//vertex.m_position.z = (4.2);
+
+	std::cout << "size of vec is " << sizeof(vec) << " bytes.\n";
+	std::cout << "size of vec2 is " << sizeof(vec2) << " bytes.\n";
+	std::cout << "size of vertex is " << sizeof(vertex) << " bytes.\n";
 	
 	while (!glfwWindowShouldClose(window_ptr)) {
 		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
