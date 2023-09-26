@@ -177,7 +177,7 @@ int main()
 		return -1;
 	}
 
-	if (!rengage::model::ModelFactory::import_model("res/models/pine_tree.obj")) {
+	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj")) {
 		return -1;
 	}
 

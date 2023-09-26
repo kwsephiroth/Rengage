@@ -9,16 +9,18 @@
 
 namespace rengage::model {
 	
-	const unsigned int ASSIMP_POST_PROCESS_FLAGS = aiProcess_CalcTangentSpace |
-												   aiProcess_Triangulate |
-												   aiProcess_JoinIdenticalVertices |
-												   aiProcess_SortByPType;
+	const unsigned int ASSIMP_POST_PROCESS_FLAGS = aiProcess_Triangulate |
+												   aiProcess_GenSmoothNormals |
+												   //aiProcess_FlipUVs |
+												   aiProcess_JoinIdenticalVertices;
 	class ModelFactory
 	{
 	private:
 		ModelFactory() = default;
+		static std::unique_ptr<Model> build_model_from_aiScene(const aiScene* scene);
 
 	public:
-		static std::unique_ptr<Model> import_model(const std::string& filename);
+		static std::unique_ptr<Model> load_model(const std::string& filename);
+
 	};
 }

@@ -2,7 +2,7 @@
 
 namespace rengage::model {
 
-	std::unique_ptr<Model> ModelFactory::import_model(const std::string& filename) {
+	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename) {
 		LOG_INFO("Loading model from path '" + filename + "'...")
 
 		Assimp::Importer importer;
@@ -17,5 +17,9 @@ namespace rengage::model {
 		std::unique_ptr<Model> model_ptr = nullptr;
 		LOG_INFO("Model successfully loaded from path '" + filename + "'.")
 		return model_ptr;
+	}
+
+	std::unique_ptr<Model> ModelFactory::build_model_from_aiScene(const aiScene* scene) {
+		return nullptr;
 	}
 }

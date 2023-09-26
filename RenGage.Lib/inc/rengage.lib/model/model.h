@@ -7,6 +7,7 @@ namespace rengage::model {
 	{
 	private:
 		std::vector<Mesh> m_meshes;
+		unsigned int m_num_meshes;
 
 	public:
 		Model() = default;
