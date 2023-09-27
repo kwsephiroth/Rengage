@@ -1,13 +1,14 @@
 #pragma once
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <iostream>
 
 namespace rengage::model {
 	struct Vertex
 	{
 		glm::vec3 m_position;//a 3D collection of floats - required
 		glm::vec3 m_normal;//a 3D collection of floats - required
-		glm::vec2 m_uv;//a 2D collection of floats - texture coordinates are not required - TODO: Determine if preallocating this is a waste of space.
+		glm::vec2 m_uv = { 0,0 };//a 2D collection of floats - texture coordinates are not required - TODO: Determine if preallocating this is a waste of space.
 
 		/*Vertices are "equal" if all their attributes (position, UVs, normals) match*/
 		bool operator == (const Vertex& rhs) {
@@ -17,6 +18,8 @@ namespace rengage::model {
 				return true;
 			}
 			return false;
-		}
+		}	
 	};
+
+	std::ostream& operator<<(std::ostream& os, const Vertex& vertex);
 }

@@ -180,17 +180,6 @@ int main()
 	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj")) {
 		return -1;
 	}
-
-	std::vector<float> vec;
-	glm::vec2 vec2;
-	rengage::model::Vertex vertex;
-	//vertex.m_position.x = (1);
-	//vertex.m_position.y = (2.3);
-	//vertex.m_position.z = (4.2);
-
-	std::cout << "size of vec is " << sizeof(vec) << " bytes.\n";
-	std::cout << "size of vec2 is " << sizeof(vec2) << " bytes.\n";
-	std::cout << "size of vertex is " << sizeof(vertex) << " bytes.\n";
 	
 	while (!glfwWindowShouldClose(window_ptr)) {
 		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
