@@ -7,13 +7,8 @@ namespace rengage::model {
 	class Mesh
 	{
 	private:		
-		Mesh() = default;
+		Mesh() = default;//TODO: Create public constructor that takes mesh dependencies as parameters.
 		std::vector<Vertex> m_vertices;
-
-		//Temporary buffers. TODO: Consider moving these into the ModelFactory load process.
-		std::vector<glm::vec3> m_positions;
-		std::vector<glm::vec3> m_normals;
-		std::vector<glm::vec2> m_uvs;
 
 	public:
 		~Mesh() = default;

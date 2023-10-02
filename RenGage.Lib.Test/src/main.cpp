@@ -180,6 +180,10 @@ int main()
 	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj")) {
 		return -1;
 	}
+
+	//if (!rengage::model::ModelFactory::load_model("res/models/bat.obj")) {
+	//	return -1;
+	//}
 	
 	while (!glfwWindowShouldClose(window_ptr)) {
 		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);

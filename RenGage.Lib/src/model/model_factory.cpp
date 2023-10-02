@@ -46,50 +46,46 @@ namespace rengage::model {
 		return nullptr;
 	}
 
-	//TODO: Currently this is incorrect. The stored vertices aren't in correct face order. Fix this.
-	bool ModelFactory::init_meshes_from_scene(const aiScene& scene, Model& model) {
-		//std::cout << "mNumMeshes = " << scene.mNumMeshes << "\n";
+	bool ModelFactory::init_meshes(const aiScene& scene, Model& model) {
 
 		//Extract positions, normals, and texture coordinates from aiScene mesh objects
 		//then use that info to create RenGage mesh objects
 		for (unsigned int mesh_index = 0; mesh_index < scene.mNumMeshes; ++mesh_index) {
-			Mesh rengage_mesh;
-			auto current_mesh = scene.mMeshes[mesh_index];//Capture pointer to current aiMesh object
-			auto current_verts = current_mesh->mVertices;//Capture pointer to current vertex array
-			auto current_num_verts = current_mesh->mNumVertices;
 
-			for (unsigned int vert_index = 0; vert_index < current_num_verts; ++vert_index) {
-				auto current_vert = current_verts[vert_index];
-				//Vertex rengage_vertex;
-
-				if (current_mesh->HasPositions()) {
-					//rengage_vertex.m_position = { current_vert.x, current_vert.y, current_vert.z };
-					rengage_mesh.m_positions.push_back({ current_vert.x, current_vert.y, current_vert.z });
-				}
-				else {
-					continue;
-				}
-
-				if (current_mesh->HasNormals()) {
-					//This is safe because the size of normals array is mNumVertices in size.
-					auto current_normal = current_mesh->mNormals[vert_index];
-					//rengage_vertex.m_normal = { current_normal.x, current_normal.y, current_normal.z };
-					rengage_mesh.m_normals.push_back({ current_normal.x, current_normal.y, current_normal.z });
-				}
-
-				if (current_mesh->HasTextureCoords(0)) {//TODO: Figure out what the texture coordinate set index is.
-					//This is safe because the size of texture coordinates array is mNumVertices in size.
-					auto current_uv = current_mesh->mTextureCoords[0][vert_index];
-					//rengage_vertex.m_uv = { current_uv.x, current_uv.y };
-					rengage_mesh.m_uvs.push_back({ current_uv.x, current_uv.y });
-				}
-
-				//rengage_mesh.m_vertices.push_back(std::move(rengage_vertex));
-			}
-			//Finally add newly created mesh to model's mesh collection
-			//std::cout << rengage_mesh << "\n";
-			//model.m_meshes.push_back(std::move(rengage_mesh));
 		}
 		return false;
+	}
+
+	Mesh ModelFactory::generate_rengage_mesh(const aiMesh& mesh) {
+
+		Mesh rengage_mesh;
+		auto vertices = mesh.mVertices;
+		auto num_vertices = mesh.mNumVertices;
+
+		for (unsigned int vertex_index = 0; vertex_index < num_vertices; ++vertex_index) {
+			auto current_vertex = vertices[vertex_index];
+			Vertex rengage_vertex;
+
+			if (mesh.HasPositions()) {
+				rengage_vertex.m_position = { current_vertex.x, current_vertex.y, current_vertex.z };
+			}
+			else {
+				continue;
+			}
+
+			if (mesh.HasNormals()) {
+				//This is safe because the size of normals array is mNumvertexices in size.
+				auto current_normal = mesh.mNormals[vertex_index];
+				rengage_vertex.m_normal = { current_normal.x, current_normal.y, current_normal.z };
+			}
+
+			if (mesh.HasTextureCoords(0)) {//TODO: Figure out what the texture coordinate set index is.
+				//This is safe because the size of texture coordinates array is mNumvertexices in size.
+				auto current_uv = mesh.mTextureCoords[0][vertex_index];
+				rengage_vertex.m_uv = { current_uv.x, current_uv.y };
+			}
+		}
+
+		return rengage_mesh;
 	}
 }

@@ -11,14 +11,15 @@ namespace rengage::model {
 	
 	const unsigned int ASSIMP_POST_PROCESS_FLAGS = aiProcess_Triangulate |
 												   aiProcess_GenSmoothNormals |
-												   //aiProcess_FlipUVs |
+												   aiProcess_FlipUVs |
 												   aiProcess_JoinIdenticalVertices;
 	class ModelFactory
 	{
 	private:
 		ModelFactory() = default;
 		static std::unique_ptr<Model> build_model_from_scene(const aiScene& scene);
-		static bool init_meshes_from_scene(const aiScene& scene, Model& model);
+		static bool init_meshes(const aiScene& scene, Model& model);
+		static Mesh generate_rengage_mesh(const aiMesh& mesh);
 
 	public:
 		static std::unique_ptr<Model> load_model(const std::string& filename);
