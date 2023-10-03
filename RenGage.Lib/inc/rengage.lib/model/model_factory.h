@@ -19,7 +19,8 @@ namespace rengage::model {
 		ModelFactory() = default;
 		static std::unique_ptr<Model> build_model_from_scene(const aiScene& scene);
 		static bool init_meshes(const aiScene& scene, Model& model);
-		static Mesh generate_rengage_mesh(const aiMesh& mesh);
+		static void process_node(const aiNode& node, const aiScene& scene, Model& model);
+		static Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 
 	public:
 		static std::unique_ptr<Model> load_model(const std::string& filename);

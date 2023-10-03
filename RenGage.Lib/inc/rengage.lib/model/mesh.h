@@ -9,6 +9,7 @@ namespace rengage::model {
 	private:		
 		Mesh() = default;//TODO: Create public constructor that takes mesh dependencies as parameters.
 		std::vector<Vertex> m_vertices;
+		std::vector<unsigned int> m_indices;
 
 	public:
 		~Mesh() = default;
