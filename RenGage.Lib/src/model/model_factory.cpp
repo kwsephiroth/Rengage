@@ -30,7 +30,6 @@ namespace rengage::model {
 
 	std::unique_ptr<Model> ModelFactory::build_model_from_scene(const aiScene& scene)
 	{
-		
 		Model* model = new Model();
 		bool success = init_meshes(scene, *model);
 
@@ -50,8 +49,12 @@ namespace rengage::model {
 
 	bool ModelFactory::init_meshes(const aiScene& scene, Model& model)
 	{
-		process_node(*scene.mRootNode, scene, model);
-		return true;
+		if (aiNode* root_node = scene.mRootNode; root_node != nullptr) {//if with Initialization since C++17
+			process_node(*root_node, scene, model);
+			//TODO: Devise method/rules of determining if a model is initialized properly.
+			return true;
+		}
+		return false;
 	}
 
 	void ModelFactory::process_node(const aiNode& node, const aiScene& scene, Model& model)
@@ -60,11 +63,12 @@ namespace rengage::model {
 		for (unsigned int mesh_index = 0; mesh_index < node.mNumMeshes; ++mesh_index)
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
-			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));
+			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));//Copy meshes that make up this parent node.
 		}
 
 		//then do the same for each of its children (recursively)
 		//this will be useful for retaining the parent-child relation between meshes.
+		//TODO: Devise scheme to mark parent and child(ren) meshes during this recursion.
 		for (unsigned int child_index = 0; child_index < node.mNumChildren; ++child_index)
 		{
 			process_node(*(node.mChildren[child_index]), scene, model);
@@ -114,6 +118,9 @@ namespace rengage::model {
 			}
 		}
 
+		//TODO: Should this really be done per child mesh or over the entire model?
+		// Generate VAOs per mesh or per model?
+		//rengage_mesh.setup_vao();//Temp test call TODO: Remove this.
 		return rengage_mesh;
 	}
 }

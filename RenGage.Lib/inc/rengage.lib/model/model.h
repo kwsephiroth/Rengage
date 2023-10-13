@@ -9,6 +9,7 @@ namespace rengage::model {
 		Model() = default;//TODO: Create public constructor that takes model dependencies as parameters.
 		std::vector<Mesh> m_meshes;
 		unsigned int m_num_meshes;
+		bool m_initialized = false;
 
 	public:
 		~Model() = default;

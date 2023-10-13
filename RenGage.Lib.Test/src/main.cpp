@@ -95,15 +95,14 @@
 //
 //	return 0;
 //}
-
-#include <rengage.lib/logging/logger_macros.h>
-#include <rengage.lib/rendering_window.h>
-#include <rengage.lib/shader/shader_factory.h>
-#include <rengage.lib/model/model_factory.h>
 #include <functional>
 #include <iostream>
 #include <glm/vec2.hpp>
 #include <vector>
+#include <rengage.lib/logging/logger_macros.h>
+#include <rengage.lib/rendering_window.h>
+#include <rengage.lib/shader/shader_factory.h>
+#include <rengage.lib/model/model_factory.h>
 #include <rengage.lib/model/vertex.h>
 
 enum class ErrorCode
