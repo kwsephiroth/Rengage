@@ -32,6 +32,7 @@
   <ItemGroup>
     <ClCompile Include="src\logging\logger.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
+    <ClCompile Include="src\model\model.cpp" />
     <ClCompile Include="src\model\model_factory.cpp" />
     <ClCompile Include="src\model\vertex.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />

@@ -23,7 +23,7 @@ namespace rengage::model {
 		static Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 
 	public:
-		static std::unique_ptr<Model> load_model(const std::string& filename);
+		static std::unique_ptr<Model> load_model(const std::string& filename, std::optional<unsigned int> VAO=std::nullopt);
 
 	};
 }

@@ -2,7 +2,7 @@
 
 namespace rengage::model {
 
-	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename)
+	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename, std::optional<unsigned int> VAO)
 	{
 		LOG_INFO("Loading model from path '" + filename + "'...")
 
@@ -17,6 +17,7 @@ namespace rengage::model {
 		
 		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene);
 		if (model_ptr != nullptr) {
+			//TODO: Bind VAO then bind and setup mesh VBOs
 			LOG_INFO("Model successfully loaded from path '" + filename + "'.")
 		}
 		else {
@@ -110,7 +111,7 @@ namespace rengage::model {
 
 		for (unsigned int face_index = 0; face_index < ai_mesh.mNumFaces; ++face_index)
 		{
-			//A face contains the indices of the vertices we need to draw in what order for its primitive.
+			//A face contains the indices, in correct order, of the vertices we need to draw its primitive.
 			auto current_face = ai_mesh.mFaces[face_index];
 			for (unsigned int vert_index = 0; vert_index < current_face.mNumIndices; ++vert_index)
 			{
@@ -118,9 +119,6 @@ namespace rengage::model {
 			}
 		}
 
-		//TODO: Should this really be done per child mesh or over the entire model?
-		// Generate VAOs per mesh or per model?
-		//rengage_mesh.setup_vao();//Temp test call TODO: Remove this.
 		return rengage_mesh;
 	}
 }

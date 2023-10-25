@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <optional>
+#include <unordered_map>
 #include "vertex.h"
 
 namespace rengage::model {
@@ -14,16 +15,13 @@ namespace rengage::model {
 		std::vector<unsigned int> m_indices;
 
 		//IDs are only initialized when mesh is successfully initialized.
-		std::optional<unsigned int> m_vao = std::nullopt;//vertex attribute object(VAO) id
 		std::optional<unsigned int> m_vbo = std::nullopt;//vertex buffer object(VBO) id
-		std::optional<unsigned int> m_ebo = std::nullopt;//element buffer object(EBO) id
+		//std::optional<unsigned int> m_ebo = std::nullopt;//element buffer object(EBO) id
 
-		void setup_vao();
-
+		void setup_VBO(const VertexAttribMap& attribMap);
 	public:
 		~Mesh() = default;
 		friend class ModelFactory;
 		friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh);
-		std::optional<unsigned int> VAO() { return m_vao; }
 	};
 }
