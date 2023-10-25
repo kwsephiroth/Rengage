@@ -13,6 +13,32 @@ namespace rengage::model {
 
 	void Mesh::setup_VBO(const VertexAttribMap& attribMap)
 	{
+		//First make sure map has valid attributes.
+		if (attribMap.empty() || attribMap.size() < 3) {
+			//TODO: Log error then return
+			return;
+		}
+
+		auto position_itr = attribMap.find(VertexAttribType::POSITION);
+		if (position_itr == attribMap.end()) {
+			//TODO: Log error then return
+			return;
+		}
+		auto normal_itr = attribMap.find(VertexAttribType::NORMAL);
+		if (normal_itr == attribMap.end()) {
+			//TODO: Log error then return
+			return;
+		}
+		auto texcoord_itr = attribMap.find(VertexAttribType::TEXCOORD);
+		if (texcoord_itr == attribMap.end()) {
+			//TODO: Log error then return
+			return;
+		}
+
+		VertexAttributeIndex position_attrib_index = position_itr->second;
+		VertexAttributeIndex normal_attrib_index = normal_itr->second;
+		VertexAttributeIndex texcoord_attrib_index = texcoord_itr->second;
+
 		//TODO: VAO needs to be bound first
 		////Initialize to dummy values. Will be overwritten with valid ids.
 		m_vbo = 0;
@@ -34,26 +60,6 @@ namespace rengage::model {
 		GLintptr vertex_position_offset = 0 * sizeof(float);
 		GLintptr vertex_normal_offset = 3 * sizeof(float);
 		GLintptr vertex_texcoord_offset = 6 * sizeof(float);
-
-		auto position_itr = attribMap.find(VertexAttribType::POSITION);
-		if (position_itr == attribMap.end()) {
-			//TODO: Log error then return
-			return;
-		}
-		auto normal_itr = attribMap.find(VertexAttribType::NORMAL);
-		if (normal_itr == attribMap.end()) {
-			//TODO: Log error then return
-			return;
-		}
-		auto texcoord_itr = attribMap.find(VertexAttribType::TEXCOORD);
-		if (texcoord_itr == attribMap.end()) {
-			//TODO: Log error then return
-			return;
-		}
-
-		VertexAttributeIndex position_attrib_index = position_itr->second;
-		VertexAttributeIndex normal_attrib_index = normal_itr->second;
-		VertexAttributeIndex texcoord_attrib_index = texcoord_itr->second;
 
 		//setup position attribute
 		glEnableVertexAttribArray(position_attrib_index);
