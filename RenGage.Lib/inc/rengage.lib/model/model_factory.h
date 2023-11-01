@@ -23,7 +23,10 @@ namespace rengage::model {
 		static Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 
 	public:
-		static std::unique_ptr<Model> load_model(const std::string& filename, std::optional<unsigned int> VAO=std::nullopt);
-
+		static std::unique_ptr<Model> load_model(const std::string& filename,
+												 const VertexAttributeIndex position_index,
+												 const VertexAttributeIndex normal_index,
+												 const VertexAttributeIndex tex_coord_index,
+												 std::optional<unsigned int> VAO=std::nullopt);
 	};
 }

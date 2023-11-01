@@ -176,7 +176,19 @@ int main()
 		return -1;
 	}
 
-	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj")) {
+	rengage::model::VertexAttributeIndex position_index = 0;
+	rengage::model::VertexAttributeIndex normal_index = 1;
+	rengage::model::VertexAttributeIndex tex_coord_index = 2;
+
+	
+	unsigned int VAO = 0; glGenVertexArrays(1, &VAO);
+
+	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj",
+												  position_index,
+												  normal_index,
+												  tex_coord_index,
+											      VAO))
+	{
 		return -1;
 	}
 

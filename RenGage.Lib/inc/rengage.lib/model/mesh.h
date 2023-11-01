@@ -5,6 +5,7 @@
 #include <optional>
 #include <unordered_map>
 #include "vertex.h"
+#include "../logging/logger_macros.h"
 
 namespace rengage::model {
 	class Mesh
@@ -18,10 +19,12 @@ namespace rengage::model {
 		std::optional<unsigned int> m_vbo = std::nullopt;//vertex buffer object(VBO) id
 		//std::optional<unsigned int> m_ebo = std::nullopt;//element buffer object(EBO) id
 
-		void setup_VBO(const VertexAttribMap& attribMap);
+		//void setup_VBO(const VertexAttribMap& attribMap);
+		void register_VBO(const unsigned int position_index, const unsigned int normal_index, const unsigned int tex_coord_index);
 	public:
 		~Mesh() = default;
 		friend class ModelFactory;
+		friend class Model;
 		friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh);
 	};
 }

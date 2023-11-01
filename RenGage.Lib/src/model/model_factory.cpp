@@ -2,7 +2,11 @@
 
 namespace rengage::model {
 
-	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename, std::optional<unsigned int> VAO)
+	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename,
+													const VertexAttributeIndex position_index,
+													const VertexAttributeIndex normal_index,
+													const VertexAttributeIndex tex_coord_index,
+													std::optional<unsigned int> VAO)
 	{
 		LOG_INFO("Loading model from path '" + filename + "'...")
 
@@ -17,7 +21,14 @@ namespace rengage::model {
 		
 		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene);
 		if (model_ptr != nullptr) {
-			//TODO: Bind VAO then bind and setup mesh VBOs
+			//Bind VAO then bind and setup mesh VBOs
+			if (VAO.has_value()) {
+				model_ptr->setup_VAO(VAO.value(), position_index, normal_index, tex_coord_index);
+			}
+			else {
+				model_ptr->setup_VAO(0, position_index, normal_index, tex_coord_index);//Use default VAO object 0
+			}
+
 			LOG_INFO("Model successfully loaded from path '" + filename + "'.")
 		}
 		else {
@@ -107,6 +118,9 @@ namespace rengage::model {
 				auto current_uv = ai_mesh.mTextureCoords[0][vertex_index];
 				rengage_vertex.m_uv = { current_uv.x, current_uv.y };
 			}
+
+			//Add new vertex to mesh's vertex collection.
+			rengage_mesh.m_vertices.push_back(rengage_vertex);
 		}
 
 		for (unsigned int face_index = 0; face_index < ai_mesh.mNumFaces; ++face_index)
