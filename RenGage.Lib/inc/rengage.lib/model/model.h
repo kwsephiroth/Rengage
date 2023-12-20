@@ -14,9 +14,9 @@ namespace rengage::model {
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<unsigned int> m_VAO = std::nullopt;//vertex attribute object(VAO) id
-		VertexAttributeIndex m_position_index;
-		VertexAttributeIndex m_normal_index;
-		VertexAttributeIndex m_tex_coord_index;
+		std::optional<VertexAttributeIndex> m_position_index = std::nullopt;
+		std::optional<VertexAttributeIndex> m_normal_index = std::nullopt;
+		std::optional<VertexAttributeIndex> m_tex_coord_index = std::nullopt;
 
 		void setup_VAO(const unsigned int VAO, const VertexAttributeIndex position_index, const VertexAttributeIndex normal_index, const VertexAttributeIndex tex_coord_index);
 		void register_VBOs(const VertexAttributeIndex position_index, const VertexAttributeIndex normal_index, const VertexAttributeIndex tex_coord_index);

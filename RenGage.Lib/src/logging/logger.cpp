@@ -47,7 +47,7 @@ namespace rengage::logging
 		}
 	}
 
-	std::string Logger::get_log_prefix(const LogSeverity severity, std::string caller)
+	std::string Logger::get_log_prefix(const LogSeverity severity, const std::source_location& location)
 	{
 		auto sys_time_now = std::chrono::system_clock::now();
 		auto time_now = std::chrono::system_clock::to_time_t(sys_time_now);
@@ -65,37 +65,54 @@ namespace rengage::logging
 			}
 		}
 
+		std::string file_path = location.file_name();
+		std::string file_name_only;
+		int name_start_index = -1;
+		for (int i = file_path.size() - 1; i >= 0; i--)
+		{
+			if (file_path[i] == '/' || file_path[i] == '\\')
+			{
+				name_start_index = i + 1;
+				break;
+			}
+		}
+		
+		if (name_start_index)
+		{
+			file_name_only = file_path.substr(name_start_index);
+		}
+
 		ss << "[ " << time_str << " | "  << ms_since_epoch.count() << " (ms) | "
-			<<  caller << " | "
+			<< file_name_only << '(' << location.line() << ") '" << location.function_name() << "' | "
 			<<  log_severity_to_str(severity) << " ] : ";
 
 		return ss.str();
 	}
 
-	void Logger::log(LogSeverity severity, LogDestination destination, std::string msg, std::string caller)
+	void Logger::log(LogSeverity severity, LogDestination destination, std::string msg, std::source_location location)
 	{
 		switch (destination)
 		{
 			case LogDestination::CONSOLE: 
-				log_to_console(severity, std::move(msg), std::move(caller));
+				log_to_console(severity, std::move(msg), std::move(location));
 				break;
 
 			case LogDestination::FILE: 
-				log_to_file(severity, std::move(msg), std::move(caller));
+				log_to_file(severity, std::move(msg), std::move(location));
 				break;
 		}
 	}
 
-	void Logger::log_to_file(LogSeverity severity, std::string msg, std::string caller)
+	void Logger::log_to_file(LogSeverity severity, std::string msg, std::source_location location)
 	{
 		std::call_once(m_file_init_flag, &Logger::init_log_file, this);
-		auto log_prefix = get_log_prefix(severity, caller);
+		auto log_prefix = get_log_prefix(severity, location);
 		std::unique_lock<std::mutex>(m_log_file_mutex);
 		m_log_file <<  log_prefix << "{ " << msg << " }\n";
 	}
 
-	void Logger::log_to_console(LogSeverity severity, std::string msg, std::string caller)
+	void Logger::log_to_console(LogSeverity severity, std::string msg, std::source_location location)
 	{
-		std::cout << get_log_prefix(severity, caller) << "{ " << msg << " }\n";
+		std::cout << get_log_prefix(severity, location) << "{ " << msg << " }\n";
 	}
 }

@@ -8,6 +8,7 @@
 #include <ctime>
 #include <mutex>
 #include <filesystem>
+#include <source_location>//(since C++20)
 
 namespace rengage::logging
 {
@@ -63,15 +64,24 @@ namespace rengage::logging
 
 		//TODO: Determine how portable GCC builtin function is
 		//TODO: Add support for caller's line number and file name
-		void log(LogSeverity severity, LogDestination destination, std::string msg, std::string caller = __builtin_FUNCTION());
-		void log_to_file(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
-		void log_to_console(LogSeverity severity, std::string msg, std::string caller = __builtin_FUNCTION());
+		void log(LogSeverity severity,
+				 LogDestination destination,
+				 std::string msg,
+				 std::source_location location = std::source_location::current());
+
+		void log_to_file(LogSeverity severity,
+						 std::string msg,
+						 std::source_location location = std::source_location::current());
+
+		void log_to_console(LogSeverity severity,
+							std::string msg,
+							std::source_location location = std::source_location::current());
 
 	private:
 		Logger(std::string log_directory = LOG_FILE_DIRECTORY);
 		void init_log_file();
 		void open_log_file(const std::string file_name);
-		std::string get_log_prefix(const LogSeverity severity, std::string caller);
+		std::string get_log_prefix(const LogSeverity severity, const std::source_location& location);
 
 		std::ofstream m_log_file;
 		std::string m_log_file_directory;

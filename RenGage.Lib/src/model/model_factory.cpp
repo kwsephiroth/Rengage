@@ -75,6 +75,18 @@ namespace rengage::model {
 		for (unsigned int mesh_index = 0; mesh_index < node.mNumMeshes; ++mesh_index)
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
+			LOG_INFO("MESH NAME: " + std::string(ai_mesh->mName.C_Str()))
+			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
+				aiMaterial* ai_material = scene.mMaterials[material_index];
+				aiString str;
+				auto texture_count = ai_material->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+				for (unsigned int i = 0; i < texture_count; ++i)
+				{
+					ai_material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
+					LOG_INFO("	Texture file located @ '" + std::string(str.C_Str()) + "'")
+				}
+			}
+
 			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));//Copy meshes that make up this parent node.
 		}
 

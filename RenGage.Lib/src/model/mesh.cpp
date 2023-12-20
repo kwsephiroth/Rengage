@@ -87,19 +87,23 @@ namespace rengage::model {
 		//TODO: VAO needs to be bound first
 		////Initialize to dummy values. Will be overwritten with valid ids.
 		m_vbo = 0;
-		//m_ebo = 0;
+		m_ebo = 0;
 
-		std::cout << "old m_vbo = " << m_vbo.value() << "\n";
+		//std::cout << "old m_vbo = " << m_vbo.value() << "\n";
 		//std::cout << "old m_ebo = " << m_ebo.value() << "\n";
 		////Generate buffer/array ids
 		glGenBuffers(1, &m_vbo.value());
-		//glGenBuffers(1, &m_ebo.value());
+		glGenBuffers(1, &m_ebo.value());
 
-		std::cout << "new m_vbo = " << m_vbo.value() << "\n";
+		//std::cout << "new m_vbo = " << m_vbo.value() << "\n";
 		//std::cout << "new m_ebo = " << m_ebo.value() << "\n\n";
-
+		//Point VBO at vertex data
 		glBindBuffer(GL_ARRAY_BUFFER, m_vbo.value());
-		glBufferData(GL_ARRAY_BUFFER, size(m_vertices), &m_vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+		
+		//Point EBO at face indices
+		glBindBuffer(GL_ARRAY_BUFFER, m_ebo.value());
+		glBufferData(GL_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
 		size_t vertex_stride = sizeof(Vertex);
 		GLintptr vertex_position_offset = 0 * sizeof(float);

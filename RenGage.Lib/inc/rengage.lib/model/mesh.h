@@ -17,7 +17,7 @@ namespace rengage::model {
 
 		//IDs are only initialized when mesh is successfully initialized.
 		std::optional<unsigned int> m_vbo = std::nullopt;//vertex buffer object(VBO) id
-		//std::optional<unsigned int> m_ebo = std::nullopt;//element buffer object(EBO) id
+		std::optional<unsigned int> m_ebo = std::nullopt;//element buffer object(EBO) id
 
 		//void setup_VBO(const VertexAttribMap& attribMap);
 		void register_VBO(const unsigned int position_index, const unsigned int normal_index, const unsigned int tex_coord_index);
