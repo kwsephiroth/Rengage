@@ -65,6 +65,7 @@ namespace rengage::logging
 			}
 		}
 
+		//TODO: Move this filename extraction logic to dedicated, stand-alone function.
 		std::string file_path = location.file_name();
 		std::string file_name_only;
 		int name_start_index = -1;

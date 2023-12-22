@@ -102,6 +102,7 @@
 #include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_factory.h>
+#include <rengage.lib/shader/shader_program.h>
 #include <rengage.lib/model/model_factory.h>
 #include <rengage.lib/model/vertex.h>
 
@@ -139,7 +140,7 @@ void OpenGLCall(OpenGLFunc func, Args&&... args)
 }
 
 const char* VERTEX_SHADER_SOURCE = 
-"#version 430\n\n\
+"#version 460\n\n\
 void main(void)\n\
 {\n\
 	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n\
@@ -169,13 +170,25 @@ int main()
 	LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 
 	auto window_color = window.color();
-	auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
-	
-	if (vertex_shader == nullptr || !vertex_shader->is_valid()) {
-		LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
+	//auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
+	//auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_VERTEX_SHADER, "res/shaders/vertex_shader.glsl");
+	//auto frag_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_FRAGMENT_SHADER, "res/shaders/fragment_shader.glsl");
+	//
+	//if (vertex_shader == nullptr || frag_shader == nullptr || !vertex_shader->is_valid() || !frag_shader->is_valid()) {
+	//	LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
+	//	return -1;
+	//}
+
+	//TODO: Attach shaders to shader program here
+	auto program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
+																   "res/shaders/fragment_shader.glsl");
+	if (!program)
+	{
+		LOG_ERROR("Failed to create shader program. Check logs for error(s).");
 		return -1;
 	}
 
+	//TODO: change this to query shader for indices instead.
 	rengage::model::VertexAttributeIndex position_index = 0;
 	rengage::model::VertexAttributeIndex normal_index = 1;
 	rengage::model::VertexAttributeIndex tex_coord_index = 2;

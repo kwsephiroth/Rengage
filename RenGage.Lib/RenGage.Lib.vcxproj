@@ -28,8 +28,10 @@
     <ClInclude Include="inc\rengage.lib\shader\shader.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_factory.h" />
     <ClInclude Include="inc\rengage.lib\model\vertex.h" />
+    <ClInclude Include="inc\rengage.lib\shader\shader_program.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\logging\logger.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
     <ClCompile Include="src\model\model.cpp" />
