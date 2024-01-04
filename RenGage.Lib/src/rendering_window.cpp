@@ -42,12 +42,14 @@ namespace rengage
 		}
 
 		m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), main_monitor, NULL);
+		//m_window = glfwCreateWindow(m_attributes.min_width, m_attributes.min_height, m_attributes.name.c_str(), main_monitor, NULL);
 		if (!m_window) {
 			glfwTerminate();
 			LOG_ERROR("Failed to create GLFW window with given context.");
 			return;
 		}
-
+		//glfwMakeContextCurrent(m_window);
+		//glfwSwapInterval(m_attributes.swap_interval);//Set vsync
 		LOG_INFO("GLFW window initialization successful.");
 		m_initialized = true;
 	}

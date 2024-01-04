@@ -10,6 +10,7 @@ namespace rengage::shader
 	class ShaderProgram
 	{
 	public:
+		~ShaderProgram() { std::cout << "~ShaderProgram() invoked!\n"; glDeleteProgram(m_id); }
 		static std::unique_ptr<ShaderProgram> create_instance(const std::string& vertex_shader_path,
 															  const std::string& frag_shader_path);
 
@@ -18,7 +19,10 @@ namespace rengage::shader
 		inline GLuint id() const { return m_id; }
 
 	private:
-		ShaderProgram();
+		ShaderProgram()
+		{
+			m_id = glCreateProgram();
+		}
 		bool link_program();
 
 		GLuint m_id;

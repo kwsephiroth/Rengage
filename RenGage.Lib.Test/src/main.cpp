@@ -121,7 +121,11 @@ struct GLResult
 template<typename OpenGLFunc, typename ... Args>
 void OpenGLCall(OpenGLFunc func, Args&&... args)
 {
-	func(std::forward<Args>(args)...);
+	//auto current_pid = 123;
+	//glGetIntegerv(GL_CURRENT_PROGRAM, &current_pid);
+	//LOG_INFO("current_pid = " + std::to_string(current_pid));
+
+	//func(std::forward<Args>(args)...);
 	unsigned int errorCount = 0;
 	for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
 		errorCount++;
@@ -150,7 +154,7 @@ int main()
 {
 	LOG_ERROR("Hello from RenGage.Lib.Test!");
 	rengage::WindowAttributes window_attribs = { .name="Test", .min_width=1920, .min_height=1080, .color={0.0f, 0.0f, 0.0f, 1.0f}, .swap_interval=1 };//designated initializer since C++20
-	auto window = rengage::RenderingWindow(std::move(window_attribs));
+	auto window = rengage::RenderingWindow(std::move(window_attribs));//copy or move constructor invoked here.
 	
 	if (!window.initialized()) {
 		LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).")
@@ -188,11 +192,10 @@ int main()
 		return -1;
 	}
 
-	//TODO: change this to query shader for indices instead.
-	rengage::model::VertexAttributeIndex position_index = 0;
-	rengage::model::VertexAttributeIndex normal_index = 1;
-	rengage::model::VertexAttributeIndex tex_coord_index = 2;
-
+	program->use();
+	rengage::model::VertexAttributeIndex position_index = glGetAttribLocation(program->id(), "position");
+	rengage::model::VertexAttributeIndex normal_index = glGetAttribLocation(program->id(), "normal");
+	rengage::model::VertexAttributeIndex tex_coord_index = glGetAttribLocation(program->id(), "tex_coord");
 	
 	unsigned int VAO = 0; glGenVertexArrays(1, &VAO);
 
@@ -208,11 +211,17 @@ int main()
 	//if (!rengage::model::ModelFactory::load_model("res/models/bat.obj")) {
 	//	return -1;
 	//}
-	
-	while (!glfwWindowShouldClose(window_ptr)) {
-		OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
-		OpenGLCall(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
-		OpenGLCall(glClear, GL_COLOR_BUFFER_BIT);
+	//auto current_pid = 123;
+	//glGetIntegerv(GL_CURRENT_PROGRAM, &current_pid); glError = glGetError();  std::cout << "glErrorj = " << glError << "\n";
+	//LOG_INFO("current_pid = " + std::to_string(current_pid));
+	while (!glfwWindowShouldClose(window_ptr))
+	{	
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glClearColor(window_color.r, window_color.g, window_color.b, window_color.a);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		//OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
+		//OpenGLCall(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
+		OpenGLCall(glClear, GL_COLOR_BUFFER_BIT);//1/3/24 current error is coming from gl call(s) during model loading.
 		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}

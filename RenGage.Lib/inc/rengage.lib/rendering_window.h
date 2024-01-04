@@ -22,7 +22,7 @@ namespace rengage
 	};
 
 	const int GL_VERSION_MAJOR = 4;//TODO: Determine if version information should be hardcoded or variable.
-	const int GL_VERSION_MINOR = 6;
+	const int GL_VERSION_MINOR = 3;
 	const int MIN_WINDOW_WIDTH = 800;
 	const int MIN_WINDOW_HEIGHT = 800;
 	const Resolution RES_1080P{ 1920, 1080 };
@@ -57,7 +57,8 @@ namespace rengage
 		bool create_default_window();
 		bool create_custom_window();
 
-		GLFWwindow* m_window;
+		GLFWwindow* m_window;//TODO: Need a copy/move constructor for this raw pointer member.
+		//std::unique_ptr<GLFWwindow> m_window;
 		bool m_initialized;
 		WindowAttributes m_attributes;
 		bool m_is_default;

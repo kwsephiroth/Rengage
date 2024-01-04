@@ -13,13 +13,23 @@ namespace rengage::shader
 	class Shader 
 	{
 	public:
-		~Shader() = default;
-		inline GLuint id() const { return m_id; }
+		~Shader()
+		{
+			//glDeleteShader(m_id);
+		}
+
+		//inline GLuint id() const { return m_id; }
 		inline GLenum type() const { return m_type; }
 		inline bool is_valid() const { return m_is_valid; }
 		inline std::string source() const { return m_source; }
 		inline std::string file_name() const { return m_file_name; }
+		void delete_shader()
+		{
+			glDeleteShader(m_id);
+			m_is_valid = false;
+		}
 		friend class ShaderFactory;
+		friend class ShaderProgram;
 
 	private:		
 		Shader() = default;
