@@ -1,105 +1,9 @@
-//#include <GL/glew.h>
-//#include <GLFW/glfw3.h>
-//#include <glm/vec3.hpp> // glm::vec3
-//#include <glm/vec4.hpp> // glm::vec4
-//#include <glm/mat4x4.hpp> // glm::mat4
-//#include <glm/gtc/quaternion.hpp>
-//#include <glm/gtx/quaternion.hpp>
-//#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-//#include <SOIL2/soil2.h>
-//#include <iostream>
-//#include <assimp/Importer.hpp>      // C++ importer interface
-//#include <assimp/scene.h>           // Output data structure
-//#include <assimp/postprocess.h>     // Post processing flags
-//
-//static bool ImportModelUsingAssimp(const char* pFile) {
-//	// Create an instance of the Importer class
-//	Assimp::Importer importer;
-//
-//	// And have it read the given file with some example postprocessing
-//	// Usually - if speed is not the most important aspect for you - you'll
-//	// probably to request more postprocessing than we do in this example.
-//	const aiScene* scene = importer.ReadFile(pFile,
-//		aiProcess_CalcTangentSpace |
-//		aiProcess_Triangulate |
-//		aiProcess_JoinIdenticalVertices |
-//		aiProcess_SortByPType);
-//	std::cout << "Importing model '" << pFile << "' using Assimp library...\n";
-//	// If the import failed, report it
-//	if (nullptr == scene) {
-//		//DoTheErrorLogging(importer.GetErrorString());
-//		std::cout << importer.GetErrorString() << "\n";
-//		return false;
-//	}
-//
-//	// Now we can access the file's contents.
-//	//DoTheSceneProcessing(scene);
-//
-//	std::cout << "Filename : " << scene->GetShortFilename(pFile) << "\nMaterials:\n";
-//	for (unsigned int i = 0; i < scene->mNumMaterials; ++i)
-//	{
-//		std::cout << "--Name: " << scene->mMaterials[i]->GetName().C_Str() << "\n";
-//	}
-//
-//	// We're done. Everything will be cleaned up by the importer destructor
-//	return true;
-//}
-//
-//int main()
-//{
-//	if (!ImportModelUsingAssimp("non-existent-file.obj"))
-//		std::cout << "ERROR: Failed to load the model file.\n";
-//
-//
-//	GLFWwindow* window;
-//
-//	/* Initialize the library */
-//	if (!glfwInit())
-//		return -1;
-//
-//	/* Create a windowed mode window and its OpenGL context */
-//	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-//	if (!window)
-//	{
-//		glfwTerminate();
-//		return -1;
-//	}
-//
-//	/* Make the window's context current */
-//	glfwMakeContextCurrent(window);
-//
-//	glfwSwapInterval(1);//Set vsync
-//
-//	//Must have a valid OpenGL context before initializing glew
-//	auto errorCode = glewInit();
-//	if (errorCode != GLEW_OK)
-//		std::cout << "glewInit() failed with error code (" << errorCode << ")" << std::endl;
-//
-//
-//	std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-//
-//	/* Loop until the user closes the window */
-//	while (!glfwWindowShouldClose(window))
-//	{
-//		/* Render here */
-//		glClear(GL_COLOR_BUFFER_BIT);
-//
-//		/* Swap front and back buffers */
-//		glfwSwapBuffers(window);
-//
-//		/* Poll for and process events */
-//		glfwPollEvents();
-//	}
-//
-//	glfwTerminate();
-//
-//	return 0;
-//}
 #include <functional>
 #include <iostream>
 #include <glm/vec2.hpp>
 #include <vector>
 #include <rengage.lib/logging/logger_macros.h>
+#include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_factory.h>
 #include <rengage.lib/shader/shader_program.h>
@@ -118,30 +22,9 @@ struct GLResult
 	std::string error_msg;
 };
 
-template<typename OpenGLFunc, typename ... Args>
-void OpenGLCall(OpenGLFunc func, Args&&... args)
-{
-	//auto current_pid = 123;
-	//glGetIntegerv(GL_CURRENT_PROGRAM, &current_pid);
-	//LOG_INFO("current_pid = " + std::to_string(current_pid));
-
-	//func(std::forward<Args>(args)...);
-	unsigned int errorCount = 0;
-	for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
-		errorCount++;
-
-		//TODO: Need to log more helpful info about error (e.g. function name, which file, line number)
-		//std::string caller = __builtin_FUNCTION();
-		LOG_ERROR("glErrorCode(" + std::to_string(glError) + ")");// from function \"" + caller + "\"")
-
-		glError = glGetError();
-	}
-
-	if (errorCount > 0) {
-		std::cout << "Program closed due to OpenGL error(s). Please check log for error code(s).\n";
-		exit(0);
-	}
-}
+#define GLCALL(function, ...) \
+	function(__VA_ARGS__);	  \
+	std::cout << "GLCALL invoked!\n"; \
 
 const char* VERTEX_SHADER_SOURCE = 
 "#version 460\n\n\
@@ -197,7 +80,8 @@ int main()
 	rengage::model::VertexAttributeIndex normal_index = glGetAttribLocation(program->id(), "normal");
 	rengage::model::VertexAttributeIndex tex_coord_index = glGetAttribLocation(program->id(), "tex_coord");
 	
-	unsigned int VAO = 0; glGenVertexArrays(1, &VAO);
+	unsigned int VAO = 0;
+	opengl_invoke(glGenVertexArrays, 1, &VAO);
 
 	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj",
 												  position_index,
@@ -208,20 +92,11 @@ int main()
 		return -1;
 	}
 
-	//if (!rengage::model::ModelFactory::load_model("res/models/bat.obj")) {
-	//	return -1;
-	//}
-	//auto current_pid = 123;
-	//glGetIntegerv(GL_CURRENT_PROGRAM, &current_pid); glError = glGetError();  std::cout << "glErrorj = " << glError << "\n";
-	//LOG_INFO("current_pid = " + std::to_string(current_pid));
 	while (!glfwWindowShouldClose(window_ptr))
 	{	
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glClearColor(window_color.r, window_color.g, window_color.b, window_color.a);
-		//glClear(GL_COLOR_BUFFER_BIT);
-		//OpenGLCall(glClear, GL_DEPTH_BUFFER_BIT);
-		//OpenGLCall(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
-		OpenGLCall(glClear, GL_COLOR_BUFFER_BIT);//1/3/24 current error is coming from gl call(s) during model loading.
+		opengl_invoke(glClear, GL_DEPTH_BUFFER_BIT);
+		opengl_invoke(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
+		opengl_invoke(glClear, GL_COLOR_BUFFER_BIT);//1/3/24 current error is coming from gl call(s) during model loading.
 		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}
