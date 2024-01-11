@@ -1,6 +1,7 @@
 #pragma once
 #include "shader.h"
 #include "../logging/logger_macros.h"
+#include "../tools/opengl_invoke.h"
 #include <fstream>
 #include <sstream>
 #include <string>

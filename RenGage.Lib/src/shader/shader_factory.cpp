@@ -22,7 +22,7 @@ namespace rengage::shader
 		}
 		input_file.close();
 
-		auto shader_id = glCreateShader(type);
+		auto shader_id = opengl_get_invoke(glCreateShader, ARGS(type));
 		auto shader_source_ptr = source.c_str();
 		auto success = compile_shader_source(shader_id, shader_source_ptr, filename);
 
@@ -41,7 +41,7 @@ namespace rengage::shader
 	std::unique_ptr<Shader> ShaderFactory::load_shader_from_source(const GLenum type, const std::string& source)
 	{
 		std::unique_ptr<Shader> shader_ptr = nullptr;
-		GLenum shader_id = glCreateShader(type);
+		GLenum shader_id = opengl_get_invoke(glCreateShader, ARGS(type));
 		auto success = compile_shader_source(shader_id, source);
 
 		if (success == GL_TRUE) {
@@ -57,18 +57,18 @@ namespace rengage::shader
 
 	GLint ShaderFactory::compile_shader_source(const GLuint shader_id, const std::string& source, const std::string& filename)
 	{
-		const char* source_cstr = source.c_str();
-		glShaderSource(shader_id, 1, &source_cstr, NULL);
-		glCompileShader(shader_id);
+		const GLchar* source_cstr = source.c_str();
+		opengl_invoke(glShaderSource, ARGS(shader_id, 1, &source_cstr, nullptr));
+		opengl_invoke(glCompileShader, ARGS(shader_id));
 		GLint success;
-		glGetShaderiv(shader_id, GL_COMPILE_STATUS, &success);
+		opengl_invoke(glGetShaderiv, ARGS(shader_id, GL_COMPILE_STATUS, &success));
 		
 		if (success != GL_TRUE) {
 			GLsizei actual_log_length = 0;
 			const unsigned int MAX_LOG_LENGTH = 1024;
 			GLchar info_log[MAX_LOG_LENGTH];
 
-			glGetShaderInfoLog(shader_id, MAX_LOG_LENGTH, &actual_log_length, info_log);
+			opengl_invoke(glGetShaderInfoLog, ARGS(shader_id, MAX_LOG_LENGTH, &actual_log_length, info_log));
 
 			std::stringstream ss;
 			ss << "\nSHADER COMPILATION FAILURE: \n";

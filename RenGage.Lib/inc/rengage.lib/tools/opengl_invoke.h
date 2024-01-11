@@ -25,9 +25,12 @@ namespace {
 }
 
 template<typename OpenGLFunc, typename ... Args>
-static void opengl_invoke(OpenGLFunc func, const std::tuple<Args...>& args, std::source_location location = std::source_location::current())
+static void opengl_invoke(OpenGLFunc func, const std::tuple<Args...>& args_tp, std::source_location location = std::source_location::current())
 {
-	std::apply(func, args);
+	std::apply(func, args_tp);
+	/*std::apply([&](auto&&... args) {
+		func(args...);
+		}, args_tp);*/
 	check_for_opengl_error(location);
 }
 
@@ -39,9 +42,12 @@ static void opengl_invoke(OpenGLFunc func, std::source_location location = std::
 }
 
 template<typename OpenGLFunc, typename ... Args>
-static auto opengl_get_invoke(OpenGLFunc func, const std::tuple<Args...>& args, std::source_location location = std::source_location::current())
+static auto opengl_get_invoke(OpenGLFunc func, const std::tuple<Args...>& args_tp, std::source_location location = std::source_location::current())
 {
-	auto ret_val = std::apply(func, args);
+	auto ret_val = std::apply(func, args_tp);
+	/*auto ret_val = std::apply([&](auto&&... args)->auto {
+		return func(args...);
+		}, args_tp);*/
 	check_for_opengl_error(location);
 	return ret_val;
 }
