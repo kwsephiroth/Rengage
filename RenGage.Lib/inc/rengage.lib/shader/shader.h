@@ -15,6 +15,7 @@ namespace rengage::shader
 	public:
 		~Shader()
 		{
+			//TODO: Figure out when and where to delete the shader.
 			//glDeleteShader(m_id);
 		}
 

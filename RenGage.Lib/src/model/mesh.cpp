@@ -77,7 +77,7 @@ namespace rengage::model {
 	//	//TODO: Unbind VBOS
 	//}
 
-	void Mesh::register_VBO(const unsigned int position_index, const unsigned int normal_index, const unsigned int tex_coord_index)
+	void Mesh::register_VBO(const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
 		if (m_vertices.empty()) {
 			//Log error and return
@@ -85,41 +85,56 @@ namespace rengage::model {
 			return;
 		}
 		//TODO: VAO needs to be bound first
-		////Initialize to dummy values. Will be overwritten with valid ids.
+		//Initialize to dummy values. Will be overwritten with valid ids.
 		m_vbo = 0;
 		m_ebo = 0;
-
+		GLuint vbo;
+		GLuint ebo;
 		//std::cout << "old m_vbo = " << m_vbo.value() << "\n";
 		//std::cout << "old m_ebo = " << m_ebo.value() << "\n";
-		////Generate buffer/array ids
-		glGenBuffers(1, &m_vbo.value());
-		glGenBuffers(1, &m_ebo.value());
+
+		//Generate buffer/array ids
+		opengl_invoke(glGenBuffers, ARGS(1, &vbo));
+		opengl_invoke(glGenBuffers, ARGS(1, &ebo));
+		m_vbo = vbo;
+		m_ebo = ebo;
 
 		//std::cout << "new m_vbo = " << m_vbo.value() << "\n";
 		//std::cout << "new m_ebo = " << m_ebo.value() << "\n\n";
+
 		//Point VBO at vertex data
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo.value());
-		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
+		opengl_invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
+		opengl_invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
 		
 		//Point EBO at face indices
-		glBindBuffer(GL_ARRAY_BUFFER, m_ebo.value());
-		glBufferData(GL_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
+		opengl_invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_ebo.value()));
+		opengl_invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
 
 		size_t vertex_stride = sizeof(Vertex);
 		GLintptr vertex_position_offset = 0 * sizeof(float);
 		GLintptr vertex_normal_offset = 3 * sizeof(float);
 		GLintptr vertex_texcoord_offset = 6 * sizeof(float);
 
-		//setup position attribute
-		glEnableVertexAttribArray(position_index);
-		glVertexAttribPointer(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset);
+		
+		if (position_index >= 0)//negative one index indicates unused attribute.
+		{
+			//setup position attribute
+			opengl_invoke(glEnableVertexAttribArray, ARGS(position_index));
+			opengl_invoke(glVertexAttribPointer, ARGS(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));
+		}
 
-		//setup normal attribute
-		glEnableVertexAttribArray(normal_index);
-		glVertexAttribPointer(normal_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_normal_offset);
+		if (normal_index >= 0)
+		{
+			//setup normal attribute
+			opengl_invoke(glEnableVertexAttribArray, ARGS(normal_index));
+			opengl_invoke(glVertexAttribPointer, ARGS(normal_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_normal_offset));
+		}
 
-		//setup uv(texture coordinate) attribute
-		glEnableVertexAttribArray(tex_coord_index);
-		glVertexAttribPointer(tex_coord_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset);
+		if (tex_coord_index >= 0)
+		{
+			//setup uv(texture coordinate) attribute
+			opengl_invoke(glEnableVertexAttribArray, ARGS(tex_coord_index));
+			opengl_invoke(glVertexAttribPointer, ARGS(tex_coord_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
+		}
 	}
 }

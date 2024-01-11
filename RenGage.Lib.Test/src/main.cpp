@@ -10,33 +10,10 @@
 #include <rengage.lib/model/model_factory.h>
 #include <rengage.lib/model/vertex.h>
 
-enum class ErrorCode
-{
-	FAIL=0,
-	SUCCESS=1
-};
-
-struct GLResult
-{
-	ErrorCode error_code = ErrorCode::FAIL;
-	std::string error_msg;
-};
-
-#define GLCALL(function, ...) \
-	function(__VA_ARGS__);	  \
-	std::cout << "GLCALL invoked!\n"; \
-
-const char* VERTEX_SHADER_SOURCE = 
-"#version 460\n\n\
-void main(void)\n\
-{\n\
-	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n\
-}";
-
 int main()
 {
 	LOG_ERROR("Hello from RenGage.Lib.Test!");
-	rengage::WindowAttributes window_attribs = { .name="Test", .min_width=1920, .min_height=1080, .color={0.0f, 0.0f, 0.0f, 1.0f}, .swap_interval=1 };//designated initializer since C++20
+	rengage::WindowAttributes window_attribs = { .name="Test", .min_width=1920, .min_height=1080, .color={0.0f, 0.0f, 1.0f, 1.0f}, .swap_interval=1 };//designated initializer since C++20
 	auto window = rengage::RenderingWindow(std::move(window_attribs));//copy or move constructor invoked here.
 	
 	if (!window.initialized()) {
@@ -57,16 +34,6 @@ int main()
 	LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 
 	auto window_color = window.color();
-	//auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_source(GL_VERTEX_SHADER, VERTEX_SHADER_SOURCE);//Glew should already be initialized by window construction before this point, else exception will occur
-	//auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_VERTEX_SHADER, "res/shaders/vertex_shader.glsl");
-	//auto frag_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_FRAGMENT_SHADER, "res/shaders/fragment_shader.glsl");
-	//
-	//if (vertex_shader == nullptr || frag_shader == nullptr || !vertex_shader->is_valid() || !frag_shader->is_valid()) {
-	//	LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
-	//	return -1;
-	//}
-
-	//TODO: Attach shaders to shader program here
 	auto program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
 																   "res/shaders/fragment_shader.glsl");
 	if (!program)
@@ -76,12 +43,16 @@ int main()
 	}
 
 	program->use();
-	rengage::model::VertexAttributeIndex position_index = glGetAttribLocation(program->id(), "position");
-	rengage::model::VertexAttributeIndex normal_index = glGetAttribLocation(program->id(), "normal");
-	rengage::model::VertexAttributeIndex tex_coord_index = glGetAttribLocation(program->id(), "tex_coord");
+
+	/*If the named attribute variable is not an active attribute in the specified program object
+	or if name starts with the reserved prefix "gl_",
+	a value of - 1 is returned from glGetAttribLocation.*/
+	GLint position_index = opengl_get_invoke(glGetAttribLocation, ARGS(program->id(), "position"));
+	GLint normal_index = opengl_get_invoke(glGetAttribLocation, ARGS(program->id(), "normal"));
+	GLint tex_coord_index = opengl_get_invoke(glGetAttribLocation, ARGS(program->id(), "tex_coord"));
 	
 	unsigned int VAO = 0;
-	opengl_invoke(glGenVertexArrays, 1, &VAO);
+	opengl_invoke(glGenVertexArrays, ARGS(1, &VAO));
 
 	if (!rengage::model::ModelFactory::load_model("res/models/pine_tree.obj",
 												  position_index,
@@ -94,9 +65,9 @@ int main()
 
 	while (!glfwWindowShouldClose(window_ptr))
 	{	
-		opengl_invoke(glClear, GL_DEPTH_BUFFER_BIT);
-		opengl_invoke(glClearColor, window_color.r, window_color.g, window_color.b, window_color.a);
-		opengl_invoke(glClear, GL_COLOR_BUFFER_BIT);//1/3/24 current error is coming from gl call(s) during model loading.
+		opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
+		opengl_invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
+		opengl_invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 		glfwSwapBuffers(window_ptr);
 		glfwPollEvents();
 	}

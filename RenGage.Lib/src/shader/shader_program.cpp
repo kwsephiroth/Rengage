@@ -2,6 +2,19 @@
 
 namespace rengage::shader
 {
+
+	ShaderProgram::ShaderProgram()
+	{
+		m_id = opengl_get_invoke(glCreateProgram);
+		//std::cout << "m_id = " << m_id << "\n";
+	}
+
+	ShaderProgram::~ShaderProgram()
+	{
+		std::cout << "~ShaderProgram() invoked!\n";
+		//opengl_invoke(glDeleteProgram, ARGS(m_id));
+	}
+
 	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(const std::string& vertex_shader_path,
 																  const std::string& frag_shader_path)
 	{
@@ -22,7 +35,7 @@ namespace rengage::shader
 		{
 			return nullptr;
 		}
-
+		//TODO: Figure out when and where to delete shaders.
 		//glDeleteShader(vertex_shader->m_id);
 		//glDeleteShader(frag_shader->m_id);
 		return program;

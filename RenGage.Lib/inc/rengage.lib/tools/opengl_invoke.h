@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <source_location>
 #include <string>
+#include <tuple>
 #include "../logging/logger_macros.h"
 
 namespace {
@@ -22,15 +23,74 @@ namespace {
 		}
 	}
 }
+
 template<typename OpenGLFunc, typename ... Args>
-struct opengl_invoke
+static void opengl_invoke(OpenGLFunc func, const std::tuple<Args...>& args, std::source_location location = std::source_location::current())
+{
+	std::apply(func, args);
+	check_for_opengl_error(location);
+}
+
+template<typename OpenGLFunc>
+static void opengl_invoke(OpenGLFunc func, std::source_location location = std::source_location::current())
+{
+	func();
+	check_for_opengl_error(location);
+}
+
+template<typename OpenGLFunc, typename ... Args>
+static auto opengl_get_invoke(OpenGLFunc func, const std::tuple<Args...>& args, std::source_location location = std::source_location::current())
+{
+	auto ret_val = std::apply(func, args);
+	check_for_opengl_error(location);
+	return ret_val;
+}
+
+template<typename OpenGLFunc>
+static auto opengl_get_invoke(OpenGLFunc func, std::source_location location = std::source_location::current())
+{
+	auto ret_val = func();
+	check_for_opengl_error(location);
+	return ret_val;
+}
+
+template <typename ... Args >
+static auto ARGS(Args&&... args) {
+	return std::make_tuple(std::forward<Args>(args)...);
+}
+/*struct opengl_invoker
+{
+	opengl_invoker(std::source_location location = std::source_location::current())
+		: m_src_loc(std::move(location)) {}
+	
+	template<typename OpenGLFunc, typename ...Args>
+	void invoke(OpenGLFunc func, Args&&... args)
+	{
+		func(std::forward<Args>(args)...);
+		check_for_opengl_error(m_src_loc);
+	}
+	
+	template<typename OpenGLFunc, typename ...Args>
+	auto get_invoke(OpenGLFunc func, Args&&... args) 
+		-> decltype(func(std::forward<Args>(args)...))
+	{
+		auto ret_val = func(std::forward<Args>(args)...);
+		check_for_opengl_error(m_src_loc);
+		return ret_val;
+	}
+
+private:
+	std::source_location m_src_loc;
+};*/
+
+/*struct opengl_invoke
 {
 	opengl_invoke(OpenGLFunc func, Args&&... args, std::source_location location = std::source_location::current())
 	{
 		func(std::forward<Args>(args)...);
 		check_for_opengl_error(location);
 	}
-};
+};*/
 
 /*template<typename OpenGLFunc, typename ReturnType, typename ... Args>
 struct opengl_invoke
@@ -70,8 +130,8 @@ struct opengl_invoke
 	}
 }*/
 
-template<typename OpenGLFunc, typename ... Args>
-opengl_invoke(OpenGLFunc func, Args&&... args)->opengl_invoke<OpenGLFunc, Args...>;//User-Defined Deduction Guide since C++20
+//template<typename OpenGLFunc, typename ... Args>
+//opengl_invoke(OpenGLFunc func, Args&&... args)->opengl_invoke<OpenGLFunc, Args...>;//User-Defined Deduction Guide since C++17
 
 //template<typename OpenGLFunc, typename ReturnType, typename ... Args>
 //opengl_invoke(OpenGLFunc func, ReturnType& destination, Args&&... args)->opengl_invoke<OpenGLFunc, ReturnType, Args...>;

@@ -4,13 +4,14 @@
 #include "../logging/logger_macros.h"
 #include "shader.h"
 #include "shader_factory.h"
+#include "../tools/opengl_invoke.h"
 
 namespace rengage::shader
 {
 	class ShaderProgram
 	{
 	public:
-		~ShaderProgram() { std::cout << "~ShaderProgram() invoked!\n"; glDeleteProgram(m_id); }
+		~ShaderProgram();
 		static std::unique_ptr<ShaderProgram> create_instance(const std::string& vertex_shader_path,
 															  const std::string& frag_shader_path);
 
@@ -19,10 +20,7 @@ namespace rengage::shader
 		inline GLuint id() const { return m_id; }
 
 	private:
-		ShaderProgram()
-		{
-			m_id = glCreateProgram();
-		}
+		ShaderProgram();
 		bool link_program();
 
 		GLuint m_id;

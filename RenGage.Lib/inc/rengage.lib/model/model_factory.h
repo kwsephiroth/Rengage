@@ -24,9 +24,9 @@ namespace rengage::model {
 
 	public:
 		static std::unique_ptr<Model> load_model(const std::string& filename,
-												 const VertexAttributeIndex position_index,
-												 const VertexAttributeIndex normal_index,
-												 const VertexAttributeIndex tex_coord_index,
-												 std::optional<unsigned int> VAO=std::nullopt);
+												 const GLint position_index,
+												 const GLint normal_index,
+												 const GLint tex_coord_index,
+												 std::optional<GLuint> VAO=std::nullopt);
 	};
 }

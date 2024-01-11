@@ -2,7 +2,7 @@
 
 namespace rengage::model {
 
-	void Model::setup_VAO(unsigned int VAO, const VertexAttributeIndex position_index, const VertexAttributeIndex normal_index, const VertexAttributeIndex tex_coord_index)
+	void Model::setup_VAO(GLuint VAO, const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
 		//Copy ids
 		m_VAO = VAO;
@@ -10,11 +10,11 @@ namespace rengage::model {
 		m_normal_index = normal_index;
 		m_tex_coord_index = tex_coord_index;
 
-		glBindVertexArray(m_VAO.value());
+		opengl_invoke(glBindVertexArray, ARGS(m_VAO.value()));
 		register_VBOs(position_index, normal_index, tex_coord_index);//Associate all VBOs with currently bound VAO
 	}
 
-	void Model::register_VBOs(const VertexAttributeIndex position_index, const VertexAttributeIndex normal_index, const VertexAttributeIndex tex_coord_index)
+	void Model::register_VBOs(const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
 		for (auto& mesh : m_meshes)
 		{

@@ -69,12 +69,15 @@ namespace rengage::logging
 		std::string file_path = location.file_name();
 		std::string file_name_only;
 		int name_start_index = -1;
-		for (int i = file_path.size() - 1; i >= 0; i--)
+		if (!file_path.empty())
 		{
-			if (file_path[i] == '/' || file_path[i] == '\\')
+			for (int i = file_path.size() - 1; i >= 0; --i)
 			{
-				name_start_index = i + 1;
-				break;
+				if (file_path[i] == '/' || file_path[i] == '\\')
+				{
+					name_start_index = i + 1;
+					break;
+				}
 			}
 		}
 		

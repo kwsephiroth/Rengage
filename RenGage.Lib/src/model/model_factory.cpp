@@ -3,10 +3,10 @@
 namespace rengage::model {
 
 	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename,
-													const VertexAttributeIndex position_index,
-													const VertexAttributeIndex normal_index,
-													const VertexAttributeIndex tex_coord_index,
-													std::optional<unsigned int> VAO)
+													const GLint position_index,
+													const GLint normal_index,
+													const GLint tex_coord_index,
+													std::optional<GLuint> VAO)
 	{
 		LOG_INFO("Loading model from path '" + filename + "'...")
 
