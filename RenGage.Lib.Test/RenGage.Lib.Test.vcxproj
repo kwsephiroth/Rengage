@@ -151,11 +151,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment_shader.glsl" />
     <None Include="res\shaders\vertex_shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\GameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

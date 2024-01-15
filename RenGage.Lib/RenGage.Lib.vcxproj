@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\rengage.lib\camera\camera.h" />
     <ClInclude Include="inc\rengage.lib\logging\logger.h" />
     <ClInclude Include="inc\rengage.lib\logging\logger_macros.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="inc\rengage.lib\tools\opengl_invoke.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\logging\logger.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />

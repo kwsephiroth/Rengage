@@ -26,7 +26,7 @@ namespace rengage::model {
 		bool operator == (const Vertex& rhs) {
 			if (m_position == rhs.m_position &&
 				m_normal == rhs.m_normal &&
-				m_uv == m_uv) {
+				m_uv == rhs.m_uv) {
 				return true;
 			}
 			return false;

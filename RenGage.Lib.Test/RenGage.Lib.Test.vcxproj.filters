@@ -18,9 +18,17 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
     <None Include="res\shaders\fragment_shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
