@@ -65,6 +65,7 @@ namespace rengage::shader
 			LOG_ERROR(ss.str())
 			return false;
 		}
+		m_is_valid = true;
 		return true;
 	}
 

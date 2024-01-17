@@ -18,12 +18,14 @@ namespace rengage::shader
 		void attach_shader(GLuint shader_id);
 		void use();
 		inline GLuint id() const { return m_id; }
+		inline bool is_valid() const { return m_is_valid; }
 
 	private:
 		ShaderProgram();
 		bool link_program();
 
 		GLuint m_id;
+		bool m_is_valid = false;
 	};
 }
 

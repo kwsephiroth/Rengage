@@ -10,6 +10,8 @@
 #include <filesystem>
 #include <source_location>//(since C++20)
 
+#define DEBUG_MODE 1
+
 namespace rengage::logging
 {
 	const std::string LOG_FILE_DIRECTORY = "Logs/";
