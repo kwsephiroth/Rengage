@@ -151,7 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\game_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +160,8 @@
     <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\GameManager.h" />
+    <ClInclude Include="inc\game_manager.h" />
+    <ClInclude Include="inc\renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

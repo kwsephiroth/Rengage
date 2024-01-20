@@ -18,7 +18,10 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameManager.cpp">
+    <ClCompile Include="src\game_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,7 +30,10 @@
     <None Include="res\shaders\fragment_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\GameManager.h">
+    <ClInclude Include="inc\game_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

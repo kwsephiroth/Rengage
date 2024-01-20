@@ -27,5 +27,7 @@ namespace rengage::model {
 		friend class ModelFactory;
 		friend class Model;
 		friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh);
+
+		GLsizei total_vertices() const { return (GLsizei)m_vertices.size(); }
 	};
 }

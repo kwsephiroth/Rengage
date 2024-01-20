@@ -1,4 +1,4 @@
-#include "../inc/GameManager.h"
+#include "../inc/game_manager.h"
 
 namespace forest_escape {
 	
@@ -63,7 +63,7 @@ namespace forest_escape {
 	bool GameManager::init_shader_program()
 	{
 		m_program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
-																		   "res/shaders/fragment_shader.glsl");
+																    "res/shaders/fragment_shader.glsl");
 		if (m_program == nullptr || !m_program->is_valid())
 		{
 			LOG_ERROR("Failed to create shader program. Check logs for error(s).");
@@ -137,6 +137,7 @@ namespace forest_escape {
 	void GameManager::draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr)
 	{
 		//opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO()));
-		//opengl_invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0 < number of vertices > ));
+		//opengl_invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, model_ptr->total_vertices()));
+		//std::cout << "Total vertices: " << model_ptr->total_vertices() << "\n";
 	}
 }

@@ -18,6 +18,7 @@ namespace rengage::model {
 	{
 		for (auto& mesh : m_meshes)
 		{
+			m_total_vertices += mesh.total_vertices();
 			mesh.register_VBO(position_index, normal_index, tex_coord_index);
 		}
 	}
