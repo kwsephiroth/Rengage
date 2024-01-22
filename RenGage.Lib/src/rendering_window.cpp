@@ -6,7 +6,9 @@ namespace rengage
 		m_window(nullptr),
 		m_initialized(false), 
 		m_attributes(attributes),
-		m_start_fullscreen(full_screen)
+		m_start_fullscreen(full_screen),
+		m_width(attributes.min_width),
+		m_height(attributes.min_height)
 	{
 		init();
 	}
@@ -19,6 +21,13 @@ namespace rengage
 	void RenderingWindow::init()
 	{
 		LOG_INFO("Initializing rendering window.");
+
+		if (m_width <= 0 || m_height <= 0)
+		{
+			LOG_ERROR("Invalid window width and/or height.");
+		}
+
+		m_aspect_ratio = (float)m_width / (float)m_height;
 		
 		if (m_initialized) {
 			LOG_INFO("Rendering window is already initialized.");
@@ -62,5 +71,18 @@ namespace rengage
 	bool RenderingWindow::create_custom_window()
 	{
 		return false;
+	}
+
+	void RenderingWindow::resize(int new_width, int new_height)
+	{
+		m_width = new_width;
+		m_height = new_height;
+		m_aspect_ratio = (float)m_width / (float)m_height;
+		std::stringstream ss;
+		ss << "Window Resized!\n"
+		   << "New Width: " + std::to_string(m_width)
+		   << "\nNew Height: " + std::to_string(m_height)
+		   << "\nNew Aspect Ratio: " + std::to_string(m_aspect_ratio) << "\n";
+		LOG_INFO(ss.str());
 	}
 }

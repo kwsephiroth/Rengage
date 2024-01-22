@@ -6,6 +6,12 @@
 
 namespace rengage
 {
+	//namespace//Anonymous namespace restricts variable visibility to this file only.
+	//{
+	//	int new_window_height = 0;
+	//	int new_window_width = 0;
+	//}
+
 	struct Resolution
 	{
 		unsigned int horizontal;
@@ -41,16 +47,19 @@ namespace rengage
 		explicit RenderingWindow(WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~RenderingWindow();
 		GLFWwindow* operator()(){ return m_window; }//TODO: Switch to QT instead of GLFW for window management?
-		GLFWwindow* get() const { return m_window; }
 		inline bool initialized() const { return m_initialized; }
 		inline std::string name() const { return m_attributes.name; }
-		inline int width() const { return m_attributes.min_width; }
-		inline int height() const { return m_attributes.min_height; }
+		inline int min_width() const { return m_attributes.min_width; }
+		inline int min_height() const { return m_attributes.min_height; }
+		inline int width() const { return m_width; }
+		inline int height() const { return m_height; }
 		inline glm::vec4 color() const { return m_attributes.color; }
 		inline int swap_interval() const { return m_attributes.swap_interval; }
+		inline float aspect_ratio() const { return m_aspect_ratio; }
 		inline GLFWwindow* glfw_window() const { return m_window; }
 		void hide() { glfwHideWindow(m_window); }
 		void show() { glfwShowWindow(m_window); }
+		void resize(int new_width, int new_height);
 
 	private:
 		void init();
@@ -63,5 +72,14 @@ namespace rengage
 		WindowAttributes m_attributes;
 		bool m_is_default;
 		bool m_start_fullscreen;
+		int m_width;
+		int m_height;
+		float m_aspect_ratio;
 	};
+
+	//static void window_resize_callback(GLFWwindow* window, int new_width, int new_height)
+	//{
+	//	new_window_height = new_height;
+	//	new_window_width = new_width;
+	//}
 }

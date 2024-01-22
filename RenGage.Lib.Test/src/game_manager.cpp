@@ -1,5 +1,11 @@
 #include "../inc/game_manager.h"
 
+#define WINDOW_CALLBACK(function_name)\
+	[](GLFWwindow* window, auto... args) {\
+		auto pointer = static_cast<rengage::RenderingWindow*>(glfwGetWindowUserPointer(window));\
+		if(pointer) pointer->function_name(args...);\
+	}
+
 namespace forest_escape {
 	
 	GameManager::GameManager()
@@ -47,9 +53,13 @@ namespace forest_escape {
 				return false;
 		}
 
-		auto window_ptr = m_window->get();
-		glfwMakeContextCurrent(window_ptr);
+		auto glfw_ptr = m_window->glfw_window();
+		glfwMakeContextCurrent(glfw_ptr);
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
+		
+		//Register GLFW window callback(s).
+		glfwSetWindowUserPointer(glfw_ptr, m_window.get());//Enables GLFW to use our instance of RenderingWindow for callback invocation.
+		glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(resize));
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
@@ -111,16 +121,16 @@ namespace forest_escape {
 
 	void GameManager::start_game_loop()
 	{
-		auto window_ptr = m_window->get();
+		auto glfw_ptr = m_window->glfw_window();
 		auto window_color = m_window->color();
 
-		while (!glfwWindowShouldClose(window_ptr))
+		while (!glfwWindowShouldClose(glfw_ptr))
 		{
 			opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
 			opengl_invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
 			opengl_invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			draw_frame();
-			glfwSwapBuffers(window_ptr);
+			glfwSwapBuffers(glfw_ptr);
 			glfwPollEvents();
 		}
 		glfwTerminate();
