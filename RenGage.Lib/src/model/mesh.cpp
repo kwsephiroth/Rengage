@@ -93,7 +93,7 @@ namespace rengage::model {
 		//std::cout << "old m_vbo = " << m_vbo.value() << "\n";
 		//std::cout << "old m_ebo = " << m_ebo.value() << "\n";
 
-		//Generate buffer/array ids
+		//Generate buffer/array ids //TODO: Should this operation really occur on a per-mesh basis?
 		opengl_invoke(glGenBuffers, ARGS(1, &vbo));
 		opengl_invoke(glGenBuffers, ARGS(1, &ebo));
 		m_vbo = vbo;

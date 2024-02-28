@@ -2,8 +2,8 @@
 
 #define WINDOW_CALLBACK(function_name)\
 	[](GLFWwindow* window, auto... args) {\
-		auto pointer = static_cast<rengage::RenderingWindow*>(glfwGetWindowUserPointer(window));\
-		if(pointer) pointer->function_name(args...);\
+		auto pointer = static_cast<forest_escape::GameManager*>(glfwGetWindowUserPointer(window));\
+		if(pointer) pointer->function_name(window, args...);\
 	}
 
 namespace forest_escape {
@@ -29,21 +29,21 @@ namespace forest_escape {
 			exit(0);
 		}
 
-		//Fetch and store uniform indices once.
-		//opengl_invoke(glUseProgram, ARGS(m_program_id));
-		m_mv_index = opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix"));
-		m_proj_index = opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix"));
-		std::cout << "mv_matrix_index = " << m_mv_index << "\nproj_matrix_index = " << m_proj_index << "\n";
+		//TODO: Figure out constructor arguments for this class. Using default constructor for now.
+		m_renderer = std::make_unique<Renderer>(
+			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
+			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix"))
+			);
 
 		LOG_INFO("GameManager initialized!")
 	}
 
 	bool GameManager::init_window()
 	{
-		rengage::WindowAttributes window_attribs = {.name = "Forest Escape", 
+		rengage::WindowAttributes window_attribs = {.name = "Forest Escape",
 													.min_width = 1920, 
 													.min_height = 1080, 
-													.color = {0.0f, 0.0f, 1.0f, 1.0f},
+													.color = {0.0f, 0.0f, 0.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
 		m_window = std::make_unique<rengage::RenderingWindow>(std::move(window_attribs));
@@ -58,15 +58,21 @@ namespace forest_escape {
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
 		
 		//Register GLFW window callback(s).
-		glfwSetWindowUserPointer(glfw_ptr, m_window.get());//Enables GLFW to use our instance of RenderingWindow for callback invocation.
-		glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(resize));
+		glfwSetWindowUserPointer(glfw_ptr, this);//Enables GLFW to use our instance of RenderingWindow for callback invocation.
+		glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(on_window_resize));
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
 			LOG_ERROR("Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
 			return false;
 		}
+
 		LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
+		return true;
+	}
+
+	bool GameManager::init_renderer()
+	{
 		return true;
 	}
 
@@ -140,14 +146,21 @@ namespace forest_escape {
 	{
 		for (const auto& [model_name, model_ptr] : m_models)
 		{
-			draw_model(model_ptr);
+			//draw_model(model_ptr);
+			m_renderer->draw_model(model_ptr);
 		}
 	}
 
 	void GameManager::draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr)
 	{
-		//opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO()));
+		//opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));//Have to explicitly "get" optional value.
 		//opengl_invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, model_ptr->total_vertices()));
 		//std::cout << "Total vertices: " << model_ptr->total_vertices() << "\n";
+	}
+
+	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)
+	{
+		LOG_INFO("on_window_resize invoked!");
+		m_window->resize(width, height);
 	}
 }

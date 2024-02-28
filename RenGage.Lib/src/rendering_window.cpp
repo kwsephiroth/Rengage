@@ -75,12 +75,22 @@ namespace rengage
 
 	void RenderingWindow::resize(int new_width, int new_height)
 	{
+		if (new_width < 1) {
+			LOG_ERROR("Invalid window width.");
+			return;
+		}
+
+		if (new_height < 1) {
+			LOG_ERROR("Invalid window height");
+			return;
+		}
+
 		m_width = new_width;
 		m_height = new_height;
 		m_aspect_ratio = (float)m_width / (float)m_height;
 		std::stringstream ss;
-		ss << "Window Resized!\n"
-		   << "New Width: " + std::to_string(m_width)
+		ss << "\nWindow Resized!"
+		   << "\nNew Width: " + std::to_string(m_width)
 		   << "\nNew Height: " + std::to_string(m_height)
 		   << "\nNew Aspect Ratio: " + std::to_string(m_aspect_ratio) << "\n";
 		LOG_INFO(ss.str());
