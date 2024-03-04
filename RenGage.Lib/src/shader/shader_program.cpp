@@ -43,23 +43,23 @@ namespace rengage::shader
 
 	void ShaderProgram::attach_shader(GLuint shader_id)
 	{
-		glAttachShader(m_id, shader_id);//TODO: Call with logging GLCall function.
+		opengl_invoke(glAttachShader, ARGS(m_id, shader_id));//TODO: Call with logging GLCall function.
 	}
 
 	bool ShaderProgram::link_program()
 	{
-		glLinkProgram(m_id);
+		opengl_invoke(glLinkProgram, ARGS(m_id));
 				
 		//Log any linking errors.
 		GLint success;
 		const unsigned int MAX_LOG_SIZE = 512;
 		GLchar info_log[MAX_LOG_SIZE];
 
-		glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+		opengl_invoke(glGetProgramiv, ARGS(m_id, GL_LINK_STATUS, &success));
 
 		if (success != GL_TRUE) {
 			std::stringstream ss;
-			glGetProgramInfoLog(m_id, MAX_LOG_SIZE, NULL, info_log);
+			opengl_invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
 			ss << "Failed to link shader program. Description below:\n";
 			ss << info_log << "\n";
 			LOG_ERROR(ss.str())
@@ -71,6 +71,6 @@ namespace rengage::shader
 
 	void ShaderProgram::use()
 	{
-		glUseProgram(m_id);
+		opengl_invoke(glUseProgram, ARGS(m_id));
 	}
 }

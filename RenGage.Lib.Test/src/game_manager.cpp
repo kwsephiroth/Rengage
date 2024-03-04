@@ -29,6 +29,8 @@ namespace forest_escape {
 			exit(0);
 		}
 
+		m_program->use();//Installs the program object as part of the current rendering state.
+
 		//TODO: Figure out constructor arguments for this class. Using default constructor for now.
 		m_renderer = std::make_unique<Renderer>(
 			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
@@ -87,8 +89,6 @@ namespace forest_escape {
 		}
 
 		m_program_id = m_program->id();
-		m_program->use();//Installs the program object as part of the current rendering state.
-
 		return true;
 	}
 
