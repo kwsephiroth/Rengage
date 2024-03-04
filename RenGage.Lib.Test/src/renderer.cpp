@@ -16,7 +16,7 @@ namespace forest_escape {
 	bool Renderer::init()
 	{
 		m_proj_matrix = glm::perspective(m_fov_y, m_aspect_ratio, m_near_plane_distance, m_far_plane_distance);
-		//opengl_invoke(glUniformMatrix4fv, ARGS(m_proj_index, 1, GL_FALSE, glm::value_ptr(m_proj_matrix)));
+		opengl_invoke(glUniformMatrix4fv, ARGS(m_proj_index, 1, GL_FALSE, glm::value_ptr(m_proj_matrix)));
 
 		m_camera = std::make_unique<rengage::camera::Camera>();
 		return true;
@@ -41,8 +41,6 @@ namespace forest_escape {
 	{
 		//TODO: create model-view matrix here.
 		auto model_view_matrix = m_camera->view_matrix() * model_ptr->model_matrix();
-
-		//TODO: Calls to this opengl function return error. Fix this.
-		//opengl_invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
+		opengl_invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 	}
 }

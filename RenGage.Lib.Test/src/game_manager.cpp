@@ -87,6 +87,7 @@ namespace forest_escape {
 		}
 
 		m_program_id = m_program->id();
+		m_program->use();//Installs the program object as part of the current rendering state.
 
 		return true;
 	}
