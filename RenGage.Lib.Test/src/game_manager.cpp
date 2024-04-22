@@ -128,9 +128,13 @@ namespace forest_escape {
 
 	void GameManager::start_game_loop()
 	{
+		if (m_game_loop_started)
+		{
+			return;
+		}
+		m_game_loop_started = true;
 		auto glfw_ptr = m_window->glfw_window();
 		auto window_color = m_window->color();
-
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
 			opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));

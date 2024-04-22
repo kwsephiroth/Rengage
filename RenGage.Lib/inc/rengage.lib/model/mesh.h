@@ -15,6 +15,7 @@ namespace rengage::model {
 		Mesh() = default;//TODO: Create public constructor that takes mesh dependencies as parameters.
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
+		bool m_initialized = false;
 
 		//IDs are only initialized when mesh is successfully initialized.
 		std::optional<GLuint> m_vbo = std::nullopt;//vertex buffer object(VBO) id
@@ -28,6 +29,10 @@ namespace rengage::model {
 		friend class Model;
 		friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh);
 
-		GLsizei total_vertices() const { return (GLsizei)m_vertices.size(); }
+		bool initialized() const { return m_initialized; }
+		GLsizei total_vertices() const { return m_vertices.size(); }
+		const std::vector<unsigned int>& indices () const { return m_indices; }
+		std::optional<GLuint> EBO() const { return m_ebo; }
+		std::optional<GLuint> VBO() const { return m_vbo; }
 	};
 }

@@ -22,6 +22,7 @@ namespace forest_escape {
 		std::unique_ptr<Renderer> m_renderer;
 		GLuint m_program_id;
 		ModelMap m_models;
+		bool m_game_loop_started = false;
 
 		void init();
 		bool init_window();

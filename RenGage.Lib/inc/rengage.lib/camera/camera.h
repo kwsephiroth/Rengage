@@ -8,7 +8,7 @@ namespace rengage::camera
 	class Camera
 	{
 	private:
-		glm::vec3 m_position = { 0,0,0 };
+		glm::vec3 m_position = { 0,0,1 };
 		glm::mat4 m_view_matrix;
 
 		bool init();

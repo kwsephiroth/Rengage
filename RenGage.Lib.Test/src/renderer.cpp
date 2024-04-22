@@ -40,7 +40,24 @@ namespace forest_escape {
 	void Renderer::draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr)
 	{
 		//TODO: create model-view matrix here.
+		if (!model_ptr || !model_ptr->initialized())
+		{
+			return;
+			//TODO: Log error then return.
+		}
 		auto model_view_matrix = m_camera->view_matrix() * model_ptr->model_matrix();
 		opengl_invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
+
+		opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
+
+		//Draw each mesh of the model.
+		for (const auto& mesh : model_ptr->meshes())
+		{
+			opengl_invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, mesh.VBO().value()));
+			opengl_invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
+			opengl_invoke(glDrawElements, ARGS(GL_TRIANGLES, static_cast<unsigned int>(mesh.indices().size()), GL_UNSIGNED_INT, nullptr));
+		}
+
+		opengl_invoke(glBindVertexArray, ARGS(0));
 	}
 }

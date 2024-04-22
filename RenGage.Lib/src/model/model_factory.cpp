@@ -64,6 +64,7 @@ namespace rengage::model {
 		if (aiNode* root_node = scene.mRootNode; root_node != nullptr) {//if with Initialization since C++17
 			process_node(*root_node, scene, model);
 			//TODO: Devise method/rules of determining if a model is initialized properly.
+			model.m_initialized = true;
 			return true;
 		}
 		return false;
@@ -144,7 +145,7 @@ namespace rengage::model {
 				rengage_mesh.m_indices.push_back(current_face.mIndices[vert_index]);
 			}
 		}
-
+		rengage_mesh.m_initialized = true;
 		return rengage_mesh;
 	}
 }

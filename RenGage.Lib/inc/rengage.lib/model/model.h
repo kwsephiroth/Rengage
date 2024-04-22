@@ -11,7 +11,7 @@ namespace rengage::model {
 	private:
 		Model() = default;//TODO: Create public constructor that takes model dependencies as parameters.
 		std::vector<Mesh> m_meshes;
-		unsigned int m_num_meshes;
+		//unsigned int m_num_meshes;
 		bool m_initialized = false;
 		glm::mat4 m_model_matrix;//Used to transform model coordinates from object to world space.
 		GLsizei m_total_vertices = 0;
@@ -27,8 +27,11 @@ namespace rengage::model {
 	public:
 		~Model() = default;
 		friend class ModelFactory;
+		bool initialized() const { return m_initialized; }
 		std::optional<GLuint> VAO() { return m_VAO; }
 		const glm::mat4& model_matrix() const { return m_model_matrix; }
 		GLsizei total_vertices() const { return m_total_vertices; }
+		GLsizei  total_meshes() const { return m_meshes.size(); }
+		const std::vector<Mesh>& meshes() const { return m_meshes; }
 	};
 };
