@@ -89,6 +89,7 @@ namespace rengage::model {
 			}
 
 			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));//Copy meshes that make up this parent node.
+			model.m_total_vertices += model.m_meshes.back().total_vertices();
 		}
 
 		//then do the same for each of its children (recursively)
@@ -140,10 +141,13 @@ namespace rengage::model {
 		{
 			//A face contains the indices, in correct order, of the vertices we need to draw its primitive.
 			auto current_face = ai_mesh.mFaces[face_index];
+			//std::string msg = "f ";
 			for (unsigned int vert_index = 0; vert_index < current_face.mNumIndices; ++vert_index)
 			{
+				//msg += std::to_string(current_face.mIndices[vert_index]) + " ";
 				rengage_mesh.m_indices.push_back(current_face.mIndices[vert_index]);
 			}
+			//LOG_INFO(msg);
 		}
 		rengage_mesh.m_initialized = true;
 		return rengage_mesh;

@@ -18,6 +18,7 @@ namespace rengage::model {
 		bool m_initialized = false;
 
 		//IDs are only initialized when mesh is successfully initialized.
+		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
 		std::optional<GLuint> m_vbo = std::nullopt;//vertex buffer object(VBO) id
 		std::optional<GLuint> m_ebo = std::nullopt;//element buffer object(EBO) id
 
@@ -32,6 +33,7 @@ namespace rengage::model {
 		bool initialized() const { return m_initialized; }
 		GLsizei total_vertices() const { return m_vertices.size(); }
 		const std::vector<unsigned int>& indices () const { return m_indices; }
+		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }
 	};

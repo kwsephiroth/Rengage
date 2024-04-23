@@ -3,6 +3,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <rengage.lib/camera/camera.h>
 #include <rengage.lib/model/model.h>
 #include <rengage.lib/rendering_window.h>
@@ -14,6 +15,7 @@ namespace forest_escape {
 	const float DEFAULT_FOV_Y = 1.0472f;//in radians
 	const float DEFAULT_NEAR_PLANE = 0.1f;
 	const float DEFAULT_FAR_PLANE = 1000.0f;
+	const float DEFAULT_ASPECT_RATIO = 1;
 
 	class Renderer
 	{
@@ -33,9 +35,10 @@ namespace forest_escape {
 		void draw_frame();
 		
 	public:
-		Renderer(GLint mv_index, GLint proj_index);
+		Renderer(GLint mv_index, GLint proj_index, float aspect_ratio);
 		~Renderer();
 		void draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr);
+		void set_aspect_ratio(float aspect_ratio);
 		friend GameManager;
 	};
 }

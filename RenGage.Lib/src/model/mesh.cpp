@@ -84,31 +84,27 @@ namespace rengage::model {
 			LOG_ERROR("Mesh has no vertices.");
 			return;
 		}
-		//TODO: VAO needs to be bound first
-		//Initialize to dummy values. Will be overwritten with valid ids.
-		m_vbo = 0;
-		m_ebo = 0;
+
+		unsigned int vao = 0;
+		opengl_invoke(glGenVertexArrays, ARGS(1, &vao));
+		m_vao = vao;
+		opengl_invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
+
+		//Generate buffer/array ids
 		GLuint vbo;
 		GLuint ebo;
-		//std::cout << "old m_vbo = " << m_vbo.value() << "\n";
-		//std::cout << "old m_ebo = " << m_ebo.value() << "\n";
-
-		//Generate buffer/array ids //TODO: Should this operation really occur on a per-mesh basis?
 		opengl_invoke(glGenBuffers, ARGS(1, &vbo));
 		opengl_invoke(glGenBuffers, ARGS(1, &ebo));
 		m_vbo = vbo;
 		m_ebo = ebo;
-
-		//std::cout << "new m_vbo = " << m_vbo.value() << "\n";
-		//std::cout << "new m_ebo = " << m_ebo.value() << "\n\n";
 
 		//Point VBO at vertex data
 		opengl_invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
 		opengl_invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
 		
 		//Point EBO at face indices
-		opengl_invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_ebo.value()));
-		opengl_invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
+		opengl_invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_ebo.value()));
+		opengl_invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
 
 		size_t vertex_stride = sizeof(Vertex);
 		GLintptr vertex_position_offset = 0 * sizeof(float);
@@ -120,7 +116,7 @@ namespace rengage::model {
 		{
 			//setup position attribute
 			opengl_invoke(glEnableVertexAttribArray, ARGS(position_index));
-			opengl_invoke(glVertexAttribPointer, ARGS(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));
+			opengl_invoke(glVertexAttribPointer, ARGS(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));//TODO: Switch to using offsetof(...) function.
 		}
 
 		if (normal_index >= 0)
@@ -134,7 +130,9 @@ namespace rengage::model {
 		{
 			//setup uv(texture coordinate) attribute
 			opengl_invoke(glEnableVertexAttribArray, ARGS(tex_coord_index));
-			opengl_invoke(glVertexAttribPointer, ARGS(tex_coord_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
+			opengl_invoke(glVertexAttribPointer, ARGS(tex_coord_index, 2, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
 		}
+
+		opengl_invoke(glBindVertexArray, ARGS(0));//Unbind VAO
 	}
 }

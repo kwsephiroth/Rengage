@@ -15,7 +15,7 @@ namespace forest_escape {
 
 	GameManager::~GameManager()
 	{
-
+		//TODO: Cleanup OpenGL objects.
 	}
 
 	void GameManager::init()
@@ -33,8 +33,9 @@ namespace forest_escape {
 
 		//TODO: Figure out constructor arguments for this class. Using default constructor for now.
 		m_renderer = std::make_unique<Renderer>(
+			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
 			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
-			opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix"))
+			m_window->aspect_ratio()
 			);
 
 		LOG_INFO("GameManager initialized!")
@@ -99,19 +100,26 @@ namespace forest_escape {
 		GLint tex_coord_index = opengl_get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
 		unsigned int VAO = 0;
-		opengl_invoke(glGenVertexArrays, ARGS(1, &VAO));
+		//opengl_invoke(glGenVertexArrays, ARGS(1, &VAO));
 
-		auto model = rengage::model::ModelFactory::load_model(  "res/models/pine_tree.obj",
-																position_index,
-																normal_index,
-																tex_coord_index,
-																VAO);
+		//auto model = rengage::model::ModelFactory::load_model(  "res/models/pine_tree.obj",
+		//														position_index,
+		//														normal_index,
+		//														tex_coord_index,
+		//														VAO);
+		auto model = rengage::model::ModelFactory::load_model("res/models/bat.obj",
+			position_index,
+			normal_index,
+			tex_coord_index,
+			VAO);
+
 		if (!model)
 		{
 			return false;
 		}
 
-		m_models.emplace("pine_tree", std::move(model));
+		//m_models.emplace("pine_tree", std::move(model));
+		m_models.emplace("bat", std::move(model));
 
 		return true;
 	}
@@ -132,13 +140,17 @@ namespace forest_escape {
 		{
 			return;
 		}
+
 		m_game_loop_started = true;
 		auto glfw_ptr = m_window->glfw_window();
 		auto window_color = m_window->color();
+		opengl_invoke(glEnable, ARGS(GL_DEPTH_TEST));
+		opengl_invoke(glDepthFunc, ARGS(GL_LESS));
+
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
-			opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
 			opengl_invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
+			opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
 			opengl_invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			draw_frame();
 			glfwSwapBuffers(glfw_ptr);
@@ -167,5 +179,8 @@ namespace forest_escape {
 	{
 		LOG_INFO("on_window_resize invoked!");
 		m_window->resize(width, height);
+		//TODO: Refactor how projection matrix is updated.
+		opengl_invoke(glViewport, ARGS(0, 0, width, height));
+		m_renderer->set_aspect_ratio(m_window->aspect_ratio());
 	}
 }
