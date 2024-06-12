@@ -101,13 +101,7 @@ namespace forest_escape {
 
 		unsigned int VAO = 0;
 		//opengl_invoke(glGenVertexArrays, ARGS(1, &VAO));
-
-		//auto model = rengage::model::ModelFactory::load_model(  "res/models/pine_tree.obj",
-		//														position_index,
-		//														normal_index,
-		//														tex_coord_index,
-		//														VAO);
-		auto model = rengage::model::ModelFactory::load_model("res/models/bat.obj",
+		auto model = rengage::model::ModelFactory::load_model("res/models/pine_tree.obj",
 			position_index,
 			normal_index,
 			tex_coord_index,
@@ -175,7 +169,7 @@ namespace forest_escape {
 		//std::cout << "Total vertices: " << model_ptr->total_vertices() << "\n";
 	}
 
-	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)
+	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)//TODO: Consider wrapping this in the Command design pattern.
 	{
 		LOG_INFO("on_window_resize invoked!");
 		m_window->resize(width, height);

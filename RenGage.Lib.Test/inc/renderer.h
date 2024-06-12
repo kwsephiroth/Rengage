@@ -15,7 +15,6 @@ namespace forest_escape {
 	const float DEFAULT_FOV_Y = 1.0472f;//in radians
 	const float DEFAULT_NEAR_PLANE = 0.1f;
 	const float DEFAULT_FAR_PLANE = 1000.0f;
-	const float DEFAULT_ASPECT_RATIO = 1;
 
 	class Renderer
 	{

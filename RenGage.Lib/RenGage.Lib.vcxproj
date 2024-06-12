@@ -20,6 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\rengage.lib\camera\camera.h" />
+    <ClInclude Include="inc\rengage.lib\logging\console_logger.h" />
+    <ClInclude Include="inc\rengage.lib\logging\file_logger.h" />
+    <ClInclude Include="inc\rengage.lib\logging\ilogger.h" />
     <ClInclude Include="inc\rengage.lib\logging\logger.h" />
     <ClInclude Include="inc\rengage.lib\logging\logger_macros.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
@@ -34,6 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
+    <ClCompile Include="src\logging\console_logger.cpp" />
+    <ClCompile Include="src\logging\file_logger.cpp" />
+    <ClCompile Include="src\logging\ilogger.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\logging\logger.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
