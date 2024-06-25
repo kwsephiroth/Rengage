@@ -10,6 +10,7 @@
 #include <mutex>
 #include <filesystem>
 #include <source_location>//(since C++20)
+#include <boost/di.hpp>
 
 namespace rengage::logging
 {

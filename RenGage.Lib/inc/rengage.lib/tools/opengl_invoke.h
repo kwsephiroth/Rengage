@@ -60,10 +60,12 @@ static auto opengl_get_invoke(OpenGLFunc func, std::source_location location = s
 	return ret_val;
 }
 
-template <typename ... Args >
+/*template <typename ... Args >
 static inline auto ARGS(Args&&... args) {//TODO: Consider replacing this with a macro instead.
 	return std::make_tuple(std::forward<Args>(args)...);
-}
+}*/
+
+#define ARGS(...) std::make_tuple(__VA_ARGS__)
 /*struct opengl_invoker
 {
 	opengl_invoker(std::source_location location = std::source_location::current())
