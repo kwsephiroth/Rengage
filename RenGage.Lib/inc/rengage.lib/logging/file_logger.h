@@ -10,7 +10,7 @@ namespace rengage::logging
 	class FileLogger final : public ILogger 
 	{
 	public:
-		FileLogger() = default;
+		FileLogger(std::string log_directory = LOG_FILE_DIRECTORY);
 		void log(LogSeverity severity,
 			std::string msg,
 			std::source_location location = std::source_location::current()) override;

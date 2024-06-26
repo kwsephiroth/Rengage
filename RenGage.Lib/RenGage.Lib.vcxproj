@@ -34,6 +34,7 @@
     <ClInclude Include="inc\rengage.lib\model\vertex.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_program.h" />
     <ClInclude Include="inc\rengage.lib\tools\opengl_invoke.h" />
+    <ClInclude Include="inc\rengage.lib\tools\opengl_invoker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
@@ -154,7 +155,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\contrib;$(ProgramW6432)\boost\boost_1_85_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\include;$(SolutionDir)dependencies\contrib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>

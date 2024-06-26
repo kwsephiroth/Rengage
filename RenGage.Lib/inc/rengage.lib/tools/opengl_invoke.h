@@ -24,6 +24,8 @@ namespace {
 	}
 }
 
+#define ARGS(...) std::make_tuple(__VA_ARGS__)
+
 template<typename OpenGLFunc, typename ... Args>
 static void opengl_invoke(OpenGLFunc func, const std::tuple<Args...>& args_tp, std::source_location location = std::source_location::current())
 {
@@ -65,7 +67,6 @@ static inline auto ARGS(Args&&... args) {//TODO: Consider replacing this with a 
 	return std::make_tuple(std::forward<Args>(args)...);
 }*/
 
-#define ARGS(...) std::make_tuple(__VA_ARGS__)
 /*struct opengl_invoker
 {
 	opengl_invoker(std::source_location location = std::source_location::current())
