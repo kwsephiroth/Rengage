@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
 #include "logging/logger_macros.h"
+#include "logging/ilogger.h"
 
 namespace rengage
 {

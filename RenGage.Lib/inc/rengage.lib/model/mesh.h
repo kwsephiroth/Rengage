@@ -6,13 +6,17 @@
 #include <unordered_map>
 #include "vertex.h"
 #include "../logging/logger_macros.h"
-#include "../tools/opengl_invoke.h"
+#include "../tools/ogl_invoker.h"
 
 namespace rengage::model {
 	class Mesh
 	{
 	private:		
-		Mesh() = default;//TODO: Create public constructor that takes mesh dependencies as parameters.
+		Mesh(std::shared_ptr<OGLInvoker> oglInvoker) :
+			m_ogl_invoker(oglInvoker) 
+		{}
+
+		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
 		bool m_initialized = false;
@@ -22,7 +26,6 @@ namespace rengage::model {
 		std::optional<GLuint> m_vbo = std::nullopt;//vertex buffer object(VBO) id
 		std::optional<GLuint> m_ebo = std::nullopt;//element buffer object(EBO) id
 
-		//void setup_VBO(const VertexAttribMap& attribMap);
 		void register_VBO(const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
 	public:
 		~Mesh() = default;

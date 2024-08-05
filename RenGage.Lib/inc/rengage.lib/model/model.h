@@ -3,7 +3,7 @@
 #include <glm/mat4x4.hpp>
 #include <vector>
 #include "mesh.h"
-#include "../tools/opengl_invoke.h"
+#include "../tools/ogl_invoker.h"
 
 namespace rengage::model {
 	class Model

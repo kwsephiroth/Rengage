@@ -5,6 +5,8 @@
 #include <tuple>
 #include "../logging/ilogger.h"
 
+#define ARGS(...) std::make_tuple(__VA_ARGS__)
+
 class OpenGLInvoker
 {
 public:

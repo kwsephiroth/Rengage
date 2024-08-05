@@ -18,8 +18,9 @@ namespace rengage::shader
 	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(const std::string& vertex_shader_path,
 																  const std::string& frag_shader_path)
 	{
-		auto vertex_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);
-		auto frag_shader = rengage::shader::ShaderFactory::load_shader_from_file(GL_FRAGMENT_SHADER, frag_shader_path);
+		rengage::shader::ShaderFactory shader_factory;
+		auto vertex_shader = shader_factory.load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);
+		auto frag_shader = shader_factory.load_shader_from_file(GL_FRAGMENT_SHADER, frag_shader_path);
 		GLenum glError = glGetError();
 
 		if (vertex_shader == nullptr || frag_shader == nullptr || !vertex_shader->is_valid() || !frag_shader->is_valid()) {
@@ -28,7 +29,6 @@ namespace rengage::shader
 		}
 
 		std::unique_ptr<ShaderProgram> program(new ShaderProgram);
-		//ShaderProgram* program = new ShaderProgram;//Create shader program object.
 		program->attach_shader(vertex_shader->m_id);
 		program->attach_shader(frag_shader->m_id);
 		if (!program->link_program())

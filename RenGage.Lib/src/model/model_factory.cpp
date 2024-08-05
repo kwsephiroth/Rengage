@@ -2,20 +2,25 @@
 
 namespace rengage::model {
 
+	ModelFactory::ModelFactory(std::shared_ptr<ILogger> logger) :
+		m_logger(std::move(logger))
+	{
+	}
+
 	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename,
 													const GLint position_index,
 													const GLint normal_index,
 													const GLint tex_coord_index,
 													std::optional<GLuint> VAO)
 	{
-		LOG_INFO("Loading model from path '" + filename + "'...")
+		LOG_INFO(m_logger, "Loading model from path '" + filename + "'...")
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filename.c_str(), ASSIMP_POST_PROCESS_FLAGS);
 
 		if (scene == nullptr) {
 			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
-			LOG_ERROR(errorMsg + importer.GetErrorString())
+			LOG_ERROR(m_logger, errorMsg + importer.GetErrorString())
 			return nullptr;
 		}
 		
@@ -29,11 +34,11 @@ namespace rengage::model {
 				model_ptr->setup_VAO(0, position_index, normal_index, tex_coord_index);//Use default VAO object 0
 			}
 
-			LOG_INFO("Model successfully loaded from path '" + filename + "'.")
+			LOG_INFO(m_logger, "Model successfully loaded from path '" + filename + "'.")
 		}
 		else {
 			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
-			LOG_ERROR(errorMsg)
+			LOG_ERROR(m_logger, errorMsg)
 			return nullptr;
 		}
 		
@@ -76,7 +81,7 @@ namespace rengage::model {
 		for (unsigned int mesh_index = 0; mesh_index < node.mNumMeshes; ++mesh_index)
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
-			LOG_INFO("MESH NAME: " + std::string(ai_mesh->mName.C_Str()))
+			LOG_INFO(m_logger, "MESH NAME: " + std::string(ai_mesh->mName.C_Str()))
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
 				aiString str;
@@ -84,7 +89,7 @@ namespace rengage::model {
 				for (unsigned int i = 0; i < texture_count; ++i)
 				{
 					ai_material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
-					LOG_INFO("	Texture file located @ '" + std::string(str.C_Str()) + "'")
+					LOG_INFO(m_logger, "	Texture file located @ '" + std::string(str.C_Str()) + "'")
 				}
 			}
 
@@ -103,6 +108,9 @@ namespace rengage::model {
 
 	Mesh ModelFactory::generate_rengage_mesh(const aiMesh& ai_mesh)
 	{
+		//TODO: Inject ILogger into OGLInvoker constructor.
+		//TODO: Inject OGLInvoker into mesh constructor.
+		
 		Mesh rengage_mesh;
 		auto vertices = ai_mesh.mVertices;
 		auto num_vertices = ai_mesh.mNumVertices;
@@ -141,13 +149,10 @@ namespace rengage::model {
 		{
 			//A face contains the indices, in correct order, of the vertices we need to draw its primitive.
 			auto current_face = ai_mesh.mFaces[face_index];
-			//std::string msg = "f ";
 			for (unsigned int vert_index = 0; vert_index < current_face.mNumIndices; ++vert_index)
 			{
-				//msg += std::to_string(current_face.mIndices[vert_index]) + " ";
 				rengage_mesh.m_indices.push_back(current_face.mIndices[vert_index]);
 			}
-			//LOG_INFO(msg);
 		}
 		rengage_mesh.m_initialized = true;
 		return rengage_mesh;

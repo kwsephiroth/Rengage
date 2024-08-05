@@ -1,29 +1,25 @@
 #pragma once
-#include "logger.h"
+#include "ilogger.h"
 
 using namespace rengage::logging;
 
-#define LOG_INFO(msg)														\
-{																			\
-	Logger::get().log(LogSeverity::INFO, LogDestination::FILE, msg);	    \
-	Logger::get().log(LogSeverity::INFO, LogDestination::CONSOLE, msg);		\
+#define LOG_INFO(logger_ptr, msg)												\
+{																				\
+	logger_ptr->log(LogSeverity::INFO, msg);									\
 }
 
-#define LOG_WARNING(msg)													\
-{																			\
-	Logger::get().log(LogSeverity::WARNING, LogDestination::FILE, msg);		\
-	Logger::get().log(LogSeverity::WARNING, LogDestination::CONSOLE, msg);	\
+#define LOG_WARNING(logger_ptr, msg)											\
+{																				\
+	logger_ptr->log(LogSeverity::WARNING, msg);									\
 }
 
-#define LOG_ERROR(msg)														\
-{																			\
-	Logger::get().log(LogSeverity::ERROR, LogDestination::FILE, msg);		\
-	Logger::get().log(LogSeverity::ERROR, LogDestination::CONSOLE, msg);	\
+#define LOG_ERROR(logger_ptr, msg)												\
+{																				\
+	logger_ptr->log(LogSeverity::ERROR, msg);									\
 }
 
-#define LOG_DEBUG(msg)														\
-{																			\
-	Logger::get().log(LogSeverity::DEBUG, LogDestination::FILE, msg);		\
-	Logger::get().log(LogSeverity::DEBUG, LogDestination::CONSOLE, msg);	\
+#define LOG_DEBUG(logger_ptr, msg)												\
+{																				\
+	logger_ptr->log(LogSeverity::DEBUG, msg);									\
 }
 

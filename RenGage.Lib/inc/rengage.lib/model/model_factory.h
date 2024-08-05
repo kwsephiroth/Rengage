@@ -6,6 +6,7 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include <boost/di.hpp>
 
 namespace rengage::model {
 	
@@ -16,17 +17,19 @@ namespace rengage::model {
 	class ModelFactory
 	{
 	private:
-		ModelFactory() = default;
-		static std::unique_ptr<Model> build_model_from_scene(const aiScene& scene);
-		static bool init_meshes(const aiScene& scene, Model& model);
-		static void process_node(const aiNode& node, const aiScene& scene, Model& model);
-		static Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
+		std::shared_ptr<ILogger> m_logger;
+
+		std::unique_ptr<Model> build_model_from_scene(const aiScene& scene);
+		bool init_meshes(const aiScene& scene, Model& model);
+		void process_node(const aiNode& node, const aiScene& scene, Model& model);
+		Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 
 	public:
-		static std::unique_ptr<Model> load_model(const std::string& filename,
-												 const GLint position_index,
-												 const GLint normal_index,
-												 const GLint tex_coord_index,
-												 std::optional<GLuint> VAO=std::nullopt);
+		explicit ModelFactory(std::shared_ptr<ILogger> logger);
+		std::unique_ptr<Model> load_model(const std::string& filename,
+										  const GLint position_index,
+										  const GLint normal_index,
+										  const GLint tex_coord_index,
+										  std::optional<GLuint> VAO=std::nullopt);
 	};
 }

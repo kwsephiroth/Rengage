@@ -4,7 +4,7 @@
 #include "../logging/logger_macros.h"
 #include "shader.h"
 #include "shader_factory.h"
-#include "../tools/opengl_invoke.h"
+#include "../tools/ogl_invoker.h"
 
 namespace rengage::shader
 {
