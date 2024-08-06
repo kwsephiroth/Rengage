@@ -3,10 +3,11 @@
 namespace rengage::shader
 {
 
-	ShaderProgram::ShaderProgram()
+	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> oglInvoker, std::shared_ptr<ILogger> logger) :
+		m_ogl_invoker(std::move(oglInvoker)),
+		m_logger(std::move(logger))
 	{
-		m_id = opengl_get_invoke(glCreateProgram);
-		//std::cout << "m_id = " << m_id << "\n";
+		m_id = m_ogl_invoker->get_invoke(glCreateProgram);
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -24,7 +25,7 @@ namespace rengage::shader
 		GLenum glError = glGetError();
 
 		if (vertex_shader == nullptr || frag_shader == nullptr || !vertex_shader->is_valid() || !frag_shader->is_valid()) {
-			LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
+			//LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
 			return nullptr;
 		}
 
@@ -43,26 +44,26 @@ namespace rengage::shader
 
 	void ShaderProgram::attach_shader(GLuint shader_id)
 	{
-		opengl_invoke(glAttachShader, ARGS(m_id, shader_id));//TODO: Call with logging GLCall function.
+		m_ogl_invoker->invoke(glAttachShader, ARGS(m_id, shader_id));//TODO: Call with logging GLCall function.
 	}
 
 	bool ShaderProgram::link_program()
 	{
-		opengl_invoke(glLinkProgram, ARGS(m_id));
+		m_ogl_invoker->invoke(glLinkProgram, ARGS(m_id));
 				
 		//Log any linking errors.
 		GLint success;
 		const unsigned int MAX_LOG_SIZE = 512;
 		GLchar info_log[MAX_LOG_SIZE];
 
-		opengl_invoke(glGetProgramiv, ARGS(m_id, GL_LINK_STATUS, &success));
+		m_ogl_invoker->invoke(glGetProgramiv, ARGS(m_id, GL_LINK_STATUS, &success));
 
 		if (success != GL_TRUE) {
 			std::stringstream ss;
-			opengl_invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
+			m_ogl_invoker->invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
 			ss << "Failed to link shader program. Description below:\n";
 			ss << info_log << "\n";
-			LOG_ERROR(ss.str())
+			LOG_ERROR(m_logger, ss.str())
 			return false;
 		}
 		m_is_valid = true;
@@ -71,6 +72,6 @@ namespace rengage::shader
 
 	void ShaderProgram::use()
 	{
-		opengl_invoke(glUseProgram, ARGS(m_id));
+		m_ogl_invoker->invoke(glUseProgram, ARGS(m_id));
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <string>
+#include "../tools/ogl_invoker.h"
 
 namespace rengage::shader
 {
@@ -26,14 +27,16 @@ namespace rengage::shader
 		inline std::string file_name() const { return m_file_name; }
 		void delete_shader()
 		{
-			glDeleteShader(m_id);
+			m_ogl_invoker->invoke(glDeleteShader, ARGS(m_id));
 			m_is_valid = false;
 		}
 		friend class ShaderFactory;
 		friend class ShaderProgram;
 
 	private:		
-		Shader() = default;
+		Shader(std::shared_ptr<OGLInvoker> oglInvoker) : m_ogl_invoker(std::move(oglInvoker)) {}
+
+		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		bool m_is_valid = false;
 		GLuint m_id = 0;
 		GLenum m_type = 0;

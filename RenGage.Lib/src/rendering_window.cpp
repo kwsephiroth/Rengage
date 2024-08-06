@@ -2,13 +2,15 @@
 
 namespace rengage
 {
-	RenderingWindow::RenderingWindow(WindowAttributes attributes, bool full_screen) :
+	RenderingWindow::RenderingWindow(std::shared_ptr<OGLInvoker> oglInvoker, std::shared_ptr<ILogger> logger, WindowAttributes attributes, bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false), 
 		m_attributes(attributes),
 		m_start_fullscreen(full_screen),
 		m_width(attributes.min_width),
 		m_height(attributes.min_height)
+		m_ogl_invoker(std::move(oglInvoker)),
+		m_logger(std::move(logger))
 	{
 		init();
 	}
