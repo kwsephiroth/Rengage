@@ -20,9 +20,23 @@ namespace forest_escape {
 
 	void GameManager::init()
 	{
-		//TODO: Introduce boost dependency injector here.
 		m_logger = std::make_shared<rengage::logging::FileLogger>();
-		LOG_INFO(m_logger, "Initializing GameManager...")
+		
+		if (auto p_logger = dynamic_cast<rengage::logging::FileLogger*>(m_logger.get()))
+		{
+			if (!p_logger->is_initialized())
+			{
+				rengage::logging::ConsoleLogger().log(rengage::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
+				return;
+			}
+		}
+		else
+		{
+			rengage::logging::ConsoleLogger().log(rengage::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
+			return;
+		}
+
+		LOG_INFO(m_logger, "Initializing GameManager...");
 		if (!init_window() ||
 			!init_shader_program() ||
 			!init_models())
@@ -41,7 +55,8 @@ namespace forest_escape {
 			m_window->aspect_ratio()
 			);
 
-		LOG_INFO(m_logger, "GameManager initialized!")
+		LOG_INFO(m_logger, "GameManager initialized!");
+		m_initialized = true;
 	}
 
 	bool GameManager::init_window()
@@ -55,7 +70,7 @@ namespace forest_escape {
 		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, m_logger, std::move(window_attribs));
 
 		if (!m_window->initialized()) {
-			LOG_ERROR(m_logger, "Rendering window was not properly initialized. Check logs for error(s).")
+			LOG_ERROR(m_logger, "Rendering window was not properly initialized. Check logs for error(s).");
 				return false;
 		}
 
@@ -135,7 +150,7 @@ namespace forest_escape {
 
 	void GameManager::start_game_loop()
 	{
-		if (m_game_loop_started)
+		if (m_game_loop_started || !m_initialized)
 		{
 			return;
 		}

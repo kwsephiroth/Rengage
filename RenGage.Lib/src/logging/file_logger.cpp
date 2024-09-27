@@ -6,6 +6,7 @@ namespace rengage::logging
 	FileLogger::FileLogger(std::string log_directory) :
 		m_log_file_directory(log_directory)
 	{
+		init_log_file();
 	}
 
 	FileLogger::~FileLogger()
@@ -49,7 +50,9 @@ namespace rengage::logging
 
 	void FileLogger::log(LogSeverity severity, std::string msg, std::source_location location)
 	{
-		std::call_once(m_file_init_flag, &FileLogger::init_log_file, this);
+		//std::call_once(m_file_init_flag, &FileLogger::init_log_file, this);
+		if (!m_initialized)
+			return;
 		auto log_prefix = get_log_prefix(severity, location);
 		std::lock_guard<std::mutex> lock(m_log_file_mutex);
 		m_log_file << log_prefix << "{ " << msg << " }\n";

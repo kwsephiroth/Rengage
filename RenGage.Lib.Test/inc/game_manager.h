@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/logging/file_logger.h>
+#include <rengage.lib/logging/console_logger.h>
 #include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_program.h>
@@ -28,6 +29,7 @@ namespace forest_escape {
 		GLuint m_program_id;
 		ModelMap m_models;
 		bool m_game_loop_started = false;
+		bool m_initialized = false;
 
 		void init();
 		bool init_window();
