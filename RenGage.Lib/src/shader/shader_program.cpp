@@ -3,8 +3,8 @@
 namespace rengage::shader
 {
 
-	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> oglInvoker, std::shared_ptr<ILogger> logger) :
-		m_ogl_invoker(std::move(oglInvoker)),
+	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+		m_ogl_invoker(std::move(ogl_invoker)),
 		m_logger(std::move(logger))
 	{
 		m_id = m_ogl_invoker->get_invoke(glCreateProgram);
@@ -17,19 +17,21 @@ namespace rengage::shader
 	}
 
 	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(const std::string& vertex_shader_path,
-																  const std::string& frag_shader_path)
+																  const std::string& frag_shader_path,
+																  std::shared_ptr<OGLInvoker> ogl_invoker,
+																  std::shared_ptr<ILogger> logger)
 	{
-		rengage::shader::ShaderFactory shader_factory;
+		rengage::shader::ShaderFactory shader_factory{ ogl_invoker, logger };//TODO: Inject dependencies into constructor.
 		auto vertex_shader = shader_factory.load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);
 		auto frag_shader = shader_factory.load_shader_from_file(GL_FRAGMENT_SHADER, frag_shader_path);
 		GLenum glError = glGetError();
 
 		if (vertex_shader == nullptr || frag_shader == nullptr || !vertex_shader->is_valid() || !frag_shader->is_valid()) {
-			//LOG_ERROR("Failed to load shader(s). Check logs for error(s).");
+			LOG_ERROR(logger, "Failed to load shader(s). Check logs for error(s).");
 			return nullptr;
 		}
 
-		std::unique_ptr<ShaderProgram> program(new ShaderProgram);
+		std::unique_ptr<ShaderProgram> program(new ShaderProgram{ ogl_invoker, logger });
 		program->attach_shader(vertex_shader->m_id);
 		program->attach_shader(frag_shader->m_id);
 		if (!program->link_program())
@@ -44,7 +46,7 @@ namespace rengage::shader
 
 	void ShaderProgram::attach_shader(GLuint shader_id)
 	{
-		m_ogl_invoker->invoke(glAttachShader, ARGS(m_id, shader_id));//TODO: Call with logging GLCall function.
+		m_ogl_invoker->invoke(glAttachShader, ARGS(m_id, shader_id));
 	}
 
 	bool ShaderProgram::link_program()

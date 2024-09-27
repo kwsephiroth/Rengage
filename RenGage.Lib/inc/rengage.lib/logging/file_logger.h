@@ -14,13 +14,16 @@ namespace rengage::logging
 		void log(LogSeverity severity,
 			std::string msg,
 			std::source_location location = std::source_location::current()) override;
+		bool is_initialized() const;
+
 	private:
 		void init_log_file();
-		void open_log_file(const std::string file_name);
+		bool open_log_file(const std::string file_name);
 
 		std::ofstream m_log_file;
 		std::string m_log_file_directory;
-		std::once_flag m_file_init_flag;//TODO: When this is static, the log buffer is never flushed and file is empty. Figure out why.
-		std::mutex m_log_file_mutex;//inline OK since C++17
+		std::once_flag m_file_init_flag;
+		std::mutex m_log_file_mutex;
+		bool m_initialized = false;
 	};
 }

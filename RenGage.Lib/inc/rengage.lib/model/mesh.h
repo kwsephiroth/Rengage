@@ -12,8 +12,8 @@ namespace rengage::model {
 	class Mesh
 	{
 	private:		
-		Mesh(std::shared_ptr<OGLInvoker> oglInvoker, std::shared_ptr<ILogger> logger) :
-			m_ogl_invoker(std::move(oglInvoker)),
+		Mesh(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+			m_ogl_invoker(std::move(ogl_invoker)),
 			m_logger(std::move(logger))
 		{}
 

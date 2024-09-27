@@ -2,7 +2,19 @@
 
 namespace rengage::logging
 {
-	void FileLogger::open_log_file(const std::string file_name)
+
+	FileLogger::FileLogger(std::string log_directory) :
+		m_log_file_directory(log_directory)
+	{
+		init_log_file();
+	}
+
+	bool FileLogger::is_initialized() const
+	{
+		return m_initialized;
+	}
+
+	bool FileLogger::open_log_file(const std::string file_name)
 	{
 		std::string full_filename = m_log_file_directory + file_name;
 
@@ -10,7 +22,9 @@ namespace rengage::logging
 
 		if (m_log_file.fail()) {
 			//log_to_console(LogSeverity::ERROR, "Failed to open file \"" + full_filename + "\"");
+			return false;
 		}
+		return true;
 	}
 
 	void FileLogger::init_log_file()
@@ -25,7 +39,7 @@ namespace rengage::logging
 
 		std::filesystem::create_directory(m_log_file_directory);
 		std::string file_name = LOG_FILE_NAME_PREFIX + filename_mid.str() + LOG_FILE_NAME_SUFFIX;
-		open_log_file(file_name);
+		m_initialized = open_log_file(file_name);
 	}
 
 	void FileLogger::log(LogSeverity severity, std::string msg, std::source_location location)

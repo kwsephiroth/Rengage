@@ -2,7 +2,8 @@
 
 namespace rengage::model {
 
-	ModelFactory::ModelFactory(std::shared_ptr<ILogger> logger) :
+	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+		m_ogl_invoker(std::move(ogl_invoker)),
 		m_logger(std::move(logger))
 	{
 	}
@@ -108,10 +109,7 @@ namespace rengage::model {
 
 	Mesh ModelFactory::generate_rengage_mesh(const aiMesh& ai_mesh)
 	{
-		//TODO: Inject ILogger into OGLInvoker constructor.
-		//TODO: Inject OGLInvoker into mesh constructor.
-		
-		Mesh rengage_mesh;
+		Mesh rengage_mesh{ m_ogl_invoker, m_logger };
 		auto vertices = ai_mesh.mVertices;
 		auto num_vertices = ai_mesh.mNumVertices;
 

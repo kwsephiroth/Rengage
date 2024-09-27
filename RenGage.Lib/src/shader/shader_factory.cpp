@@ -27,7 +27,7 @@ namespace rengage::shader
 		auto success = compile_shader_source(shader_id, shader_source_ptr, filename);
 
 		if (success == GL_TRUE) {
-			shader_ptr = std::unique_ptr<Shader>(new Shader());
+			shader_ptr = std::unique_ptr<Shader>(new Shader(m_ogl_invoker));
 			shader_ptr->m_id = shader_id;
 			shader_ptr->m_is_valid = true;
 			shader_ptr->m_source = std::move(source);
@@ -45,7 +45,7 @@ namespace rengage::shader
 		auto success = compile_shader_source(shader_id, source);
 
 		if (success == GL_TRUE) {
-			shader_ptr = std::unique_ptr<Shader>(new Shader());//Can't use make_unique here due to private constructor.
+			shader_ptr = std::unique_ptr<Shader>(new Shader(m_ogl_invoker));//Can't use make_unique here due to private constructor.
 			shader_ptr->m_id = shader_id;
 			shader_ptr->m_is_valid = true;
 			shader_ptr->m_source = source;
