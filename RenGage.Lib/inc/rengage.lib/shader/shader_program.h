@@ -1,7 +1,6 @@
 #pragma once
 #include <GL/glew.h>
 #include <memory>
-#include <boost/di.hpp>
 #include "../logging/logger_macros.h"
 #include "../logging/file_logger.h"
 #include "shader.h"

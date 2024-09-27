@@ -11,6 +11,7 @@ namespace rengage::logging
 	{
 	public:
 		FileLogger(std::string log_directory = LOG_FILE_DIRECTORY);
+		~FileLogger();
 		void log(LogSeverity severity,
 			std::string msg,
 			std::source_location location = std::source_location::current()) override;

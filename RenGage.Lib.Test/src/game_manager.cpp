@@ -20,12 +20,14 @@ namespace forest_escape {
 
 	void GameManager::init()
 	{
-		LOG_INFO("Initializing GameManager...")
+		//TODO: Introduce boost dependency injector here.
+		m_logger = std::make_shared<rengage::logging::FileLogger>();
+		LOG_INFO(m_logger, "Initializing GameManager...")
 		if (!init_window() ||
 			!init_shader_program() ||
 			!init_models())
 		{
-			LOG_ERROR("Failed to init GameManager. Check log for error(s).")
+			LOG_ERROR(m_logger, "Failed to init GameManager. Check log for error(s).")
 			exit(0);
 		}
 
@@ -33,12 +35,13 @@ namespace forest_escape {
 
 		//TODO: Figure out constructor arguments for this class. Using default constructor for now.
 		m_renderer = std::make_unique<Renderer>(
-			rengage::opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
-			rengage::opengl_get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
+			m_ogl_invoker,
+			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
+			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
 			m_window->aspect_ratio()
 			);
 
-		LOG_INFO("GameManager initialized!")
+		LOG_INFO(m_logger, "GameManager initialized!")
 	}
 
 	bool GameManager::init_window()
@@ -49,10 +52,10 @@ namespace forest_escape {
 													.color = {0.0f, 0.0f, 0.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
-		m_window = std::make_unique<rengage::RenderingWindow>(std::move(window_attribs));
+		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, m_logger, std::move(window_attribs));
 
 		if (!m_window->initialized()) {
-			LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).")
+			LOG_ERROR(m_logger, "Rendering window was not properly initialized. Check logs for error(s).")
 				return false;
 		}
 
@@ -66,11 +69,11 @@ namespace forest_escape {
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
-			LOG_ERROR("Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
+			LOG_ERROR(m_logger, "Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
 			return false;
 		}
 
-		LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
+		LOG_INFO(m_logger, "OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 		return true;
 	}
 
@@ -82,10 +85,12 @@ namespace forest_escape {
 	bool GameManager::init_shader_program()
 	{
 		m_program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
-																    "res/shaders/fragment_shader.glsl");
+																    "res/shaders/fragment_shader.glsl",
+																	m_ogl_invoker,
+																	m_logger);
 		if (m_program == nullptr || !m_program->is_valid())
 		{
-			LOG_ERROR("Failed to create shader program. Check logs for error(s).");
+			LOG_ERROR(m_logger, "Failed to create shader program. Check logs for error(s).");
 			return false;
 		}
 
@@ -95,14 +100,12 @@ namespace forest_escape {
 
 	bool GameManager::init_models()
 	{
-		GLint position_index = rengage::opengl_get_invoke(glGetAttribLocation, ARGS(m_program->id(), "position"));
-		GLint normal_index = rengage::opengl_get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
-		GLint tex_coord_index = rengage::opengl_get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
+		GLint position_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "position"));
+		GLint normal_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
+		GLint tex_coord_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
 		unsigned int VAO = 0;
-		//opengl_invoke(glGenVertexArrays, ARGS(1, &VAO));
-		//TODO: Create model factory instance here.
-		//rengage::model::ModelFactory model_factory {}
+		rengage::model::ModelFactory model_factory{m_ogl_invoker, m_logger};
 		auto model = model_factory.load_model("res/models/pine_tree.obj",
 			position_index,
 			normal_index,
@@ -114,8 +117,8 @@ namespace forest_escape {
 			return false;
 		}
 
-		//m_models.emplace("pine_tree", std::move(model));
-		m_models.emplace("bat", std::move(model));
+		m_models.emplace("pine_tree", std::move(model));
+		//m_models.emplace("bat", std::move(model));
 
 		return true;
 	}
@@ -140,14 +143,14 @@ namespace forest_escape {
 		m_game_loop_started = true;
 		auto glfw_ptr = m_window->glfw_window();
 		auto window_color = m_window->color();
-		rengage::opengl_invoke(glEnable, ARGS(GL_DEPTH_TEST));
-		rengage::opengl_invoke(glDepthFunc, ARGS(GL_LESS));
+		m_ogl_invoker->invoke(glEnable, ARGS(GL_DEPTH_TEST));
+		m_ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
 
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
-			rengage::opengl_invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
-			rengage::opengl_invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
-			rengage::opengl_invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
+			m_ogl_invoker->invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
+			m_ogl_invoker->invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
+			m_ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			draw_frame();
 			glfwSwapBuffers(glfw_ptr);
 			glfwPollEvents();
@@ -164,7 +167,7 @@ namespace forest_escape {
 		}
 	}
 
-	void GameManager::draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr)
+	void GameManager::draw_model(const ModelPtr& model_ptr)
 	{
 		//opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));//Have to explicitly "get" optional value.
 		//opengl_invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, model_ptr->total_vertices()));
@@ -173,10 +176,10 @@ namespace forest_escape {
 
 	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)//TODO: Consider wrapping this in the Command design pattern.
 	{
-		LOG_INFO("on_window_resize invoked!");
+		LOG_INFO(m_logger, "on_window_resize invoked!");
 		m_window->resize(width, height);
 		//TODO: Refactor how projection matrix is updated.
-		rengage::opengl_invoke(glViewport, ARGS(0, 0, width, height));
+		m_ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));
 		m_renderer->set_aspect_ratio(m_window->aspect_ratio());
 	}
 }

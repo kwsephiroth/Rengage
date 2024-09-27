@@ -6,7 +6,12 @@ namespace rengage::logging
 	FileLogger::FileLogger(std::string log_directory) :
 		m_log_file_directory(log_directory)
 	{
-		init_log_file();
+	}
+
+	FileLogger::~FileLogger()
+	{
+		if(m_log_file.is_open())
+			m_log_file.close();
 	}
 
 	bool FileLogger::is_initialized() const
@@ -46,7 +51,7 @@ namespace rengage::logging
 	{
 		std::call_once(m_file_init_flag, &FileLogger::init_log_file, this);
 		auto log_prefix = get_log_prefix(severity, location);
-		std::unique_lock<std::mutex>(m_log_file_mutex);
+		std::lock_guard<std::mutex> lock(m_log_file_mutex);
 		m_log_file << log_prefix << "{ " << msg << " }\n";
 	}
 }

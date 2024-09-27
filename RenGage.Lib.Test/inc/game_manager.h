@@ -4,6 +4,7 @@
 #include <glm/vec2.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <rengage.lib/logging/logger_macros.h>
+#include <rengage.lib/logging/file_logger.h>
 #include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_program.h>
@@ -13,13 +14,17 @@
 #include "renderer.h"
 
 namespace forest_escape {
-	class GameManager//TODO: Determine if this should be a Singleton.
+
+	using ModelPtr = std::unique_ptr<rengage::model::Model>;
+	class GameManager
 	{
 	private:
-		using ModelMap = std::unordered_map<std::string, std::unique_ptr<rengage::model::Model>>;
+		using ModelMap = std::unordered_map<std::string, ModelPtr>;
 		std::unique_ptr<rengage::RenderingWindow> m_window;
 		std::unique_ptr<rengage::shader::ShaderProgram> m_program;
 		std::unique_ptr<Renderer> m_renderer;
+		std::shared_ptr<rengage::logging::ILogger> m_logger;
+		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 		GLuint m_program_id;
 		ModelMap m_models;
 		bool m_game_loop_started = false;
@@ -32,7 +37,7 @@ namespace forest_escape {
 		//bool init_controller();
 		bool init_uniform_indices();
 		bool program_is_valid();
-		void draw_model(const std::unique_ptr<rengage::model::Model>&);
+		void draw_model(const ModelPtr& model_ptr);
 		void draw_frame();
 
 	public:

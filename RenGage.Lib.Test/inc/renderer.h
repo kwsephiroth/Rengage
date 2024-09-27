@@ -16,6 +16,7 @@ namespace forest_escape {
 	const float DEFAULT_NEAR_PLANE = 0.1f;
 	const float DEFAULT_FAR_PLANE = 1000.0f;
 
+	using ModelPtr = std::unique_ptr<rengage::model::Model>;
 	class Renderer
 	{
 	private:
@@ -27,6 +28,7 @@ namespace forest_escape {
 		GLint m_proj_index;
 		glm::mat4 m_proj_matrix;
 		std::unique_ptr<rengage::camera::Camera> m_camera;
+		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 
 		bool init();
 		void update_view_matrix(const glm::vec4& new_position);
@@ -34,9 +36,9 @@ namespace forest_escape {
 		void draw_frame();
 		
 	public:
-		Renderer(GLint mv_index, GLint proj_index, float aspect_ratio);
+		Renderer(std::shared_ptr<rengage::OGLInvoker> ogl_invoker, GLint mv_index, GLint proj_index, float aspect_ratio);
 		~Renderer();
-		void draw_model(const std::unique_ptr<rengage::model::Model>& model_ptr);
+		void draw_model(const ModelPtr& model_ptr);
 		void set_aspect_ratio(float aspect_ratio);
 		friend GameManager;
 	};
