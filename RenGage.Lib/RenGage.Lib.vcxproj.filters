@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\rengage.lib\logging\logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,9 +65,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\logging\logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering_window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
