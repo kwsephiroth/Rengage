@@ -36,7 +36,7 @@ namespace rengage::model {
 		friend std::ostream& operator<<(std::ostream& os, const Mesh& mesh);
 
 		bool initialized() const { return m_initialized; }
-		GLsizei total_vertices() const { return m_vertices.size(); }
+		size_t total_vertices() const { return m_vertices.size(); }
 		const std::vector<unsigned int>& indices () const { return m_indices; }
 		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }

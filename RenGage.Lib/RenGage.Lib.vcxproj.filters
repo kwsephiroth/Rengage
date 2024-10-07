@@ -42,9 +42,6 @@
     <ClInclude Include="inc\rengage.lib\shader\shader_program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\rengage.lib\tools\opengl_invoke.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\rengage.lib\camera\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>

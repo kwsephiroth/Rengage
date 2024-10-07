@@ -6,7 +6,7 @@
 #include <rengage.lib/logging/logger_macros.h>
 #include <rengage.lib/logging/file_logger.h>
 #include <rengage.lib/logging/console_logger.h>
-#include <rengage.lib/tools/opengl_invoke.h>
+//#include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_program.h>
 #include <rengage.lib/model/model.h>
