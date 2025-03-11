@@ -34,6 +34,7 @@
     <ClInclude Include="inc\rengage.lib\shader\shader_program.h" />
     <ClInclude Include="inc\rengage.lib\tools\ogl_invoker.h" />
     <ClInclude Include="inc\rengage.lib\tools\opengl_invoker.h" />
+    <ClInclude Include="inc\rengage.lib\model\texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="src\model\vertex.cpp" />
     <ClCompile Include="src\rendering_window.cpp" />
     <ClCompile Include="src\shader\shader_factory.cpp" />
+    <ClCompile Include="src\model\texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

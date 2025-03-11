@@ -15,6 +15,7 @@ namespace rengage::model {
 		bool m_initialized = false;
 		glm::mat4 m_model_matrix;//Used to transform model coordinates from object to world space.
 		size_t m_total_vertices = 0;
+		size_t m_total_indices = 0;
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
@@ -31,6 +32,7 @@ namespace rengage::model {
 		std::optional<GLuint> VAO() { return m_vao; }
 		const glm::mat4& model_matrix() const { return m_model_matrix; }
 		size_t total_vertices() const { return m_total_vertices; }
+		size_t total_indices() const { return m_total_indices; }
 		size_t  total_meshes() const { return m_meshes.size(); }
 		const std::vector<Mesh>& meshes() const { return m_meshes; }
 	};

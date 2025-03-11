@@ -3,7 +3,7 @@
 
 namespace rengage::logging
 {
-	const std::string LOG_FILE_DIRECTORY = "Logs/";
+	const std::string LOG_FILE_DIRECTORY = "logs/";
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";
 	const std::string LOG_FILE_NAME_SUFFIX = ".log";
 

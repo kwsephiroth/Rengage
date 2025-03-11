@@ -7,8 +7,11 @@
 #include "vertex.h"
 #include "../logging/logger_macros.h"
 #include "../tools/ogl_invoker.h"
+#include "texture.h"
 
 namespace rengage::model {
+	using TexturePtr = std::shared_ptr<Texture>;
+
 	class Mesh
 	{
 	private:		
@@ -21,6 +24,7 @@ namespace rengage::model {
 		std::shared_ptr<ILogger> m_logger;
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
+		std::vector<TexturePtr> m_textures;
 		bool m_initialized = false;
 
 		//IDs are only initialized when mesh is successfully initialized.
@@ -37,6 +41,7 @@ namespace rengage::model {
 
 		bool initialized() const { return m_initialized; }
 		size_t total_vertices() const { return m_vertices.size(); }
+		size_t total_indices() const { return m_indices.size(); }
 		const std::vector<unsigned int>& indices () const { return m_indices; }
 		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }

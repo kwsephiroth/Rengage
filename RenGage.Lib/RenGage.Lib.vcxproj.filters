@@ -60,6 +60,9 @@
     <ClInclude Include="inc\rengage.lib\tools\ogl_invoker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\rengage.lib\model\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_window.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\logging\console_logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

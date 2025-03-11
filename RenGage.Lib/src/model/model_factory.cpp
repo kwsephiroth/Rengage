@@ -96,6 +96,7 @@ namespace rengage::model {
 
 			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));//Copy meshes that make up this parent node.
 			model.m_total_vertices += model.m_meshes.back().total_vertices();
+			model.m_total_indices += model.m_meshes.back().total_indices();
 		}
 
 		//then do the same for each of its children (recursively)
