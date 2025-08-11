@@ -16,10 +16,11 @@ namespace rengage::shader
 		//opengl_invoke(glDeleteProgram, ARGS(m_id));
 	}
 
-	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(const std::string& vertex_shader_path,
-																  const std::string& frag_shader_path,
-																  std::shared_ptr<OGLInvoker> ogl_invoker,
-																  std::shared_ptr<ILogger> logger)
+	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(
+		const std::string& vertex_shader_path,
+		const std::string& frag_shader_path,
+		std::shared_ptr<OGLInvoker> ogl_invoker,
+		std::shared_ptr<ILogger> logger)
 	{
 		rengage::shader::ShaderFactory shader_factory{ ogl_invoker, logger };//TODO: Inject dependencies into constructor.
 		auto vertex_shader = shader_factory.load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);
@@ -52,7 +53,7 @@ namespace rengage::shader
 	bool ShaderProgram::link_program()
 	{
 		m_ogl_invoker->invoke(glLinkProgram, ARGS(m_id));
-				
+
 		//Log any linking errors.
 		GLint success;
 		const unsigned int MAX_LOG_SIZE = 512;
@@ -65,7 +66,7 @@ namespace rengage::shader
 			m_ogl_invoker->invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
 			ss << "Failed to link shader program. Description below:\n";
 			ss << info_log << "\n";
-			LOG_ERROR(m_logger, ss.str())
+			LOG_ERROR(m_logger, ss.str());
 			return false;
 		}
 		m_is_valid = true;

@@ -101,7 +101,7 @@ namespace rengage::model {
 		//Point VBO at vertex data
 		m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
 		m_ogl_invoker->invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
-		
+
 		//Point EBO at face indices
 		m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_ebo.value()));
 		m_ogl_invoker->invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
@@ -111,7 +111,7 @@ namespace rengage::model {
 		GLintptr vertex_normal_offset = 3 * sizeof(float);
 		GLintptr vertex_texcoord_offset = 6 * sizeof(float);
 
-		
+
 		if (position_index >= 0)//negative one index indicates unused attribute.
 		{
 			//setup position attribute

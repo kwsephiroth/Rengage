@@ -7,12 +7,13 @@ namespace rengage::logging
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";
 	const std::string LOG_FILE_NAME_SUFFIX = ".log";
 
-	class FileLogger final : public ILogger 
+	class FileLogger final : public ILogger
 	{
 	public:
 		FileLogger(std::string log_directory = LOG_FILE_DIRECTORY);
 		~FileLogger();
-		void log(LogSeverity severity,
+		void log(
+			LogSeverity severity,
 			std::string msg,
 			std::source_location location = std::source_location::current()) override;
 		bool is_initialized() const;

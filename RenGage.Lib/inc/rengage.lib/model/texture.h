@@ -11,7 +11,7 @@ namespace rengage::model {
 	public:
 		Texture(const std::string& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger);
 		const std::string& filename() const { return m_filename; }
-		const GLuint handle() const { return m_handle; } 
+		const GLuint handle() const { return m_handle; }
 		const bool valid() const { return m_valid; }
 
 	private:

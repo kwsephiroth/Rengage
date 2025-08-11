@@ -7,7 +7,7 @@
 
 namespace rengage
 {
-	#define ARGS(...) std::make_tuple(__VA_ARGS__)
+#define ARGS(...) std::make_tuple(__VA_ARGS__)
 
 	namespace {
 		void check_for_opengl_error(const std::shared_ptr<logging::ILogger>& logger, std::source_location& location)
@@ -33,7 +33,7 @@ namespace rengage
 		std::shared_ptr<logging::ILogger> m_logger = nullptr;
 
 	public:
-		explicit OGLInvoker(std::shared_ptr<logging::ILogger> logger) : 
+		explicit OGLInvoker(std::shared_ptr<logging::ILogger> logger) :
 			m_logger(logger)
 		{
 		}

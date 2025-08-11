@@ -8,7 +8,7 @@ namespace rengage::camera
 		init();
 	}
 
-	Camera::Camera(glm::vec3 init_position) 
+	Camera::Camera(glm::vec3 init_position)
 		: m_position(init_position)
 	{
 		init();

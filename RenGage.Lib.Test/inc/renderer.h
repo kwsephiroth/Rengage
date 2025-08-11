@@ -34,7 +34,7 @@ namespace forest_escape {
 		void update_view_matrix(const glm::vec4& new_position);
 		void update_projection_matrix(const float new_aspect_ratio);
 		void draw_frame();
-		
+
 	public:
 		Renderer(std::shared_ptr<rengage::OGLInvoker> ogl_invoker, GLint mv_index, GLint proj_index, float aspect_ratio);
 		~Renderer();

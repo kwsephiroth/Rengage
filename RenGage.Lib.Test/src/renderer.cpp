@@ -30,7 +30,7 @@ namespace forest_escape {
 
 	void Renderer::update_view_matrix(const glm::vec4& new_position)
 	{
-		
+
 	}
 
 	void Renderer::update_projection_matrix(const float new_aspect_ratio)

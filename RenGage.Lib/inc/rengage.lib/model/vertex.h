@@ -5,14 +5,14 @@
 #include <iostream>
 
 namespace rengage::model {
-	
+
 	enum class VertexAttribType
 	{
 		POSITION,
 		NORMAL,
 		TEXCOORD
 	};
-	
+
 	using VertexAttributeIndex = unsigned int;
 	using VertexAttribMap = std::unordered_map<VertexAttribType, VertexAttributeIndex>;
 
@@ -30,7 +30,7 @@ namespace rengage::model {
 				return true;
 			}
 			return false;
-		}	
+		}
 	};
 
 	std::ostream& operator<<(std::ostream& os, const Vertex& vertex);

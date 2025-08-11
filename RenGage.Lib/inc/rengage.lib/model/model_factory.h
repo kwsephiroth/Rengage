@@ -6,14 +6,16 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
-#include <boost/di.hpp>
+#include <boost/di.hpp> // TODO: Determine if this is still needed.
+#include <filesystem>
 
 namespace rengage::model {
-	
+
 	const unsigned int ASSIMP_POST_PROCESS_FLAGS = aiProcess_Triangulate |
-												   aiProcess_GenSmoothNormals |
-												   aiProcess_FlipUVs |
-												   aiProcess_JoinIdenticalVertices;
+		aiProcess_GenSmoothNormals |
+		aiProcess_FlipUVs |
+		aiProcess_JoinIdenticalVertices;
+
 	class ModelFactory
 	{
 	private:
@@ -29,9 +31,9 @@ namespace rengage::model {
 	public:
 		explicit ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger);
 		std::unique_ptr<Model> load_model(const std::string& filename,
-										  const GLint position_index,
-										  const GLint normal_index,
-										  const GLint tex_coord_index,
-										  std::optional<GLuint> VAO=std::nullopt);
+			const GLint position_index,
+			const GLint normal_index,
+			const GLint tex_coord_index,
+			std::optional<GLuint> vao = std::nullopt);
 	};
 }

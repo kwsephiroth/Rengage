@@ -14,7 +14,7 @@ namespace rengage::model {
 
 	class Mesh
 	{
-	private:		
+	private:
 		Mesh(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
 			m_ogl_invoker(std::move(ogl_invoker)),
 			m_logger(std::move(logger))
@@ -42,7 +42,7 @@ namespace rengage::model {
 		bool initialized() const { return m_initialized; }
 		size_t total_vertices() const { return m_vertices.size(); }
 		size_t total_indices() const { return m_indices.size(); }
-		const std::vector<unsigned int>& indices () const { return m_indices; }
+		const std::vector<unsigned int>& indices() const { return m_indices; }
 		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }

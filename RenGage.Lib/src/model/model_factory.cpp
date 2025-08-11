@@ -9,40 +9,47 @@ namespace rengage::model {
 	}
 
 	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename,
-													const GLint position_index,
-													const GLint normal_index,
-													const GLint tex_coord_index,
-													std::optional<GLuint> VAO)
+		const GLint position_index,
+		const GLint normal_index,
+		const GLint tex_coord_index,
+		std::optional<GLuint> vao)
 	{
-		LOG_INFO(m_logger, "Loading model from path '" + filename + "'...")
+		LOG_INFO(m_logger, "Loading model from path '" + filename + "'...");
+
+		if (!std::filesystem::exists({ filename }))
+		{
+			std::string errorMsg = "File at path '" + filename + "' does not exist.";
+			LOG_ERROR(m_logger, errorMsg);
+			return nullptr;
+		}
 
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filename.c_str(), ASSIMP_POST_PROCESS_FLAGS);
 
 		if (scene == nullptr) {
 			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
-			LOG_ERROR(m_logger, errorMsg + importer.GetErrorString())
+			LOG_ERROR(m_logger, errorMsg + importer.GetErrorString());
 			return nullptr;
 		}
-		
+
 		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene);
 		if (model_ptr != nullptr) {
 			//Bind VAO then bind and setup mesh VBOs
-			if (VAO.has_value()) {
-				model_ptr->setup_VAO(VAO.value(), position_index, normal_index, tex_coord_index);
+			if (vao.has_value()) {
+				model_ptr->setup_VAO(vao.value(), position_index, normal_index, tex_coord_index);
 			}
 			else {
 				model_ptr->setup_VAO(0, position_index, normal_index, tex_coord_index);//Use default VAO object 0
 			}
 
-			LOG_INFO(m_logger, "Model successfully loaded from path '" + filename + "'.")
+			LOG_INFO(m_logger, "Model successfully loaded from path '" + filename + "'.");
 		}
 		else {
 			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
-			LOG_ERROR(m_logger, errorMsg)
+			LOG_ERROR(m_logger, errorMsg);
 			return nullptr;
 		}
-		
+
 		return model_ptr;
 	}
 
@@ -76,13 +83,18 @@ namespace rengage::model {
 		return false;
 	}
 
+	bool ModelFactory::init_textures(const aiScene& scene, Model& model)
+	{
+		return true;
+	}
+
 	void ModelFactory::process_node(const aiNode& node, const aiScene& scene, Model& model)
 	{
 		//process all the node's meshes (if any)
 		for (unsigned int mesh_index = 0; mesh_index < node.mNumMeshes; ++mesh_index)
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
-			LOG_INFO(m_logger, "MESH NAME: " + std::string(ai_mesh->mName.C_Str()))
+			LOG_INFO(m_logger, "MESH NAME: " + std::string(ai_mesh->mName.C_Str()));
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
 				aiString str;
@@ -90,7 +102,8 @@ namespace rengage::model {
 				for (unsigned int i = 0; i < texture_count; ++i)
 				{
 					ai_material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
-					LOG_INFO(m_logger, "	Texture file located @ '" + std::string(str.C_Str()) + "'")
+					LOG_INFO(m_logger, "	Texture file located @ '" + std::string(str.C_Str()) + "'");
+					// TODO: Init texture here?
 				}
 			}
 

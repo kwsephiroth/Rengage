@@ -9,7 +9,7 @@ namespace rengage::shader
 
 		input_file.open(filename);
 		if (!input_file.good()) {
-			LOG_ERROR(m_logger, "Error opening file named '" + std::string {filename} + "'. Please check file or filename.")
+			LOG_ERROR(m_logger, "Error opening file named '" + std::string{ filename } + "'. Please check file or filename.");
 			return shader_ptr;
 		}
 
@@ -62,7 +62,7 @@ namespace rengage::shader
 		m_ogl_invoker->invoke(glCompileShader, ARGS(shader_id));
 		GLint success;
 		m_ogl_invoker->invoke(glGetShaderiv, ARGS(shader_id, GL_COMPILE_STATUS, &success));
-		
+
 		if (success != GL_TRUE) {
 			GLsizei actual_log_length = 0;
 			const unsigned int MAX_LOG_LENGTH = 1024;
@@ -79,7 +79,7 @@ namespace rengage::shader
 				ss << "Source:\n\"" << source << "\"\n";
 			}
 			ss << "Log: " << info_log << "\n";
-			LOG_ERROR(m_logger, ss.str())
+			LOG_ERROR(m_logger, ss.str());
 		}
 
 		return success;

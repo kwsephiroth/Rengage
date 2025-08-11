@@ -8,7 +8,7 @@
 
 namespace rengage::shader
 {
-	class ShaderFactory 
+	class ShaderFactory
 	{
 	public:
 		ShaderFactory(std::shared_ptr<OGLInvoker> oglInvoker, std::shared_ptr<ILogger> logger) :
@@ -21,6 +21,6 @@ namespace rengage::shader
 	private:
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		std::shared_ptr<ILogger> m_logger;
-		GLint compile_shader_source(const GLuint shader_id, const std::string& source, const std::string& filename="");
+		GLint compile_shader_source(const GLuint shader_id, const std::string& source, const std::string& filename = "");
 	};
 }

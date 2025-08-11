@@ -13,10 +13,11 @@ namespace rengage::shader
 	{
 	public:
 		~ShaderProgram();
-		static std::unique_ptr<ShaderProgram> create_instance(const std::string& vertex_shader_path,
-															  const std::string& frag_shader_path,
-															  std::shared_ptr<OGLInvoker> ogl_invoker,
-															  std::shared_ptr<ILogger> logger);
+		static std::unique_ptr<ShaderProgram> create_instance(
+			const std::string& vertex_shader_path,
+			const std::string& frag_shader_path,
+			std::shared_ptr<OGLInvoker> ogl_invoker,
+			std::shared_ptr<ILogger> logger);
 
 		void attach_shader(GLuint shader_id);
 		void use();

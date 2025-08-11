@@ -7,7 +7,7 @@
 	}
 
 namespace forest_escape {
-	
+
 	GameManager::GameManager()
 	{
 		init();
@@ -21,7 +21,7 @@ namespace forest_escape {
 	void GameManager::init()
 	{
 		m_logger = std::make_shared<rengage::logging::FileLogger>();
-		
+
 		if (auto p_logger = dynamic_cast<rengage::logging::FileLogger*>(m_logger.get()))
 		{
 			if (!p_logger->is_initialized())
@@ -41,7 +41,7 @@ namespace forest_escape {
 			!init_shader_program() ||
 			!init_models())
 		{
-			LOG_ERROR(m_logger, "Failed to init GameManager. Check log for error(s).")
+			LOG_ERROR(m_logger, "Failed to init GameManager. Check log for error(s).");
 			exit(0);
 		}
 
@@ -61,9 +61,9 @@ namespace forest_escape {
 
 	bool GameManager::init_window()
 	{
-		rengage::WindowAttributes window_attribs = {.name = "Forest Escape",
-													.min_width = 1920, 
-													.min_height = 1080, 
+		rengage::WindowAttributes window_attribs = { .name = "Forest Escape",
+													.min_width = 1920,
+													.min_height = 1080,
 													.color = {0.0f, 0.0f, 0.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
@@ -71,13 +71,13 @@ namespace forest_escape {
 
 		if (!m_window->initialized()) {
 			LOG_ERROR(m_logger, "Rendering window was not properly initialized. Check logs for error(s).");
-				return false;
+			return false;
 		}
 
 		auto glfw_ptr = m_window->glfw_window();
 		glfwMakeContextCurrent(glfw_ptr);
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
-		
+
 		//Register GLFW window callback(s).
 		glfwSetWindowUserPointer(glfw_ptr, this);//Enables GLFW to use our instance of RenderingWindow for callback invocation.
 		glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(on_window_resize));
@@ -100,9 +100,9 @@ namespace forest_escape {
 	bool GameManager::init_shader_program()
 	{
 		m_program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
-																    "res/shaders/fragment_shader.glsl",
-																	m_ogl_invoker,
-																	m_logger);
+			"res/shaders/fragment_shader.glsl",
+			m_ogl_invoker,
+			m_logger);
 		if (m_program == nullptr || !m_program->is_valid())
 		{
 			LOG_ERROR(m_logger, "Failed to create shader program. Check logs for error(s).");
@@ -120,7 +120,7 @@ namespace forest_escape {
 		GLint tex_coord_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
 		unsigned int VAO = 0;
-		rengage::model::ModelFactory model_factory{m_ogl_invoker, m_logger};
+		rengage::model::ModelFactory model_factory{ m_ogl_invoker, m_logger };
 		auto model = model_factory.load_model("res/models/pine_tree.obj",
 			position_index,
 			normal_index,

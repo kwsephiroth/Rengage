@@ -11,7 +11,7 @@ namespace rengage::shader
 		std::string file_name;
 	};
 
-	class Shader 
+	class Shader
 	{
 	public:
 		~Shader()
@@ -33,7 +33,7 @@ namespace rengage::shader
 		friend class ShaderFactory;
 		friend class ShaderProgram;
 
-	private:		
+	private:
 		Shader(std::shared_ptr<OGLInvoker> oglInvoker) : m_ogl_invoker(std::move(oglInvoker)) {}
 
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;

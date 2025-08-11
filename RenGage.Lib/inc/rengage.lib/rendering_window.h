@@ -48,7 +48,7 @@ namespace rengage
 	public:
 		RenderingWindow(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger, WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~RenderingWindow();
-		GLFWwindow* operator()(){ return m_window; }//TODO: Switch to QT instead of GLFW for window management?
+		GLFWwindow* operator()() { return m_window; }//TODO: Switch to QT instead of GLFW for window management?
 		inline bool initialized() const { return m_initialized; }
 		inline std::string name() const { return m_attributes.name; }
 		inline int min_width() const { return m_attributes.min_width; }
