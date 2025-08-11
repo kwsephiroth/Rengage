@@ -6,6 +6,18 @@
 #include "../tools/ogl_invoker.h"
 
 namespace rengage::model {
+
+	struct ModelParameters
+	{
+		std::string file_path;
+		GLint position_index;
+		GLint normal_index;
+		GLint tex_coord_index;
+		std::optional<GLuint> vao = std::nullopt;
+		std::optional<std::string> textures_file_path;
+		std::optional<std::string> materials_file_path;
+	};
+
 	class Model
 	{
 	private:

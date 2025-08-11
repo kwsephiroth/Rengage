@@ -121,11 +121,14 @@ namespace forest_escape {
 
 		unsigned int VAO = 0;
 		rengage::model::ModelFactory model_factory{ m_ogl_invoker, m_logger };
-		auto model = model_factory.load_model("res/models/pine_tree.obj",
-			position_index,
-			normal_index,
-			tex_coord_index,
-			VAO);
+		auto model = model_factory.load_model({
+			.file_path = "res/models/pine_tree.obj",
+			.position_index = position_index,
+			.normal_index = normal_index,
+			.tex_coord_index = tex_coord_index,
+			.vao = VAO,
+			.textures_file_path = "res/textures"
+			});
 
 		if (!model)
 		{

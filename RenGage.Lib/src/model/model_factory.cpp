@@ -8,26 +8,22 @@ namespace rengage::model {
 	{
 	}
 
-	std::unique_ptr<Model> ModelFactory::load_model(const std::string& filename,
-		const GLint position_index,
-		const GLint normal_index,
-		const GLint tex_coord_index,
-		std::optional<GLuint> vao)
+	std::unique_ptr<Model> ModelFactory::load_model(const ModelParameters& params)
 	{
-		LOG_INFO(m_logger, "Loading model from path '" + filename + "'...");
+		LOG_INFO(m_logger, "Loading model from path '" + params.file_path + "'...");
 
-		if (!std::filesystem::exists({ filename }))
+		if (!std::filesystem::exists({ params.file_path }))
 		{
-			std::string errorMsg = "File at path '" + filename + "' does not exist.";
+			std::string errorMsg = "File at path '" + params.file_path + "' does not exist.";
 			LOG_ERROR(m_logger, errorMsg);
 			return nullptr;
 		}
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(filename.c_str(), ASSIMP_POST_PROCESS_FLAGS);
+		const aiScene* scene = importer.ReadFile(params.file_path.c_str(), ASSIMP_POST_PROCESS_FLAGS);
 
 		if (scene == nullptr) {
-			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
+			std::string errorMsg = "Failed to load model from path '" + params.file_path + "' - ";
 			LOG_ERROR(m_logger, errorMsg + importer.GetErrorString());
 			return nullptr;
 		}
@@ -35,17 +31,17 @@ namespace rengage::model {
 		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene);
 		if (model_ptr != nullptr) {
 			//Bind VAO then bind and setup mesh VBOs
-			if (vao.has_value()) {
-				model_ptr->setup_VAO(vao.value(), position_index, normal_index, tex_coord_index);
+			if (params.vao.has_value()) {
+				model_ptr->setup_VAO(params.vao.value(), params.position_index, params.normal_index, params.tex_coord_index);
 			}
 			else {
-				model_ptr->setup_VAO(0, position_index, normal_index, tex_coord_index);//Use default VAO object 0
+				model_ptr->setup_VAO(0, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
 
-			LOG_INFO(m_logger, "Model successfully loaded from path '" + filename + "'.");
+			LOG_INFO(m_logger, "Model successfully loaded from path '" + params.file_path + "'.");
 		}
 		else {
-			std::string errorMsg = "Failed to load model from path '" + filename + "' - ";
+			std::string errorMsg = "Failed to load model from path '" + params.file_path + "' - ";
 			LOG_ERROR(m_logger, errorMsg);
 			return nullptr;
 		}

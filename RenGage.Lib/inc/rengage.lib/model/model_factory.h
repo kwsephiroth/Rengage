@@ -30,10 +30,6 @@ namespace rengage::model {
 
 	public:
 		explicit ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger);
-		std::unique_ptr<Model> load_model(const std::string& filename,
-			const GLint position_index,
-			const GLint normal_index,
-			const GLint tex_coord_index,
-			std::optional<GLuint> vao = std::nullopt);
+		std::unique_ptr<Model> load_model(const ModelParameters& params);
 	};
 }
