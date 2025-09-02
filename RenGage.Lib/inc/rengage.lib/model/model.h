@@ -14,8 +14,8 @@ namespace rengage::model {
 		GLint normal_index;
 		GLint tex_coord_index;
 		std::optional<GLuint> vao = std::nullopt;
-		std::optional<std::string> textures_file_path;
-		std::optional<std::string> materials_file_path;
+		std::optional<std::string> textures_dir;
+		std::optional<std::string> materials_dir;
 	};
 
 	class Model
@@ -28,6 +28,8 @@ namespace rengage::model {
 		glm::mat4 m_model_matrix;//Used to transform model coordinates from object to world space.
 		size_t m_total_vertices = 0;
 		size_t m_total_indices = 0;
+		ModelParameters m_params;
+		std::shared_ptr<OGLInvoker> m_ogl_invoker;//Used to invoke Open
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
@@ -47,5 +49,6 @@ namespace rengage::model {
 		size_t total_indices() const { return m_total_indices; }
 		size_t  total_meshes() const { return m_meshes.size(); }
 		const std::vector<Mesh>& meshes() const { return m_meshes; }
+		const ModelParameters& parameters() const { return m_params; }
 	};
-};
+}

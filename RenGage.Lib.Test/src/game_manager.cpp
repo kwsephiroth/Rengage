@@ -127,7 +127,7 @@ namespace forest_escape {
 			.normal_index = normal_index,
 			.tex_coord_index = tex_coord_index,
 			.vao = VAO,
-			.textures_file_path = "res/textures"
+			.textures_dir = "res/textures"
 			});
 
 		if (!model)

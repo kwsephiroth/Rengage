@@ -28,7 +28,7 @@ namespace rengage::model {
 			return nullptr;
 		}
 
-		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene);
+		std::unique_ptr<Model> model_ptr = build_model_from_scene(*scene, params);
 		if (model_ptr != nullptr) {
 			//Bind VAO then bind and setup mesh VBOs
 			if (params.vao.has_value()) {
@@ -49,9 +49,10 @@ namespace rengage::model {
 		return model_ptr;
 	}
 
-	std::unique_ptr<Model> ModelFactory::build_model_from_scene(const aiScene& scene)
+	std::unique_ptr<Model> ModelFactory::build_model_from_scene(const aiScene& scene, const ModelParameters& params)
 	{
 		Model* model = new Model();
+		model->m_params = params;
 		bool success = init_meshes(scene, *model);
 
 		if (success) {
@@ -95,10 +96,16 @@ namespace rengage::model {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
 				aiString str;
 				auto texture_count = ai_material->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+				
+				std::string textures_dir_prefix =
+					model.parameters().textures_dir.has_value() ? model.parameters().textures_dir.value() : "";
+
+				textures_dir_prefix = (textures_dir_prefix.back() == '/') ? textures_dir_prefix : textures_dir_prefix + '/';
+
 				for (unsigned int i = 0; i < texture_count; ++i)
 				{
 					ai_material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
-					LOG_INFO(m_logger, "	Texture file located @ '" + std::string(str.C_Str()) + "'");
+					LOG_INFO(m_logger, "	Texture file located @ '" + textures_dir_prefix + std::string(str.C_Str()) + "'");
 					// TODO: Init texture here?
 				}
 			}

@@ -22,7 +22,7 @@ namespace rengage::model {
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		std::shared_ptr<ILogger> m_logger;
 
-		std::unique_ptr<Model> build_model_from_scene(const aiScene& scene);
+		std::unique_ptr<Model> build_model_from_scene(const aiScene& scene, const ModelParameters& params);
 		bool init_meshes(const aiScene& scene, Model& model);
 		bool init_textures(const aiScene& scene, Model& model);
 		void process_node(const aiNode& node, const aiScene& scene, Model& model);
