@@ -24,7 +24,7 @@ namespace rengage::model {
 
 		std::unique_ptr<Model> build_model_from_scene(const aiScene& scene, const ModelParameters& params);
 		bool init_meshes(const aiScene& scene, Model& model);
-		bool init_textures(const aiScene& scene, Model& model);
+		bool init_textures(const aiMaterial& scene, Mesh& mesh, std::filesystem::path textures_dir="");
 		void process_node(const aiNode& node, const aiScene& scene, Model& model);
 		Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 

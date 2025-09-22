@@ -1,8 +1,8 @@
 #include "../../inc/rengage.lib/model/texture.h"
 
 namespace rengage::model {
-	Texture::Texture(const std::string& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
-		m_filename(filename),
+	Texture::Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+		m_filepath(filename),
 		m_ogl_invoker(ogl_invoker),
 		m_logger(logger),
 		m_handle(0),
@@ -16,10 +16,10 @@ namespace rengage::model {
 
 	bool Texture::load()
 	{
-		m_handle = SOIL_load_OGL_texture(m_filename.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		m_handle = SOIL_load_OGL_texture((const char*)m_filepath.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		if (m_handle == 0)
 		{
-			LOG_ERROR(m_logger, "Failed to load texture path '" + m_filename + "'.");
+			LOG_ERROR(m_logger, "Failed to load texture path '" + m_filepath.string() + "'.");
 			return false;
 		}
 

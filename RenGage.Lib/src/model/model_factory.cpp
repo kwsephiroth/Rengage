@@ -80,37 +80,54 @@ namespace rengage::model {
 		return false;
 	}
 
-	bool ModelFactory::init_textures(const aiScene& scene, Model& model)
+	bool ModelFactory::init_textures(const aiMaterial& ai_material, Mesh& mesh, std::filesystem::path textures_dir)
 	{
+		aiString str;
+		auto texture_count = ai_material.GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+
+		for (unsigned int i = 0; i < texture_count; ++i)
+		{
+			ai_material.GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
+			auto full_texture_path = textures_dir.empty() ? str.C_Str() : std::filesystem::path{ textures_dir.string() + str.C_Str() };
+			LOG_INFO(m_logger, "	Texture file located at path '" + full_texture_path.string() + "'.");
+
+			if (!std::filesystem::exists(full_texture_path))
+			{
+				LOG_ERROR(m_logger, "Could not find texture file located at path '" + full_texture_path.string() + "'.");
+				return false;
+			}
+
+			TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker, m_logger });
+			if (!texture->valid()) {
+				LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
+				return false;
+			}
+			mesh.m_textures.push_back(std::move(texture));
+		}
 		return true;
 	}
 
 	void ModelFactory::process_node(const aiNode& node, const aiScene& scene, Model& model)
 	{
+		std::string textures_dir =
+			model.parameters().textures_dir.has_value() ? model.parameters().textures_dir.value() : "";
+
+		textures_dir = (textures_dir.back() == '/') ? textures_dir : textures_dir + '/';
+
 		//process all the node's meshes (if any)
 		for (unsigned int mesh_index = 0; mesh_index < node.mNumMeshes; ++mesh_index)
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
+			auto rengage_mesh = generate_rengage_mesh(*ai_mesh);
 			LOG_INFO(m_logger, "MESH NAME: " + std::string(ai_mesh->mName.C_Str()));
+
+			// Load and store textures associated with this mesh's material (if any)
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
-				aiString str;
-				auto texture_count = ai_material->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
-				
-				std::string textures_dir_prefix =
-					model.parameters().textures_dir.has_value() ? model.parameters().textures_dir.value() : "";
-
-				textures_dir_prefix = (textures_dir_prefix.back() == '/') ? textures_dir_prefix : textures_dir_prefix + '/';
-
-				for (unsigned int i = 0; i < texture_count; ++i)
-				{
-					ai_material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
-					LOG_INFO(m_logger, "	Texture file located @ '" + textures_dir_prefix + std::string(str.C_Str()) + "'");
-					// TODO: Init texture here?
-				}
+				init_textures(*ai_material, rengage_mesh, textures_dir);
 			}
 
-			model.m_meshes.push_back(generate_rengage_mesh(*ai_mesh));//Copy meshes that make up this parent node.
+			model.m_meshes.push_back(std::move(rengage_mesh));//Copy meshes that make up this parent node.
 			model.m_total_vertices += model.m_meshes.back().total_vertices();
 			model.m_total_indices += model.m_meshes.back().total_indices();
 		}
