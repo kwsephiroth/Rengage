@@ -102,6 +102,8 @@ namespace rengage::model {
 				LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
 				return false;
 			}
+
+			// TODO: Check if texture with same filepath already exists in mesh's texture collection before adding.
 			mesh.m_textures.push_back(std::move(texture));
 		}
 		return true;
