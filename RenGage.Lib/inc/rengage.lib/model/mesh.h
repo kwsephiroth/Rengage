@@ -3,7 +3,6 @@
 #include <vector>
 #include <iostream>
 #include <optional>
-#include <unordered_map>
 #include "vertex.h"
 #include "../logging/logger_macros.h"
 #include "../tools/ogl_invoker.h"

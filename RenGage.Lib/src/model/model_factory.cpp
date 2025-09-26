@@ -104,6 +104,7 @@ namespace rengage::model {
 			}
 
 			// TODO: Check if texture with same filepath already exists in mesh's texture collection before adding.
+			// We need to reuse existing textures to avoid redundant texture loading.
 			mesh.m_textures.push_back(std::move(texture));
 		}
 		return true;
