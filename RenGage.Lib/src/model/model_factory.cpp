@@ -80,15 +80,15 @@ namespace rengage::model {
 		return false;
 	}
 
-	bool ModelFactory::init_textures(const aiMaterial& ai_material, Mesh& mesh, std::filesystem::path textures_dir)
+	bool ModelFactory::init_textures(const aiMaterial& ai_material, Model& model, Mesh& mesh, std::filesystem::path textures_dir)
 	{
-		aiString str;
+		aiString texture_filename;
 		auto texture_count = ai_material.GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
 
 		for (unsigned int i = 0; i < texture_count; ++i)
 		{
-			ai_material.GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &str);
-			auto full_texture_path = textures_dir.empty() ? str.C_Str() : std::filesystem::path{ textures_dir.string() + str.C_Str() };
+			ai_material.GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &texture_filename);
+			auto full_texture_path = textures_dir.empty() ? texture_filename.C_Str() : std::filesystem::path{ textures_dir.string() + texture_filename.C_Str() };
 			LOG_INFO(m_logger, "	Texture file located at path '" + full_texture_path.string() + "'.");
 
 			if (!std::filesystem::exists(full_texture_path))
@@ -97,15 +97,23 @@ namespace rengage::model {
 				return false;
 			}
 
-			TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker, m_logger });
-			if (!texture->valid()) {
-				LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
-				return false;
-			}
-
-			// TODO: Check if texture with same filepath already exists in mesh's texture collection before adding.
+			// Check if texture with same filepath already exists in mesh's texture collection before adding.
 			// We need to reuse existing textures to avoid redundant texture loading.
-			mesh.m_textures.push_back(std::move(texture));
+			auto existingElementItr = model.m_texture_cache.find(full_texture_path.string());
+			if (existingElementItr == model.m_texture_cache.end()) // Texture with same filepath not found
+			{
+				TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker, m_logger });
+				if (!texture->valid()) {
+					LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
+					return false;
+				}
+				auto newElementItr = model.m_texture_cache.emplace(full_texture_path.string(), std::move(texture));
+				mesh.m_textures.emplace_back(newElementItr.first->second);
+			}
+			else // Found an existing texture with same filepath
+			{
+				mesh.m_textures.emplace_back(existingElementItr->second);
+			}
 		}
 		return true;
 	}
@@ -127,7 +135,7 @@ namespace rengage::model {
 			// Load and store textures associated with this mesh's material (if any)
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
-				init_textures(*ai_material, rengage_mesh, textures_dir);
+				init_textures(*ai_material, model, rengage_mesh, textures_dir);
 			}
 
 			model.m_meshes.push_back(std::move(rengage_mesh));//Copy meshes that make up this parent node.

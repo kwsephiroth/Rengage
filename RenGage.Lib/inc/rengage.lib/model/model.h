@@ -18,6 +18,8 @@ namespace rengage::model {
 		std::optional<std::string> materials_dir;
 	};
 
+	using TextureCache = std::unordered_map<std::string, TexturePtr>;
+
 	class Model
 	{
 	private:
@@ -25,11 +27,12 @@ namespace rengage::model {
 		std::vector<Mesh> m_meshes;
 		//unsigned int m_num_meshes;
 		bool m_initialized = false;
-		glm::mat4 m_model_matrix;//Used to transform model coordinates from object to world space.
+		glm::mat4 m_model_matrix;// Used to transform model coordinates from object to world space.
 		size_t m_total_vertices = 0;
 		size_t m_total_indices = 0;
 		ModelParameters m_params;
-		std::shared_ptr<OGLInvoker> m_ogl_invoker;//Used to invoke Open
+		std::shared_ptr<OGLInvoker> m_ogl_invoker;// Used to invoke Open
+		TextureCache m_texture_cache; // Cache of loaded textures to avoid redundant texture loading.
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
