@@ -161,6 +161,8 @@ namespace forest_escape {
 		auto window_color = m_window->color();
 		m_ogl_invoker->invoke(glEnable, ARGS(GL_DEPTH_TEST));
 		m_ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
+		m_ogl_invoker->invoke(glEnable, ARGS(GL_BLEND));
+		m_ogl_invoker->invoke(glBlendFunc, ARGS(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
