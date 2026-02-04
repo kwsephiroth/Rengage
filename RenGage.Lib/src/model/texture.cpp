@@ -16,7 +16,7 @@ namespace rengage::model {
 
 	bool Texture::load()
 	{
-		m_handle = SOIL_load_OGL_texture(m_filepath.string().c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);//TODO: figure out why this flag inverts the branch texture.
+		m_handle = SOIL_load_OGL_texture(m_filepath.string().c_str(), SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);//TODO: figure out why this flag inverts the branch texture.
 		if (m_handle == 0)
 		{
 			LOG_ERROR(m_logger, "Failed to load texture path '" + m_filepath.string() + "'.");

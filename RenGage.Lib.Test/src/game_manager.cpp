@@ -21,7 +21,7 @@ namespace forest_escape {
 	void GameManager::init()
 	{
 		m_logger = std::make_shared<rengage::logging::FileLogger>();
-
+		
 		if (auto p_logger = dynamic_cast<rengage::logging::FileLogger*>(m_logger.get()))
 		{
 			if (!p_logger->is_initialized())
@@ -46,6 +46,7 @@ namespace forest_escape {
 		}
 
 		m_program->use();//Installs the program object as part of the current rendering state.
+		m_ogl_invoker = std::make_shared<rengage::OGLInvoker>(m_logger);
 		m_renderer = std::make_unique<Renderer>(
 			m_ogl_invoker,
 			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
@@ -163,6 +164,8 @@ namespace forest_escape {
 		m_ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
 		m_ogl_invoker->invoke(glEnable, ARGS(GL_BLEND));
 		m_ogl_invoker->invoke(glBlendFunc, ARGS(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		//m_ogl_invoker->invoke(glEnable, ARGS(GL_ALPHA_TEST));
+		//m_ogl_invoker->invoke(glAlphaFunc, ARGS(GL_GREATER, 0.1f));
 		//m_ogl_invoker->invoke(glEnable, ARGS(GL_CULL_FACE));
 		//m_ogl_invoker->invoke(glCullFace, ARGS(GL_FRONT));
 

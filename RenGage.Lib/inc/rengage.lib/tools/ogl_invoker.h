@@ -16,7 +16,8 @@ namespace rengage
 			for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
 				errorCount++;
 				std::string msg = "glErrorCode(" + std::to_string(glError) + ")";
-				logger->log(logging::LogSeverity::ERROR, msg, location);
+				if (logger)
+					logger->log(logging::LogSeverity::ERROR, msg, location);
 				glError = glGetError();
 			}
 
