@@ -89,7 +89,6 @@ namespace rengage::model {
 		{
 			ai_material.GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &texture_filename);
 			auto full_texture_path = textures_dir.empty() ? texture_filename.C_Str() : std::filesystem::path{ textures_dir.string() + texture_filename.C_Str() };
-			LOG_INFO(m_logger, "	Texture file located at path '" + full_texture_path.string() + "'.");
 
 			if (!std::filesystem::exists(full_texture_path))
 			{
@@ -97,22 +96,24 @@ namespace rengage::model {
 				return false;
 			}
 
+			// TODO: Should the texture cache be a globally accessible service?
 			// Check if texture with same filepath already exists in mesh's texture collection before adding.
 			// We need to reuse existing textures to avoid redundant texture loading.
-			auto existingElementItr = model.m_texture_cache.find(full_texture_path.string());
-			if (existingElementItr == model.m_texture_cache.end()) // Texture with same filepath not found
+			auto existingTextureItr = model.m_texture_cache.find(full_texture_path.string());
+			if (existingTextureItr == model.m_texture_cache.end()) // Texture with same filepath not found
 			{
 				TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker, m_logger });
 				if (!texture->valid()) {
 					LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
 					return false;
 				}
+				LOG_INFO(m_logger, "Loaded texture file located at path '" + full_texture_path.string() + "'");
 				auto newElementItr = model.m_texture_cache.emplace(full_texture_path.string(), std::move(texture));
 				mesh.m_textures.emplace_back(newElementItr.first->second);
 			}
 			else // Found an existing texture with same filepath
 			{
-				mesh.m_textures.emplace_back(existingElementItr->second);
+				mesh.m_textures.emplace_back(existingTextureItr->second);
 			}
 		}
 		return true;

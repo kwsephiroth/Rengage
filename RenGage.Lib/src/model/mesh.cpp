@@ -85,14 +85,14 @@ namespace rengage::model {
 			return;
 		}
 
+		// TODO: Parameterize the VAO generation so that it can be done at Model-level once for all meshes.
 		unsigned int vao = 0;
 		m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 		m_vao = vao;
 		m_ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
 
 		//Generate buffer/array ids
-		GLuint vbo;
-		GLuint ebo;
+		GLuint vbo, ebo;
 		m_ogl_invoker->invoke(glGenBuffers, ARGS(1, &vbo));
 		m_ogl_invoker->invoke(glGenBuffers, ARGS(1, &ebo));
 		m_vbo = vbo;
@@ -111,7 +111,7 @@ namespace rengage::model {
 		GLintptr vertex_normal_offset = 3 * sizeof(float);
 		GLintptr vertex_texcoord_offset = 6 * sizeof(float);
 
-
+		// TODO: Does this binding logic need to be done per draw call or just once after VBO/EBO setup?
 		if (position_index >= 0)//negative one index indicates unused attribute.
 		{
 			//setup position attribute

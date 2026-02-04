@@ -16,13 +16,14 @@ namespace rengage::model {
 
 	bool Texture::load()
 	{
-		m_handle = SOIL_load_OGL_texture(m_filepath.string().c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+		m_handle = SOIL_load_OGL_texture(m_filepath.string().c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0);// SOIL_FLAG_INVERT_Y);//TODO: figure out why this flag inverts the branch texture.
 		if (m_handle == 0)
 		{
 			LOG_ERROR(m_logger, "Failed to load texture path '" + m_filepath.string() + "'.");
 			return false;
 		}
 
+		// TODO: Make the following section configuration by the client.
 		// ----- mipmap/anisotropic section
 		m_ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, m_handle));
 		m_ogl_invoker->invoke(glTexParameteri, ARGS(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));

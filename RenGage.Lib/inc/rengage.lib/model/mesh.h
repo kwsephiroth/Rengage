@@ -45,5 +45,6 @@ namespace rengage::model {
 		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }
+		const std::vector<TexturePtr>& Textures() const { return m_textures; }
 	};
 }

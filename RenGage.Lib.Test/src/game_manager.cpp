@@ -62,7 +62,7 @@ namespace forest_escape {
 		rengage::WindowAttributes window_attribs = { .name = "Forest Escape",
 													.min_width = 1920,
 													.min_height = 1080,
-													.color = {0.0f, 0.0f, 0.0f, 1.0f},
+													.color = {135.0f/255.0f, 206.0f/255.0f, 235.0f/244.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
 		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, m_logger, std::move(window_attribs));

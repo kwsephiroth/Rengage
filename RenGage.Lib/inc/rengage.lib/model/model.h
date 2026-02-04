@@ -32,7 +32,9 @@ namespace rengage::model {
 		size_t m_total_indices = 0;
 		ModelParameters m_params;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;// Used to invoke Open
-		TextureCache m_texture_cache; // Cache of loaded textures to avoid redundant texture loading.
+
+		//TODO: Refactor the texture cache member to be a service instead.
+		inline static TextureCache m_texture_cache; // Cache of loaded textures to avoid redundant texture loading.
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
