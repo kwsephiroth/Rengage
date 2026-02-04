@@ -15,7 +15,7 @@ namespace rengage::model {
 
 		//m_model_matrix = glm::mat4(1.0f);//Initialize to identity matrix.
 		m_model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-0.8f, -10.0f, 15.0f)); // This will be the last transformation applied to the model matrix.
-		glm::vec3 euler_angles(glm::radians(10.0f), 0.0f, 0.0f);
+		glm::vec3 euler_angles(glm::radians(20.0f), 0.0f, 0.0f);
 		m_model_matrix *= glm::toMat4(glm::quat(euler_angles));
 		register_VBOs(position_index, normal_index, tex_coord_index);//Associate all VBOs with currently bound VAO
 		m_initialized = true;

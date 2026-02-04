@@ -72,18 +72,18 @@ namespace forest_escape {
 		for (const auto& mesh : model_ptr->meshes())
 		{
 			m_ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value())); //TODO: Check how VAO is being dispersed to Mesh.
-			m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, mesh.VBO().value()));
-			m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(0, 3, GL_FLOAT, false, sizeof(rengage::model::Vertex), (GLvoid*)0));
-			m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
+			//m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, mesh.VBO().value()));
+			//m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(0, 3, GL_FLOAT, false, sizeof(rengage::model::Vertex), (GLvoid*)0));
+			//m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
 			if (const auto& textures = mesh.Textures(); !textures.empty())
 			{
 				m_ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
 				m_ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, mesh.Textures()[0]->handle()));
 			}
 			m_ogl_invoker->invoke(glDrawElements, ARGS(GL_TRIANGLES, mesh.indices().size(), GL_UNSIGNED_INT, nullptr));
-			m_ogl_invoker->invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, mesh.total_vertices()));
-			//m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+			//m_ogl_invoker->invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, mesh.total_vertices()));
+			m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 		}
-		m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+		//m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 	}
 }

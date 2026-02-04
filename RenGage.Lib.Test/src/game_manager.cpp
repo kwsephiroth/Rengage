@@ -163,6 +163,8 @@ namespace forest_escape {
 		m_ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
 		m_ogl_invoker->invoke(glEnable, ARGS(GL_BLEND));
 		m_ogl_invoker->invoke(glBlendFunc, ARGS(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		//m_ogl_invoker->invoke(glEnable, ARGS(GL_CULL_FACE));
+		//m_ogl_invoker->invoke(glCullFace, ARGS(GL_FRONT));
 
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
