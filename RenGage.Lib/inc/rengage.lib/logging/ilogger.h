@@ -91,6 +91,6 @@ namespace rengage::logging
 		virtual ~ILogger() = default;
 		virtual void log(LogSeverity severity,
 			std::string msg,
-			std::source_location location = std::source_location::current()) = 0;		
+			std::source_location location = std::source_location::current()) = 0;
 	};
 }

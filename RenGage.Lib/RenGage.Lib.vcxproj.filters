@@ -86,9 +86,6 @@
     <ClCompile Include="src\camera\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\logging\ilogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\logging\file_logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

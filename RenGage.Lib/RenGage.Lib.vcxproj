@@ -39,7 +39,6 @@
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\logging\console_logger.cpp" />
     <ClCompile Include="src\logging\file_logger.cpp" />
-    <ClCompile Include="src\logging\ilogger.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
     <ClCompile Include="src\model\model.cpp" />
