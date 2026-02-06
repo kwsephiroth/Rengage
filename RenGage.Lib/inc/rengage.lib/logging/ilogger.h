@@ -20,7 +20,7 @@ namespace rengage::logging
 		DEBUG
 	};
 
-	static std::string log_severity_to_str(const LogSeverity severity)
+	inline std::string log_severity_to_str(const LogSeverity severity)
 	{
 		switch (severity)
 		{
