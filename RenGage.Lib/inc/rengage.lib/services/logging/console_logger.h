@@ -1,7 +1,7 @@
 #pragma once
-#include "../logging/ilogger.h"
+#include "ilogger.h"
 
-namespace rengage::logging
+namespace rengage::services::logging
 {
 	class ConsoleLogger final : public ILogger
 	{

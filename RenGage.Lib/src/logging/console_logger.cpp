@@ -1,6 +1,6 @@
-#include "logging/console_logger.h"
+#include "services/logging/console_logger.h"
 
-namespace rengage::logging
+namespace rengage::services::logging
 {
 	void ConsoleLogger::log(LogSeverity severity, std::string msg, std::source_location location)
 	{

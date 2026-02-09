@@ -10,7 +10,7 @@
 #include <filesystem>
 #include <source_location>
 
-namespace rengage::logging
+namespace rengage::services::logging
 {
 	enum class LogSeverity
 	{

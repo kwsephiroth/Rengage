@@ -20,19 +20,19 @@ namespace forest_escape {
 
 	void GameManager::init()
 	{
-		m_logger = std::make_shared<rengage::logging::FileLogger>();
+		m_logger = std::make_shared<rengage::services::logging::FileLogger>();
 		
-		if (auto p_logger = dynamic_cast<rengage::logging::FileLogger*>(m_logger.get()))
+		if (auto p_logger = dynamic_cast<rengage::services::logging::FileLogger*>(m_logger.get()))
 		{
 			if (!p_logger->is_initialized())
 			{
-				rengage::logging::ConsoleLogger().log(rengage::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
+				rengage::services::logging::ConsoleLogger().log(rengage::services::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
 				return;
 			}
 		}
 		else
 		{
-			rengage::logging::ConsoleLogger().log(rengage::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
+			rengage::services::logging::ConsoleLogger().log(rengage::services::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
 			return;
 		}
 

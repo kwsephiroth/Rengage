@@ -2,8 +2,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
-#include "logging/logger_macros.h"
-#include "logging/ilogger.h"
+#include "services/logging/logger_macros.h"
+#include "services/logging/ilogger.h"
 #include "tools/ogl_invoker.h"
 
 namespace rengage

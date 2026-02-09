@@ -61,8 +61,8 @@ namespace forest_escape {
 		//tempModelMatrix *= glm::toMat4(my_quat);
 		//tempModelMatrix = glm::scale(tempModelMatrix, glm::vec3(.3f, .3f, .3f));
 		//auto vMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.1f, -(cameraZ + depthOffset)));
-
-		auto model_view_matrix = m_camera->view_matrix() * model_ptr->model_matrix();
+		auto view_matrix = glm::translate(glm::mat4(1.0f), -m_camera->position());
+		auto model_view_matrix =  view_matrix * model_ptr->model_matrix();
 		m_ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 		//m_ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
 		//std::cout << "model view matrix = " << glm::to_string(model_view_matrix) << "\n";

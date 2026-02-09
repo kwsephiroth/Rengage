@@ -1,6 +1,6 @@
-#include "logging/file_logger.h"
+#include "services/logging/file_logger.h"
 
-namespace rengage::logging
+namespace rengage::services::logging
 {
 
 	FileLogger::FileLogger(std::string log_directory) :

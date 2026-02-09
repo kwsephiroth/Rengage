@@ -1,7 +1,7 @@
 #pragma once
-#include "../logging/ilogger.h"
+#include "ilogger.h"
 
-namespace rengage::logging
+namespace rengage::services::logging
 {
 	const std::string LOG_FILE_DIRECTORY = "logs/";
 	const std::string LOG_FILE_NAME_PREFIX = "RenGage.Log_";

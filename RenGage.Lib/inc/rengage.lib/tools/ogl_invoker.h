@@ -3,21 +3,21 @@
 #include <source_location>
 #include <string>
 #include <tuple>
-#include "../logging/ilogger.h"
+#include "../services/logging/ilogger.h"
 
 namespace rengage
 {
 #define ARGS(...) std::make_tuple(__VA_ARGS__)
 
 	namespace {
-		void check_for_opengl_error(const std::shared_ptr<logging::ILogger>& logger, std::source_location& location)
+		void check_for_opengl_error(const std::shared_ptr<services::logging::ILogger>& logger, std::source_location& location)
 		{
 			unsigned int errorCount = 0;
 			for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
 				errorCount++;
 				std::string msg = "glErrorCode(" + std::to_string(glError) + ")";
 				if (logger)
-					logger->log(logging::LogSeverity::ERROR, msg, location);
+					logger->log(services::logging::LogSeverity::ERROR, msg, location);
 				glError = glGetError();
 			}
 
@@ -31,10 +31,10 @@ namespace rengage
 	class OGLInvoker
 	{
 	private:
-		std::shared_ptr<logging::ILogger> m_logger = nullptr;
+		std::shared_ptr<services::logging::ILogger> m_logger = nullptr;
 
 	public:
-		explicit OGLInvoker(std::shared_ptr<logging::ILogger> logger) :
+		explicit OGLInvoker(std::shared_ptr<services::logging::ILogger> logger) :
 			m_logger(logger)
 		{
 		}

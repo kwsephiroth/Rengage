@@ -1,7 +1,7 @@
 #pragma once
 #include "ilogger.h"
 
-using namespace rengage::logging;
+using namespace rengage::services::logging;
 
 #define LOG_INFO(logger_ptr, msg)												\
 {																				\

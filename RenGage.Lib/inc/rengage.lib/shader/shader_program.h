@@ -1,8 +1,8 @@
 #pragma once
 #include <GL/glew.h>
 #include <memory>
-#include "../logging/logger_macros.h"
-#include "../logging/file_logger.h"
+#include "../services/logging/logger_macros.h"
+#include "../services/logging/file_logger.h"
 #include "shader.h"
 #include "shader_factory.h"
 #include "../tools/ogl_invoker.h"

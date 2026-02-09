@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <SOIL2/SOIL2.h>
 #include <string>
-#include "../logging/logger_macros.h"
+#include "../services/logging/logger_macros.h"
 #include "../tools/ogl_invoker.h"
 
 namespace rengage::model {

@@ -60,6 +60,18 @@
     <ClInclude Include="inc\rengage.lib\model\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\rengage.lib\services\logging\logger_macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\services\logging\ilogger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\services\logging\file_logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\services\logging\console_logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_window.cpp">

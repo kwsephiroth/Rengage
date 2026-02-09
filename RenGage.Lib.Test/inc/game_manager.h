@@ -3,9 +3,9 @@
 #include <memory>
 #include <glm/vec2.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <rengage.lib/logging/logger_macros.h>
-#include <rengage.lib/logging/file_logger.h>
-#include <rengage.lib/logging/console_logger.h>
+#include <rengage.lib/services/logging/logger_macros.h>
+#include <rengage.lib/services/logging/file_logger.h>
+#include <rengage.lib/services/logging/console_logger.h>
 //#include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_program.h>
@@ -24,7 +24,7 @@ namespace forest_escape {
 		std::unique_ptr<rengage::RenderingWindow> m_window;
 		std::unique_ptr<rengage::shader::ShaderProgram> m_program;
 		std::unique_ptr<Renderer> m_renderer;
-		std::shared_ptr<rengage::logging::ILogger> m_logger;
+		std::shared_ptr<rengage::services::logging::ILogger> m_logger;
 		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 		GLuint m_program_id;
 		ModelMap m_models;

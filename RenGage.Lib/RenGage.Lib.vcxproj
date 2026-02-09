@@ -28,6 +28,10 @@
     <ClInclude Include="inc\rengage.lib\model\model.h" />
     <ClInclude Include="inc\rengage.lib\model\model_factory.h" />
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h" />
+    <ClInclude Include="inc\rengage.lib\services\logging\console_logger.h" />
+    <ClInclude Include="inc\rengage.lib\services\logging\file_logger.h" />
+    <ClInclude Include="inc\rengage.lib\services\logging\ilogger.h" />
+    <ClInclude Include="inc\rengage.lib\services\logging\logger_macros.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_factory.h" />
     <ClInclude Include="inc\rengage.lib\model\vertex.h" />

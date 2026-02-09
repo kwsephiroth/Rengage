@@ -20,7 +20,7 @@ namespace rengage::model {
 		register_VBOs(position_index, normal_index, tex_coord_index);//Associate all VBOs with currently bound VAO
 		m_initialized = true;
 	}
-
+	
 	void Model::register_VBOs(const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
 		for (auto& mesh : m_meshes)

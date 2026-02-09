@@ -4,7 +4,7 @@
 #include <iostream>
 #include <optional>
 #include "vertex.h"
-#include "../logging/logger_macros.h"
+#include "../services/logging/logger_macros.h"
 #include "../tools/ogl_invoker.h"
 #include "texture.h"
 
