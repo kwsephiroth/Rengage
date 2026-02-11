@@ -95,5 +95,5 @@ namespace rengage::services::logging
 			std::source_location location = std::source_location::current()) = 0;
 	};
 
-	using ILoggerPtr = std::shared_ptr<ILogger>;
+	using ILoggerPtr = std::shared_ptr<services::logging::ILogger>;
 }

@@ -46,7 +46,7 @@ namespace rengage
 	class RenderingWindow//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
 	public:
-		RenderingWindow(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger, WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
+		RenderingWindow(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger, WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~RenderingWindow();
 		GLFWwindow* operator()() { return m_window; }//TODO: Switch to QT instead of GLFW for window management?
 		inline bool initialized() const { return m_initialized; }
@@ -78,7 +78,7 @@ namespace rengage
 		int m_height;
 		float m_aspect_ratio;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
-		std::shared_ptr<ILogger> m_logger;
+		std::shared_ptr<services::logging::ILogger> m_logger;
 	};
 
 	//static void window_resize_callback(GLFWwindow* window, int new_width, int new_height)

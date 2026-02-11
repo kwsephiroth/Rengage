@@ -9,7 +9,7 @@ namespace rengage::model {
 	class Texture
 	{
 	public:
-		Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger);
+		Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger);
 		const std::string filename() const { return m_filepath.string(); } //TODO: Update this to return a reference rather than a copy.
 		const GLuint handle() const { return m_handle; }
 		const bool valid() const { return m_valid; }
@@ -18,7 +18,7 @@ namespace rengage::model {
 		bool load();
 		std::filesystem::path m_filepath;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
-		std::shared_ptr<ILogger> m_logger;
+		std::shared_ptr<services::logging::ILogger> m_logger;
 		GLuint m_handle;// The Opengl texture handle
 		bool m_valid;
 	};

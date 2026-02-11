@@ -1,7 +1,7 @@
 #include "../../inc/rengage.lib/model/texture.h"
 
 namespace rengage::model {
-	Texture::Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+	Texture::Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
 		m_filepath(filename),
 		m_ogl_invoker(ogl_invoker),
 		m_logger(logger),

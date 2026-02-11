@@ -2,7 +2,7 @@
 
 namespace rengage::model {
 
-	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
 		m_ogl_invoker(std::move(ogl_invoker)),
 		m_logger(std::move(logger))
 	{

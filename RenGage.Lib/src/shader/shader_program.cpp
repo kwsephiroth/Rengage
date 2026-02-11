@@ -3,7 +3,7 @@
 namespace rengage::shader
 {
 
-	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger) :
+	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
 		m_ogl_invoker(std::move(ogl_invoker)),
 		m_logger(std::move(logger))
 	{
@@ -20,7 +20,7 @@ namespace rengage::shader
 		const std::string& vertex_shader_path,
 		const std::string& frag_shader_path,
 		std::shared_ptr<OGLInvoker> ogl_invoker,
-		std::shared_ptr<ILogger> logger)
+		std::shared_ptr<services::logging::ILogger> logger)
 	{
 		rengage::shader::ShaderFactory shader_factory{ ogl_invoker, logger };//TODO: Inject dependencies into constructor.
 		auto vertex_shader = shader_factory.load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);

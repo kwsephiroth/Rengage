@@ -17,7 +17,7 @@ namespace rengage::shader
 			const std::string& vertex_shader_path,
 			const std::string& frag_shader_path,
 			std::shared_ptr<OGLInvoker> ogl_invoker,
-			std::shared_ptr<ILogger> logger);
+			std::shared_ptr<services::logging::ILogger> logger);
 
 		void attach_shader(GLuint shader_id);
 		void use();
@@ -25,13 +25,13 @@ namespace rengage::shader
 		inline bool is_valid() const { return m_is_valid; }
 
 	private:
-		ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<ILogger> logger);
+		ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger);
 		bool link_program();
 
 		GLuint m_id;
 		bool m_is_valid = false;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
-		std::shared_ptr<ILogger> m_logger;
+		std::shared_ptr<services::logging::ILogger> m_logger;
 	};
 }
 

@@ -11,8 +11,6 @@ namespace forest_escape {
 
 	GameManager::GameManager()
 	{
-		using namespace rengage::services;
-		auto& logger = ServiceLocator::get_service<logging::ILogger>();
 		init();
 	}
 
