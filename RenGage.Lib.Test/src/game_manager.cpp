@@ -1,5 +1,6 @@
 #include "../inc/game_manager.h"
 
+
 #define WINDOW_CALLBACK(function_name)\
 	[](GLFWwindow* window, auto... args) {\
 		auto pointer = static_cast<forest_escape::GameManager*>(glfwGetWindowUserPointer(window));\
@@ -10,6 +11,8 @@ namespace forest_escape {
 
 	GameManager::GameManager()
 	{
+		using namespace rengage::services;
+		auto& logger = ServiceLocator::get_service<logging::ILogger>();
 		init();
 	}
 

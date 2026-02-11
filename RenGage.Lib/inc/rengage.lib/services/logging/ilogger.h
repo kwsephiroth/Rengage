@@ -9,6 +9,7 @@
 #include <mutex>
 #include <filesystem>
 #include <source_location>
+#include <memory>
 
 namespace rengage::services::logging
 {
@@ -93,4 +94,6 @@ namespace rengage::services::logging
 			std::string msg,
 			std::source_location location = std::source_location::current()) = 0;
 	};
+
+	using ILoggerPtr = std::shared_ptr<ILogger>;
 }

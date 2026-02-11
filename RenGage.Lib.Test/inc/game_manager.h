@@ -12,6 +12,7 @@
 #include <rengage.lib/model/model.h>
 #include <rengage.lib/model/model_factory.h>
 #include <rengage.lib/camera/camera.h>
+#include <rengage.lib/services/service_locator.h>
 #include "renderer.h"
 
 namespace forest_escape {
