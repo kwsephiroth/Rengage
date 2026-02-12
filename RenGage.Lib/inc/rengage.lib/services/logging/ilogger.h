@@ -61,10 +61,10 @@ namespace rengage::services::logging
 		//TODO: Move this filename extraction logic to dedicated, stand-alone function.
 		std::string file_path = location.file_name();
 		std::string file_name_only;
-		int name_start_index = -1;
+		size_t name_start_index = -1;
 		if (!file_path.empty())
 		{
-			for (int i = file_path.size() - 1; i >= 0; --i)
+			for (auto i = file_path.size() - 1; i >= 0; --i)
 			{
 				if (file_path[i] == '/' || file_path[i] == '\\')
 				{
@@ -95,5 +95,5 @@ namespace rengage::services::logging
 			std::source_location location = std::source_location::current()) = 0;
 	};
 
-	using ILoggerPtr = std::shared_ptr<services::logging::ILogger>;
+	//using ILoggerPtr = std::shared_ptr<services::logging::ILogger>;
 }
