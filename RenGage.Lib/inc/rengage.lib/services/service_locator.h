@@ -12,14 +12,14 @@ namespace rengage::services
 	template<typename T>
 	concept ServiceType = std::same_as<T, logging::ILogger>;
 
-	using ServiceVariant = std::variant<std::unique_ptr<services::logging::ILogger>>;
+	using ServiceVariant = std::variant<std::unique_ptr<logging::ILogger>>;
 	using TypeHashCode = size_t;
 
 	class ServiceLocator
 	{
 	public:
 		template<ServiceType T>
-		static void provide_service(std::shared_ptr<T> service)
+		static void provide_service(std::unique_ptr<T> service)
 		{
 			auto& type_id = typeid(T);
 			if (!service)
@@ -29,11 +29,11 @@ namespace rengage::services
 				std::cout << error_msg << std::endl;
 				assert(true);
 			}
-			m_services_map[type_id.hash_code()] = service;
+			m_services_map[type_id.hash_code()] = std::move(service);
 		}
 
 		template<ServiceType T>
-		static T* get_service()
+		static const T* get_service()
 		{
 			auto& type_id = typeid(T);
 			auto it = m_services_map.find(type_id.hash_code());
@@ -47,7 +47,7 @@ namespace rengage::services
 				assert(true);
 			}
 			
-			auto service_ptr = std::get<std::shared_ptr<T>>(it->second);
+			auto service_ptr = std::get<std::unique_ptr<T>>(it->second);
 			assert(service_ptr != nullptr);
 
 			// Return reference to service instance.
