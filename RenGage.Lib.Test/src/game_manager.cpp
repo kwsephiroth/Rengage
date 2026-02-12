@@ -21,33 +21,17 @@ namespace forest_escape {
 
 	void GameManager::init()
 	{
-		m_logger = std::make_shared<rengage::services::logging::FileLogger>();
-		
-		if (auto p_logger = dynamic_cast<rengage::services::logging::FileLogger*>(m_logger.get()))
-		{
-			if (!p_logger->is_initialized())
-			{
-				rengage::services::logging::ConsoleLogger().log(rengage::services::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
-				return;
-			}
-		}
-		else
-		{
-			rengage::services::logging::ConsoleLogger().log(rengage::services::logging::LogSeverity::ERROR, "Failed to instantiate logger.");
-			return;
-		}
-
-		LOG_INFO(m_logger, "Initializing GameManager...");
+		LOG_INFO("Initializing GameManager...");
 		if (!init_window() ||
 			!init_shader_program() ||
 			!init_models())
 		{
-			LOG_ERROR(m_logger, "Failed to init GameManager. Check log for error(s).");
+			LOG_ERROR("Failed to init GameManager. Check log for error(s).");
 			exit(0);
 		}
 
 		m_program->use();//Installs the program object as part of the current rendering state.
-		m_ogl_invoker = std::make_shared<rengage::OGLInvoker>(m_logger);
+		m_ogl_invoker = std::make_shared<rengage::OGLInvoker>();
 		m_renderer = std::make_unique<Renderer>(
 			m_ogl_invoker,
 			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
@@ -55,7 +39,7 @@ namespace forest_escape {
 			m_window->aspect_ratio()
 			);
 
-		LOG_INFO(m_logger, "GameManager initialized!");
+		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
 	}
 
@@ -67,10 +51,10 @@ namespace forest_escape {
 													.color = {135.0f/255.0f, 206.0f/255.0f, 235.0f/244.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
-		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, m_logger, std::move(window_attribs));
+		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, std::move(window_attribs));
 
 		if (!m_window->initialized()) {
-			LOG_ERROR(m_logger, "Rendering window was not properly initialized. Check logs for error(s).");
+			LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).");
 			return false;
 		}
 
@@ -84,11 +68,11 @@ namespace forest_escape {
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
-			LOG_ERROR(m_logger, "Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
+			LOG_ERROR("Failed to initialize GLEW with error code(" + std::to_string(error_code) + ").");
 			return false;
 		}
 
-		LOG_INFO(m_logger, "OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
+		LOG_INFO("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)));
 		return true;
 	}
 
@@ -101,11 +85,10 @@ namespace forest_escape {
 	{
 		m_program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
 			"res/shaders/fragment_shader.glsl",
-			m_ogl_invoker,
-			m_logger);
+			m_ogl_invoker);
 		if (m_program == nullptr || !m_program->is_valid())
 		{
-			LOG_ERROR(m_logger, "Failed to create shader program. Check logs for error(s).");
+			LOG_ERROR("Failed to create shader program. Check logs for error(s).");
 			return false;
 		}
 
@@ -120,7 +103,7 @@ namespace forest_escape {
 		GLint tex_coord_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
 		unsigned int VAO = 0;
-		rengage::model::ModelFactory model_factory{ m_ogl_invoker, m_logger };
+		rengage::model::ModelFactory model_factory{ m_ogl_invoker };
 		auto model = model_factory.load_model({
 			.file_path = "res/models/pine_tree.obj",
 			.position_index = position_index,
@@ -200,7 +183,7 @@ namespace forest_escape {
 
 	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)//TODO: Consider wrapping this in the Command design pattern.
 	{
-		LOG_INFO(m_logger, "on_window_resize invoked!");
+		LOG_INFO("on_window_resize invoked!");
 		m_window->resize(width, height);
 		//TODO: Refactor how projection matrix is updated.
 		m_ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));

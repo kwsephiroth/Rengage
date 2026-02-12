@@ -1,10 +1,9 @@
 #include "../../inc/rengage.lib/model/texture.h"
 
 namespace rengage::model {
-	Texture::Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
+	Texture::Texture(const std::filesystem::path& filename, std::shared_ptr<OGLInvoker> ogl_invoker) :
 		m_filepath(filename),
 		m_ogl_invoker(ogl_invoker),
-		m_logger(logger),
 		m_handle(0),
 		m_valid(false)
 	{
@@ -19,7 +18,7 @@ namespace rengage::model {
 		m_handle = SOIL_load_OGL_texture(m_filepath.string().c_str(), SOIL_LOAD_RGBA, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);//TODO: figure out why this flag inverts the branch texture.
 		if (m_handle == 0)
 		{
-			LOG_ERROR(m_logger, "Failed to load texture path '" + m_filepath.string() + "'.");
+			LOG_ERROR("Failed to load texture path '" + m_filepath.string() + "'.");
 			return false;
 		}
 

@@ -81,7 +81,7 @@ namespace rengage::model {
 	{
 		if (m_vertices.empty()) {
 			//Log error and return
-			LOG_ERROR(m_logger, "Mesh has no vertices.");
+			LOG_ERROR("Mesh has no vertices.");
 			return;
 		}
 

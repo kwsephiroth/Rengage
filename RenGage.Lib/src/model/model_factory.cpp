@@ -2,20 +2,19 @@
 
 namespace rengage::model {
 
-	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
-		m_ogl_invoker(std::move(ogl_invoker)),
-		m_logger(std::move(logger))
+	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker ) :
+		m_ogl_invoker(std::move(ogl_invoker))
 	{
 	}
 
 	std::unique_ptr<Model> ModelFactory::load_model(const ModelParameters& params)
 	{
-		LOG_INFO(m_logger, "Loading model from path '" + params.file_path + "'...");
+		LOG_INFO("Loading model from path '" + params.file_path + "'...");
 
 		if (!std::filesystem::exists({ params.file_path }))
 		{
 			std::string errorMsg = "File at path '" + params.file_path + "' does not exist.";
-			LOG_ERROR(m_logger, errorMsg);
+			LOG_ERROR(errorMsg);
 			return nullptr;
 		}
 
@@ -24,7 +23,7 @@ namespace rengage::model {
 
 		if (scene == nullptr) {
 			std::string errorMsg = "Failed to load model from path '" + params.file_path + "' - ";
-			LOG_ERROR(m_logger, errorMsg + importer.GetErrorString());
+			LOG_ERROR(errorMsg + importer.GetErrorString());
 			return nullptr;
 		}
 
@@ -38,11 +37,11 @@ namespace rengage::model {
 				model_ptr->setup_VAO(0, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
 
-			LOG_INFO(m_logger, "Model successfully loaded from path '" + params.file_path + "'.");
+			LOG_INFO("Model successfully loaded from path '" + params.file_path + "'.");
 		}
 		else {
 			std::string errorMsg = "Failed to load model from path '" + params.file_path + "' - ";
-			LOG_ERROR(m_logger, errorMsg);
+			LOG_ERROR(errorMsg);
 			return nullptr;
 		}
 
@@ -92,7 +91,7 @@ namespace rengage::model {
 
 			if (!std::filesystem::exists(full_texture_path))
 			{
-				LOG_ERROR(m_logger, "Could not find texture file located at path '" + full_texture_path.string() + "'.");
+				LOG_ERROR("Could not find texture file located at path '" + full_texture_path.string() + "'.");
 				return false;
 			}
 
@@ -102,12 +101,12 @@ namespace rengage::model {
 			auto existingTextureItr = model.m_texture_cache.find(full_texture_path.string());
 			if (existingTextureItr == model.m_texture_cache.end()) // Texture with same filepath not found
 			{
-				TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker, m_logger });
+				TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker });
 				if (!texture->valid()) {
-					LOG_ERROR(m_logger, "Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
+					LOG_ERROR("Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
 					return false;
 				}
-				LOG_INFO(m_logger, "Loaded texture file located at path '" + full_texture_path.string() + "'");
+				LOG_INFO("Loaded texture file located at path '" + full_texture_path.string() + "'");
 				auto newElementItr = model.m_texture_cache.emplace(full_texture_path.string(), std::move(texture));
 				mesh.m_textures.emplace_back(newElementItr.first->second);
 			}
@@ -131,7 +130,7 @@ namespace rengage::model {
 		{
 			auto ai_mesh = scene.mMeshes[node.mMeshes[mesh_index]];
 			auto rengage_mesh = generate_rengage_mesh(*ai_mesh);
-			LOG_INFO(m_logger, "MESH NAME: " + std::string(ai_mesh->mName.C_Str()));
+			LOG_INFO("MESH NAME: " + std::string(ai_mesh->mName.C_Str()));
 
 			// Load and store textures associated with this mesh's material (if any)
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
@@ -155,7 +154,7 @@ namespace rengage::model {
 
 	Mesh ModelFactory::generate_rengage_mesh(const aiMesh& ai_mesh)
 	{
-		Mesh rengage_mesh{ m_ogl_invoker, m_logger };
+		Mesh rengage_mesh{ m_ogl_invoker };
 		auto vertices = ai_mesh.mVertices;
 		auto num_vertices = ai_mesh.mNumVertices;
 

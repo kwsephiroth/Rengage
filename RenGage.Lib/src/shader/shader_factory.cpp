@@ -9,7 +9,7 @@ namespace rengage::shader
 
 		input_file.open(filename);
 		if (!input_file.good()) {
-			LOG_ERROR(m_logger, "Error opening file named '" + std::string{ filename } + "'. Please check file or filename.");
+			LOG_ERROR("Error opening file named '" + std::string{ filename } + "'. Please check file or filename.");
 			return shader_ptr;
 		}
 
@@ -79,7 +79,7 @@ namespace rengage::shader
 				ss << "Source:\n\"" << source << "\"\n";
 			}
 			ss << "Log: " << info_log << "\n";
-			LOG_ERROR(m_logger, ss.str());
+			LOG_ERROR(ss.str());
 		}
 
 		return success;

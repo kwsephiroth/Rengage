@@ -33,7 +33,7 @@ namespace rengage::services
 		}
 
 		template<ServiceType T>
-		static const T* get_service()
+		static T* get_service()
 		{
 			auto& type_id = typeid(T);
 			auto it = m_services_map.find(type_id.hash_code());
@@ -47,11 +47,11 @@ namespace rengage::services
 				assert(true);
 			}
 			
-			auto service_ptr = std::get<std::unique_ptr<T>>(it->second);
+			auto service_ptr = std::get<std::unique_ptr<T>>(it->second).get();
 			assert(service_ptr != nullptr);
 
 			// Return reference to service instance.
-			return service_ptr.get();
+			return service_ptr;
 		}
 
 	private:

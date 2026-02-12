@@ -25,7 +25,6 @@ namespace forest_escape {
 		std::unique_ptr<rengage::RenderingWindow> m_window;
 		std::unique_ptr<rengage::shader::ShaderProgram> m_program;
 		std::unique_ptr<Renderer> m_renderer;
-		std::shared_ptr<rengage::services::logging::ILogger> m_logger;
 		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 		GLuint m_program_id;
 		ModelMap m_models;

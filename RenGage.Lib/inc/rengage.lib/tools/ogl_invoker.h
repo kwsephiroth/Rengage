@@ -4,20 +4,23 @@
 #include <string>
 #include <tuple>
 #include "../services/logging/ilogger.h"
+#include "../services/service_locator.h"
 
 namespace rengage
 {
 #define ARGS(...) std::make_tuple(__VA_ARGS__)
 
 	namespace {
-		void check_for_opengl_error(const std::shared_ptr<services::logging::ILogger>& logger, std::source_location& location)
+		void check_for_opengl_error(std::source_location& location)
 		{
 			unsigned int errorCount = 0;
 			for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
 				errorCount++;
 				std::string msg = "glErrorCode(" + std::to_string(glError) + ")";
-				if (logger)
-					logger->log(services::logging::LogSeverity::ERROR, msg, location);
+
+				auto logger_service_ptr = services::ServiceLocator::get_service<services::logging::ILogger>();
+				logger_service_ptr->log(services::logging::LogSeverity::ERROR, msg, location);
+
 				glError = glGetError();
 			}
 
@@ -30,34 +33,28 @@ namespace rengage
 
 	class OGLInvoker
 	{
-	private:
-		std::shared_ptr<services::logging::ILogger> m_logger = nullptr;
-
 	public:
-		explicit OGLInvoker(std::shared_ptr<services::logging::ILogger> logger) :
-			m_logger(logger)
-		{
-		}
+		OGLInvoker() = default;
 
 		template<typename OpenGLFunc, typename ... Args>
 		void invoke(OpenGLFunc func, const std::tuple<Args...>& args_tp, std::source_location location = std::source_location::current())
 		{
 			std::apply(func, args_tp);
-			check_for_opengl_error(m_logger, location);
+			check_for_opengl_error(location);
 		}
 
 		template<typename OpenGLFunc>
 		void invoke(OpenGLFunc func, std::source_location location = std::source_location::current())
 		{
 			func();
-			check_for_opengl_error(m_logger, location);
+			check_for_opengl_error(location);
 		}
 
 		template<typename OpenGLFunc, typename ... Args>
 		auto get_invoke(OpenGLFunc func, const std::tuple<Args...>& args_tp, std::source_location location = std::source_location::current())
 		{
 			auto ret_val = std::apply(func, args_tp);
-			check_for_opengl_error(m_logger, location);
+			check_for_opengl_error(location);
 			return ret_val;
 		}
 
@@ -65,7 +62,7 @@ namespace rengage
 		auto get_invoke(OpenGLFunc func, std::source_location location = std::source_location::current())
 		{
 			auto ret_val = func();
-			check_for_opengl_error(m_logger, location);
+			check_for_opengl_error(location);
 			return ret_val;
 		}
 	};

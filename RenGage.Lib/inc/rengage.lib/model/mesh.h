@@ -14,13 +14,12 @@ namespace rengage::model {
 	class Mesh
 	{
 	private:
-		Mesh(std::shared_ptr<OGLInvoker> ogl_invoker, std::shared_ptr<services::logging::ILogger> logger) :
-			m_ogl_invoker(std::move(ogl_invoker)),
-			m_logger(std::move(logger))
-		{}
+		Mesh(std::shared_ptr<OGLInvoker> ogl_invoker) :
+			m_ogl_invoker(std::move(ogl_invoker))
+		{
+		}
 
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
-		std::shared_ptr<services::logging::ILogger> m_logger;
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
 		std::vector<TexturePtr> m_textures;
