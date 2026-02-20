@@ -66,6 +66,12 @@
     <ClInclude Include="inc\rengage.lib\services\logging\null_logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\rengage.lib\input\controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\input\keyboard_controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_window.cpp">
@@ -99,6 +105,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\services\logging\console_logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\keyboard_controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
