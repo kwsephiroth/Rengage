@@ -2,7 +2,6 @@
 
 namespace rengage::shader
 {
-
 	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker) :
 		m_ogl_invoker(std::move(ogl_invoker))
 	{
