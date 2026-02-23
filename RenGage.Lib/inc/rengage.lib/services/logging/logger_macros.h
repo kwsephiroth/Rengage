@@ -1,5 +1,5 @@
 #pragma once
-#include "ilogger.h"
+#include "../../interfaces/ilogger.h"
 #include "../service_locator.h"
 
 #define FETCH_LOGGER_SERVICE() auto logger_service_ptr = rengage::services::ServiceLocator::get_service<rengage::services::logging::ILogger>();																											\

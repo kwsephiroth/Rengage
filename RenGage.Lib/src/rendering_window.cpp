@@ -60,6 +60,10 @@ namespace rengage
 		}
 		//glfwMakeContextCurrent(m_window);
 		//glfwSwapInterval(m_attributes.swap_interval);//Set vsync
+
+		//TODO: Setup event handlers for window events.
+		//EventHandler event_handler(m_window);
+
 		LOG_INFO("GLFW window initialization successful.");
 		m_initialized = true;
 	}

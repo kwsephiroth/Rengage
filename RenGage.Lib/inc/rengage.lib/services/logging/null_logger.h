@@ -1,5 +1,5 @@
 #pragma once
-#include "ilogger.h"
+#include "../../interfaces/ilogger.h"
 
 namespace rengage::services::logging
 {

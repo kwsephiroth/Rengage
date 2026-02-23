@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec4.hpp>
 #include "services/logging/logger_macros.h"
-#include "services/logging/ilogger.h"
+#include "interfaces/ilogger.h"
 #include "tools/ogl_invoker.h"
 
 namespace rengage
@@ -64,6 +64,20 @@ namespace rengage
 		void resize(int new_width, int new_height);
 
 	private:
+
+		class EventHandler //: public Observable //TODO
+		{
+		public:
+			EventHandler(GLFWwindow* window);
+
+		private:
+			// on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods);
+			//void on_char_event(GLFWwindow* window, unsigned int codepoint);
+			void on_window_resize(GLFWwindow* window, int new_width, int new_height);
+			//void on_mouse_movement(GLFWwindow* window, double xpos, double ypos);
+			//void on_mouse_button(GLFWwindow* window, int button, int action, int mods);
+		};
+
 		void init();
 		bool create_default_window();
 		bool create_custom_window();

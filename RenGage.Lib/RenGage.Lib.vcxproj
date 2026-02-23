@@ -22,13 +22,13 @@
     <ClInclude Include="inc\rengage.lib\camera\camera.h" />
     <ClInclude Include="inc\rengage.lib\input\controller.h" />
     <ClInclude Include="inc\rengage.lib\input\keyboard_controller.h" />
+    <ClInclude Include="inc\rengage.lib\interfaces\ilogger.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
     <ClInclude Include="inc\rengage.lib\model\model.h" />
     <ClInclude Include="inc\rengage.lib\model\model_factory.h" />
     <ClInclude Include="inc\RenGage.Lib\rendering_window.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\console_logger.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\file_logger.h" />
-    <ClInclude Include="inc\rengage.lib\services\logging\ilogger.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\logger_macros.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\null_logger.h" />
     <ClInclude Include="inc\rengage.lib\services\service_locator.h" />

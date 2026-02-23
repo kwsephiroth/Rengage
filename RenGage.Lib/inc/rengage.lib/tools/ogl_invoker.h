@@ -3,7 +3,7 @@
 #include <source_location>
 #include <string>
 #include <tuple>
-#include "../services/logging/ilogger.h"
+#include "../interfaces/ilogger.h"
 #include "../services/service_locator.h"
 
 namespace rengage
