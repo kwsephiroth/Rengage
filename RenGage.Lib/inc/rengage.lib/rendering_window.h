@@ -5,6 +5,7 @@
 #include "services/logging/logger_macros.h"
 #include "interfaces/ilogger.h"
 #include "tools/ogl_invoker.h"
+#include <functional>
 
 namespace rengage
 {
@@ -64,13 +65,18 @@ namespace rengage
 		void resize(int new_width, int new_height);
 
 	private:
-
 		class EventHandler //: public Observable //TODO
 		{
 		public:
-			EventHandler(GLFWwindow* window);
+			EventHandler(GLFWwindow* window) :
+				m_window(window)
+			{
+			}
+			void register_handlers();
+			//void register_resize_handler(std::function<void(GLFWwindow*, int, int)> handler);
 
 		private:
+			GLFWwindow* m_window = nullptr;
 			// on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods);
 			//void on_char_event(GLFWwindow* window, unsigned int codepoint);
 			void on_window_resize(GLFWwindow* window, int new_width, int new_height);
@@ -92,6 +98,7 @@ namespace rengage
 		int m_height;
 		float m_aspect_ratio;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
+		std::unique_ptr<EventHandler> m_event_handler;
 	};
 
 	//static void window_resize_callback(GLFWwindow* window, int new_width, int new_height)
