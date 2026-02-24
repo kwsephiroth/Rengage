@@ -69,8 +69,8 @@ namespace rengage
 		//glfwSwapInterval(m_attributes.swap_interval);//Set vsync
 
 		// Setup event handlers for window events.
-		//m_event_handler = std::make_unique<EventHandler>(m_window);
-		//m_event_handler->register_handlers();
+		m_event_handler = std::make_unique<EventHandler>(m_window);
+		m_event_handler->register_handlers();
 
 		LOG_INFO("GLFW window initialization successful.");
 		m_initialized = true;
@@ -106,12 +106,44 @@ namespace rengage
 			<< "\nNew Width: " + std::to_string(m_width)
 			<< "\nNew Height: " + std::to_string(m_height)
 			<< "\nNew Aspect Ratio: " + std::to_string(m_aspect_ratio) << "\n";
-		LOG_INFO(ss.str());
+		//LOG_INFO(ss.str());
+		std::cout << ss.str() << std::endl;
 	}
 
 	void RenderingWindow::EventHandler::register_handlers()
 	{
 		glfwSetWindowUserPointer(m_window, this);//Enables GLFW to use our EventHandler instance for callback invocation.
-		//glfwSetWindowSizeCallback(m_window, WINDOW_CALLBACK(on_window_resize));
+		glfwSetWindowSizeCallback(m_window, WINDOW_CALLBACK(on_window_resize));
+		glfwSetKeyCallback(m_window, WINDOW_CALLBACK(on_key_event));
+	}
+
+	void RenderingWindow::set_resize_handler(ResizeHandler handler)
+	{
+		m_event_handler->m_resize_handler = std::move(handler);
+	}
+
+	void RenderingWindow::set_key_event_handler(KeyEventHandler handler)
+	{
+		m_event_handler->m_key_event_handler = std::move(handler);
+	}
+
+	void RenderingWindow::EventHandler::on_window_resize(GLFWwindow* window, int new_width, int new_height)
+	{
+		if (m_resize_handler) {
+			m_resize_handler(window, new_width, new_height);
+		}
+		else {
+			LOG_WARNING("No resize handler registered for window resize event.");
+		}
+	}
+
+	void RenderingWindow::EventHandler::on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		if (m_key_event_handler) {
+			m_key_event_handler(window, key, scancode, action, mods);
+		}
+		else {
+			LOG_WARNING("No key event handler registered for key event.");
+		}
 	}
 }

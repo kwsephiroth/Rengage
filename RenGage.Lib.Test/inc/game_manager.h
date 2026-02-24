@@ -13,6 +13,7 @@
 #include <rengage.lib/model/model_factory.h>
 #include <rengage.lib/camera/camera.h>
 #include <rengage.lib/services/service_locator.h>
+#include <rengage.lib/input/keyboard_controller.h>
 #include "renderer.h"
 
 namespace forest_escape {
@@ -30,6 +31,7 @@ namespace forest_escape {
 		ModelMap m_models;
 		bool m_game_loop_started = false;
 		bool m_initialized = false;
+		std::unique_ptr<rengage::input::controller::KeyboardController> m_keyboard_controller;
 
 		void init();
 		bool init_window();

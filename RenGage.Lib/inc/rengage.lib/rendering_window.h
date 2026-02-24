@@ -44,6 +44,11 @@ namespace rengage
 	const std::string DEFAULT_WINDOW_NAME = "";
 	const WindowAttributes DEFAULT_WINDOW_ATTRIBS{ DEFAULT_WINDOW_NAME, MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, DEFAULT_WINDOW_COLOR, DEFAULT_SWAP_INTERVAL };
 
+	// Event handler type aliases
+	using ResizeHandler = std::function<void(GLFWwindow*, int, int)>;
+	using KeyEventHandler = std::function<void(GLFWwindow* window, int key, int scancode, int action, int mods)>;
+
+
 	class RenderingWindow//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
 	public:
@@ -64,6 +69,10 @@ namespace rengage
 		void show() { glfwShowWindow(m_window); }
 		void resize(int new_width, int new_height);
 
+		//Event handler registration methods
+		void set_resize_handler(ResizeHandler handler);
+		void set_key_event_handler(KeyEventHandler handler);
+
 	private:
 		class EventHandler //: public Observable //TODO
 		{
@@ -73,11 +82,13 @@ namespace rengage
 			{
 			}
 			void register_handlers();
-			//void register_resize_handler(std::function<void(GLFWwindow*, int, int)> handler);
 
+			ResizeHandler m_resize_handler;
+			KeyEventHandler m_key_event_handler;
 		private:
 			GLFWwindow* m_window = nullptr;
-			// on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+			void on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods);
 			//void on_char_event(GLFWwindow* window, unsigned int codepoint);
 			void on_window_resize(GLFWwindow* window, int new_width, int new_height);
 			//void on_mouse_movement(GLFWwindow* window, double xpos, double ypos);

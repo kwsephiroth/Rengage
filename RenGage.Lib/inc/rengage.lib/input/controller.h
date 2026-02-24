@@ -18,8 +18,8 @@ namespace rengage::input::controller
 		virtual void enable () = 0;
 		virtual void disable() = 0;
 
-	protected:
-		Controller(std::shared_ptr<GLFWwindow> parentWindow) : m_parent_window(std::move(parentWindow)) {}
-		std::shared_ptr<GLFWwindow> m_parent_window;
+	//protected:
+		//Controller(std::shared_ptr<GLFWwindow> parentWindow) : m_parent_window(std::move(parentWindow)) {}
+		//std::shared_ptr<GLFWwindow> m_parent_window;
 	};
 }

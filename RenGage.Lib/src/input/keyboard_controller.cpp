@@ -3,8 +3,8 @@
 
 namespace rengage::input::controller
 {
-	KeyboardController::KeyboardController(std::shared_ptr<GLFWwindow> parentWindow) 
-		: Controller(std::move(parentWindow))
+	KeyboardController::KeyboardController()///std::shared_ptr<GLFWwindow> parentWindow) 
+		//: Controller(std::move(parentWindow))
 	{
 	}
 
@@ -17,13 +17,16 @@ namespace rengage::input::controller
 	void KeyboardController::disable()
 	{
 		LOG_INFO("Disabling keyboard controller.");
-		glfwSetKeyCallback(m_parent_window.get(), nullptr);
-		glfwSetCharCallback(m_parent_window.get(), nullptr);
+		//glfwSetKeyCallback(m_parent_window.get(), nullptr);
+		//glfwSetCharCallback(m_parent_window.get(), nullptr);
 	}
 
 	void KeyboardController::handle_key_event(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		LOG_DEBUG("Handling key event: key=" + std::to_string(key) + ", scancode=" + std::to_string(scancode) + ", action=" + std::to_string(action) + ", mods=" + std::to_string(mods));
+		std::cout << ("Handling key event: key=" + std::to_string(key) + 
+					  ", scancode=" + std::to_string(scancode) + 
+					  ", action=" + std::to_string(action) + 
+					  ", mods=" + std::to_string(mods)) << std::endl;
 	}
 
 	void KeyboardController::handle_char_event(GLFWwindow* window, unsigned int codepoint)

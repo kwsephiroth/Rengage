@@ -63,8 +63,14 @@ namespace forest_escape {
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
 
 		//Register GLFW window callback(s).
-		glfwSetWindowUserPointer(glfw_ptr, this);//Enables GLFW to use our instance of RenderingWindow for callback invocation.
-		glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(on_window_resize));
+		//glfwSetWindowUserPointer(glfw_ptr, this);//Enables GLFW to use our instance of RenderingWindow for callback invocation.
+		//glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(on_window_resize));
+		m_keyboard_controller = std::make_unique<rengage::input::controller::KeyboardController>();
+		using namespace std::placeholders;
+		m_window->set_resize_handler(std::bind(&GameManager::on_window_resize, this, _1, _2, _3));
+		m_window->set_key_event_handler(std::bind(&rengage::input::controller::KeyboardController::handle_key_event,
+										m_keyboard_controller.get(),
+										_1, _2, _3, _4, _5));
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
@@ -183,7 +189,8 @@ namespace forest_escape {
 
 	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)//TODO: Consider wrapping this in the Command design pattern.
 	{
-		LOG_INFO("on_window_resize invoked!");
+		//LOG_INFO("on_window_resize invoked!");
+		std::cout << "on_window_resize invoked!\n";
 		m_window->resize(width, height);
 		//TODO: Refactor how projection matrix is updated.
 		m_ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));
