@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 
-namespace rengage::input::controller
+namespace rengage::input
 {
 	enum class ControllerType
 	{
@@ -11,10 +11,10 @@ namespace rengage::input::controller
 		Gamepad
 	};
 
-	class Controller
+	class InputHandler
 	{
 	public:
-		virtual ~Controller() = default;
+		virtual ~InputHandler() = default;
 		virtual void enable () = 0;
 		virtual void disable() = 0;
 

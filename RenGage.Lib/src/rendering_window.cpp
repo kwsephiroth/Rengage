@@ -70,7 +70,8 @@ namespace rengage
 
 		// Setup event handlers for window events.
 		m_event_handler = std::make_unique<EventHandler>(m_window);
-		m_event_handler->register_handlers();
+		glfwSetWindowUserPointer(m_window, m_event_handler.get());
+		//m_event_handler->register_handlers();
 
 		LOG_INFO("GLFW window initialization successful.");
 		m_initialized = true;
@@ -113,18 +114,46 @@ namespace rengage
 	void RenderingWindow::EventHandler::register_handlers()
 	{
 		glfwSetWindowUserPointer(m_window, this);//Enables GLFW to use our EventHandler instance for callback invocation.
+		//glfwSetWindowSizeCallback(m_window, WINDOW_CALLBACK(on_window_resize));
+		//glfwSetKeyCallback(m_window, WINDOW_CALLBACK(on_key_event));
+		//glfwSetMouseButtonCallback(m_window, WINDOW_CALLBACK(on_mouse_button));
+		//glfwSetCursorPosCallback(m_window, WINDOW_CALLBACK(on_mouse_movement));
+	}
+
+	void RenderingWindow::register_resize_handler(ResizeHandler handler)
+	{
+		m_event_handler->m_resize_handler = std::move(handler);
 		glfwSetWindowSizeCallback(m_window, WINDOW_CALLBACK(on_window_resize));
+	}
+
+	void RenderingWindow::register_key_event_handler(KeyEventHandler handler)
+	{
+		m_event_handler->m_key_event_handler = std::move(handler);
 		glfwSetKeyCallback(m_window, WINDOW_CALLBACK(on_key_event));
 	}
 
-	void RenderingWindow::set_resize_handler(ResizeHandler handler)
+	void RenderingWindow::register_char_event_handler(CharEventHandler handler)
 	{
-		m_event_handler->m_resize_handler = std::move(handler);
+		m_event_handler->m_char_event_handler = std::move(handler);
+		glfwSetCharCallback(m_window, WINDOW_CALLBACK(on_char_event));
 	}
 
-	void RenderingWindow::set_key_event_handler(KeyEventHandler handler)
+	void RenderingWindow::register_mouse_movement_handler(MouseMovementHandler handler)
 	{
-		m_event_handler->m_key_event_handler = std::move(handler);
+		m_event_handler->m_mouse_movement_handler = std::move(handler);
+		glfwSetCursorPosCallback(m_window, WINDOW_CALLBACK(on_mouse_movement));
+	}
+
+	void RenderingWindow::register_mouse_button_handler(MouseButtonHandler handler)
+	{
+		m_event_handler->m_mouse_button_handler = std::move(handler);
+		glfwSetMouseButtonCallback(m_window, WINDOW_CALLBACK(on_mouse_button));
+	}
+
+	void RenderingWindow::register_mouse_scroll_handler(MouseScrollHandler handler)
+	{
+		m_event_handler->m_mouse_scroll_handler = std::move(handler);
+		glfwSetScrollCallback(m_window, WINDOW_CALLBACK(on_mouse_scroll));
 	}
 
 	void RenderingWindow::EventHandler::on_window_resize(GLFWwindow* window, int new_width, int new_height)
@@ -144,6 +173,46 @@ namespace rengage
 		}
 		else {
 			LOG_WARNING("No key event handler registered for key event.");
+		}
+	}
+
+	void RenderingWindow::EventHandler::on_char_event(GLFWwindow* window, unsigned int codepoint)
+	{
+		if (m_char_event_handler) {
+			m_char_event_handler(window, codepoint);
+		}
+		else {
+			LOG_WARNING("No char event handler registered for char event.");
+		}
+	}
+
+	void RenderingWindow::EventHandler::on_mouse_movement(GLFWwindow* window, double xpos, double ypos)
+	{
+		if (m_mouse_movement_handler) {
+			m_mouse_movement_handler(window, xpos, ypos);
+		}
+		else {
+			LOG_WARNING("No mouse movement handler registered for mouse movement event.");
+		}
+	}
+
+	void RenderingWindow::EventHandler::on_mouse_button(GLFWwindow* window, int button, int action, int mods)
+	{
+		if (m_mouse_button_handler) {
+			m_mouse_button_handler(window, button, action, mods);
+		}
+		else {
+			LOG_WARNING("No mouse button handler registered for mouse button event.");
+		}
+	}
+
+	void RenderingWindow::EventHandler::on_mouse_scroll(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		if (m_mouse_scroll_handler) {
+			m_mouse_scroll_handler(window, xoffset, yoffset);
+		}
+		else {
+			LOG_WARNING("No mouse scroll handler registered for mouse scroll event.");
 		}
 	}
 }

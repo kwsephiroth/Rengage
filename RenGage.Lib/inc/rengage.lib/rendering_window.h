@@ -47,7 +47,10 @@ namespace rengage
 	// Event handler type aliases
 	using ResizeHandler = std::function<void(GLFWwindow*, int, int)>;
 	using KeyEventHandler = std::function<void(GLFWwindow* window, int key, int scancode, int action, int mods)>;
-
+	using CharEventHandler = std::function<void(GLFWwindow* window, unsigned int codepoint)>;
+	using MouseMovementHandler = std::function<void(GLFWwindow* window, double xpos, double ypos)>;
+	using MouseButtonHandler = std::function<void(GLFWwindow* window, int button, int action, int mods)>;
+	using MouseScrollHandler = std::function<void(GLFWwindow* window, double xoffset, double yoffset)>;
 
 	class RenderingWindow//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
@@ -70,8 +73,12 @@ namespace rengage
 		void resize(int new_width, int new_height);
 
 		//Event handler registration methods
-		void set_resize_handler(ResizeHandler handler);
-		void set_key_event_handler(KeyEventHandler handler);
+		void register_resize_handler(ResizeHandler handler);
+		void register_key_event_handler(KeyEventHandler handler);
+		void register_char_event_handler(CharEventHandler handler);
+		void register_mouse_movement_handler(MouseMovementHandler handler);
+		void register_mouse_button_handler(MouseButtonHandler handler);
+		void register_mouse_scroll_handler(MouseScrollHandler handler);
 
 	private:
 		class EventHandler //: public Observable //TODO
@@ -85,14 +92,19 @@ namespace rengage
 
 			ResizeHandler m_resize_handler;
 			KeyEventHandler m_key_event_handler;
-		private:
-			GLFWwindow* m_window = nullptr;
+			CharEventHandler m_char_event_handler;
+			MouseMovementHandler m_mouse_movement_handler;
+			MouseButtonHandler m_mouse_button_handler;
+			MouseScrollHandler m_mouse_scroll_handler;
 
 			void on_key_event(GLFWwindow* window, int key, int scancode, int action, int mods);
-			//void on_char_event(GLFWwindow* window, unsigned int codepoint);
+			void on_char_event(GLFWwindow* window, unsigned int codepoint);
 			void on_window_resize(GLFWwindow* window, int new_width, int new_height);
-			//void on_mouse_movement(GLFWwindow* window, double xpos, double ypos);
-			//void on_mouse_button(GLFWwindow* window, int button, int action, int mods);
+			void on_mouse_movement(GLFWwindow* window, double xpos, double ypos);
+			void on_mouse_button(GLFWwindow* window, int button, int action, int mods);
+			void on_mouse_scroll(GLFWwindow* window, double xoffset, double yoffset);
+		private:
+			GLFWwindow* m_window = nullptr;
 		};
 
 		void init();

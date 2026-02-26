@@ -1,14 +1,14 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <memory>
-#include "controller.h"
+#include "input_handler.h"
 
-namespace rengage::input::controller
+namespace rengage::input
 {
-	class KeyboardController : public Controller
+	class KeyboardInputHandler : public InputHandler
 	{
 	public:
-		KeyboardController();//std::shared_ptr<GLFWwindow> parentWindow);
+		KeyboardInputHandler();//std::shared_ptr<GLFWwindow> parentWindow);
 		void enable() override;
 		void disable() override;
 		

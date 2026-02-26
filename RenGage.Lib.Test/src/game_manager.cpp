@@ -37,7 +37,7 @@ namespace forest_escape {
 			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
 			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
 			m_window->aspect_ratio()
-			);
+		);
 
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
@@ -48,7 +48,7 @@ namespace forest_escape {
 		rengage::WindowAttributes window_attribs = { .name = "Forest Escape",
 													.min_width = 1920,
 													.min_height = 1080,
-													.color = {135.0f/255.0f, 206.0f/255.0f, 235.0f/244.0f, 1.0f},
+													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
 		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, std::move(window_attribs));
@@ -62,15 +62,30 @@ namespace forest_escape {
 		glfwMakeContextCurrent(glfw_ptr);
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
 
-		//Register GLFW window callback(s).
-		//glfwSetWindowUserPointer(glfw_ptr, this);//Enables GLFW to use our instance of RenderingWindow for callback invocation.
-		//glfwSetWindowSizeCallback(glfw_ptr, WINDOW_CALLBACK(on_window_resize));
-		m_keyboard_controller = std::make_unique<rengage::input::controller::KeyboardController>();
+		// Initialize input handlers.
+		m_keyboard_input_handler = std::make_unique<rengage::input::KeyboardInputHandler>();
+		m_mouse_input_handler = std::make_unique<rengage::input::MouseInputHandler>();
+
+		// Register handlers for window events.
+
+		// TODO: Create macro for binding member functions as event handlers to reduce boilerplate code and improve readability.
 		using namespace std::placeholders;
-		m_window->set_resize_handler(std::bind(&GameManager::on_window_resize, this, _1, _2, _3));
-		m_window->set_key_event_handler(std::bind(&rengage::input::controller::KeyboardController::handle_key_event,
-										m_keyboard_controller.get(),
-										_1, _2, _3, _4, _5));
+		m_window->register_resize_handler(std::bind(&GameManager::on_window_resize, this, _1, _2, _3));
+		m_window->register_key_event_handler(std::bind(&rengage::input::KeyboardInputHandler::handle_key_event,
+			m_keyboard_input_handler.get(),
+			_1, _2, _3, _4, _5));
+		m_window->register_char_event_handler(std::bind(&rengage::input::KeyboardInputHandler::handle_char_event,
+			m_keyboard_input_handler.get(),
+			_1, _2));
+		m_window->register_mouse_movement_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_movement,
+			m_mouse_input_handler.get(),
+			_1, _2, _3));
+		m_window->register_mouse_button_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_button,
+			m_mouse_input_handler.get(),
+			_1, _2, _3, _4));
+		m_window->register_mouse_scroll_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_scroll,
+			m_mouse_input_handler.get(),
+			_1, _2, _3));
 
 		auto error_code = glewInit();//Glew must initialized in order to make OpenGL function calls.
 		if (error_code != GLEW_OK) {
