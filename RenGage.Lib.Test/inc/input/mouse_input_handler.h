@@ -16,5 +16,8 @@ namespace forest_escape::input
 		void handle_mouse_button(GLFWwindow* window, int button, int action, int mods);
 		void handle_mouse_scroll(GLFWwindow* window, double xoffset, double yoffset);
 	private:
+		void process_mouse_movement(double xpos, double ypos);
+		void process_button_press(int button);
+		void process_mouse_scroll(double xoffset, double yoffset);
 	};
 }
