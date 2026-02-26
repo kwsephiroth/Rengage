@@ -3,7 +3,7 @@
 #include <memory>
 #include "input_handler.h"
 
-namespace rengage::input
+namespace forest_escape::input
 {
 	class KeyboardInputHandler : public InputHandler
 	{
@@ -14,6 +14,10 @@ namespace rengage::input
 		
 		void handle_key_event(GLFWwindow* window, int key, int scancode, int action, int mods); // Internal method to process keyboard events.
 		void handle_char_event(GLFWwindow* window, unsigned int codepoint); // Internal method to process character input events.
+	
 	private:
+		void process_key_press(int key);
+		//void process_key_release(int key);
+		//void process_key_repeat(int key);
 	};
 }	

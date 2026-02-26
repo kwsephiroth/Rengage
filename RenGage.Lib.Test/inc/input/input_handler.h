@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 
-namespace rengage::input
+namespace forest_escape::input
 {
 	enum class ControllerType
 	{

@@ -3,7 +3,7 @@
 #include <memory>
 #include "input_handler.h"
 
-namespace rengage::input
+namespace forest_escape::input
 {
 	class MouseInputHandler : public InputHandler
 	{

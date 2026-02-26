@@ -1,7 +1,7 @@
-#include "../../inc/rengage.lib/input/mouse_input_handler.h"
-#include "../../inc/rengage.lib/services/logging/logger_macros.h"
+#include <rengage.lib/services/logging/logger_macros.h>
+#include "../../inc/input/mouse_input_handler.h"
 
-namespace rengage::input
+namespace forest_escape::input
 {
 	MouseInputHandler::MouseInputHandler()///std::shared_ptr<GLFWwindow> parentWindow) 
 		//: Controller(std::move(parentWindow))

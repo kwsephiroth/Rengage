@@ -63,27 +63,27 @@ namespace forest_escape {
 		glfwSwapInterval(m_window->swap_interval());//Set vsync
 
 		// Initialize input handlers.
-		m_keyboard_input_handler = std::make_unique<rengage::input::KeyboardInputHandler>();
-		m_mouse_input_handler = std::make_unique<rengage::input::MouseInputHandler>();
+		m_keyboard_input_handler = std::make_unique<input::KeyboardInputHandler>();
+		m_mouse_input_handler = std::make_unique<input::MouseInputHandler>();
 
 		// Register handlers for window events.
 
 		// TODO: Create macro for binding member functions as event handlers to reduce boilerplate code and improve readability.
 		using namespace std::placeholders;
 		m_window->register_resize_handler(std::bind(&GameManager::on_window_resize, this, _1, _2, _3));
-		m_window->register_key_event_handler(std::bind(&rengage::input::KeyboardInputHandler::handle_key_event,
+		m_window->register_key_event_handler(std::bind(&input::KeyboardInputHandler::handle_key_event,
 			m_keyboard_input_handler.get(),
 			_1, _2, _3, _4, _5));
-		m_window->register_char_event_handler(std::bind(&rengage::input::KeyboardInputHandler::handle_char_event,
+		m_window->register_char_event_handler(std::bind(&input::KeyboardInputHandler::handle_char_event,
 			m_keyboard_input_handler.get(),
 			_1, _2));
-		m_window->register_mouse_movement_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_movement,
+		m_window->register_mouse_movement_handler(std::bind(&input::MouseInputHandler::handle_mouse_movement,
 			m_mouse_input_handler.get(),
 			_1, _2, _3));
-		m_window->register_mouse_button_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_button,
+		m_window->register_mouse_button_handler(std::bind(&input::MouseInputHandler::handle_mouse_button,
 			m_mouse_input_handler.get(),
 			_1, _2, _3, _4));
-		m_window->register_mouse_scroll_handler(std::bind(&rengage::input::MouseInputHandler::handle_mouse_scroll,
+		m_window->register_mouse_scroll_handler(std::bind(&input::MouseInputHandler::handle_mouse_scroll,
 			m_mouse_input_handler.get(),
 			_1, _2, _3));
 
