@@ -30,6 +30,12 @@
     <ClCompile Include="src\input\mouse_input_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\commands\move_entity_command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\input\camera_controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
@@ -54,16 +60,16 @@
     <ClInclude Include="inc\interfaces\icommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\commands\MoveForwardCommand.h">
+    <ClInclude Include="inc\commands\move_entity_command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\commands\MoveBackwardsCommand.h">
+    <ClInclude Include="inc\interfaces\iobserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\commands\MoveLeftCommand.h">
+    <ClInclude Include="inc\interfaces\iobservable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\commands\MoveRightCommand.h">
+    <ClInclude Include="inc\input\camera_controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

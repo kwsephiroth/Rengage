@@ -163,6 +163,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\commands\move_entity_command.cpp" />
+    <ClCompile Include="src\input\camera_controller.cpp" />
     <ClCompile Include="src\input\keyboard_input_handler.cpp" />
     <ClCompile Include="src\input\mouse_input_handler.cpp" />
     <ClCompile Include="src\renderer.cpp" />
@@ -174,15 +176,15 @@
     <None Include="res\shaders\vertex_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\commands\MoveBackwardsCommand.h" />
-    <ClInclude Include="inc\commands\MoveForwardCommand.h" />
-    <ClInclude Include="inc\commands\MoveLeftCommand.h" />
-    <ClInclude Include="inc\commands\MoveRightCommand.h" />
+    <ClInclude Include="inc\commands\move_entity_command.h" />
     <ClInclude Include="inc\game_manager.h" />
+    <ClInclude Include="inc\input\camera_controller.h" />
     <ClInclude Include="inc\input\input_handler.h" />
     <ClInclude Include="inc\input\keyboard_input_handler.h" />
     <ClInclude Include="inc\input\mouse_input_handler.h" />
     <ClInclude Include="inc\interfaces\icommand.h" />
+    <ClInclude Include="inc\interfaces\iobservable.h" />
+    <ClInclude Include="inc\interfaces\iobserver.h" />
     <ClInclude Include="inc\renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
