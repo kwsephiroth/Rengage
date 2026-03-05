@@ -1,12 +1,15 @@
 #pragma once
 #include <any>
+#include <glm/vec2.hpp>
 
 namespace forest_escape::input
 {
 	enum class EventType
 	{
+		Undefined = 0,
 		KeyPressed,
 		KeyReleased,
+		KeyRepeated,
 		MouseMoved,
 		MouseButtonPressed,
 		MouseButtonReleased,
@@ -14,6 +17,8 @@ namespace forest_escape::input
 	};
 
 	using EventArgs = std::any;
+	using Key = int;
+	using Coordinate2D = glm::vec2;
 
 	class IObserver
 	{

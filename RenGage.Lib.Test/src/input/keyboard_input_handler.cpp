@@ -15,29 +15,52 @@ namespace forest_escape::input
 	{
 	}
 
+	void KeyboardInputHandler::add_observer(IObserver* observer)
+	{
+		m_observers.push_back(observer);
+	}
+
+	void KeyboardInputHandler::remove_observer(IObserver* observer)
+	{
+		m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer), m_observers.end());
+	}
+
 	void KeyboardInputHandler::handle_key_event(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		//std::cout << ("Handling key event: key=" + std::to_string(key) + 
 		//			  ", scancode=" + std::to_string(scancode) + 
 		//			  ", action=" + std::to_string(action) + 
 		//			  ", mods=" + std::to_string(mods)) << std::endl;
+		auto event_type = EventType::Undefined;
 		switch (action)
 		{
 			case GLFW_PRESS:
 			{
-				process_key_press(key);
+				event_type = EventType::KeyPressed;
+				//process_key_press(key);
 			}
 			break;
 
 			case GLFW_RELEASE:
 			{
+				event_type = EventType::KeyReleased;
+				//process_key_release(key);
 			}
 			break;
 
 			case GLFW_REPEAT:
 			{
+				event_type = EventType::KeyRepeated;
+				//process_key_repeat(key);
 			}
 			break;
+		}
+		if (event_type != EventType::Undefined)
+		{
+			for (auto observer : m_observers)
+			{
+				observer->on_notify(event_type, key);
+			}
 		}
 	}
 

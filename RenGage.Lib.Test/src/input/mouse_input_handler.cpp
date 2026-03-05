@@ -16,10 +16,26 @@ namespace forest_escape::input
 	{
 	}
 
+	void MouseInputHandler::add_observer(IObserver* observer)
+	{
+		m_observers.push_back(observer);
+	}
+
+	void MouseInputHandler::remove_observer(IObserver* observer)
+	{
+		m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer), m_observers.end());
+	}
+
 	void MouseInputHandler::handle_mouse_movement(GLFWwindow* window, double xpos, double ypos)
 	{
 		std::cout << ("Handling mouse movement event: xpos=" + std::to_string(xpos) + 
 					  ", ypos=" + std::to_string(ypos)) << std::endl;
+
+		auto event_type = EventType::MouseMoved;
+		for (auto observer : m_observers)
+		{
+			observer->on_notify(event_type, Coordinate2D(xpos, ypos));
+		}
 	}
 
 	void MouseInputHandler::handle_mouse_button(GLFWwindow* window, int button, int action, int mods)

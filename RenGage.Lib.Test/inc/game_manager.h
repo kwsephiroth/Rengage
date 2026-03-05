@@ -15,6 +15,7 @@
 #include <rengage.lib/services/service_locator.h>
 #include "input/keyboard_input_handler.h"
 #include "input/mouse_input_handler.h"
+#include "input/camera_controller.h"
 #include "renderer.h"
 
 namespace forest_escape {
@@ -34,6 +35,7 @@ namespace forest_escape {
 		bool m_initialized = false;
 		std::unique_ptr<input::KeyboardInputHandler> m_keyboard_input_handler;
 		std::unique_ptr<input::MouseInputHandler> m_mouse_input_handler;
+		std::unique_ptr<input::CameraController> m_camera_controller;
 
 		void init();
 		bool init_window();

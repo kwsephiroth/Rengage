@@ -39,6 +39,11 @@ namespace forest_escape {
 			m_window->aspect_ratio()
 		);
 
+		// Setup camera controller as observer to input handlers.
+		m_camera_controller = std::make_unique<input::CameraController>(m_renderer->m_camera.get());
+		m_keyboard_input_handler->add_observer(m_camera_controller.get());
+		m_mouse_input_handler->add_observer(m_camera_controller.get());
+
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
 	}

@@ -6,8 +6,6 @@
 namespace forest_escape::input
 {
 	using namespace rengage::camera;
-	using Key = int;
-	using Coordinate2D = glm::vec2;
 
 	class CameraController : public IObserver
 	{
