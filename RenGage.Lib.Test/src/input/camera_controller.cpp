@@ -5,7 +5,10 @@
 namespace forest_escape::input
 {
 	CameraController::CameraController(Camera* camera) :
-		m_camera(camera)
+		m_camera(camera),
+		m_up_vector({ 0.0f, 1.0f, 0.0f }),
+		m_right_vector({ 0.0f, 1.0f, 0.0f }),
+		m_forward_vector({ 0.0f, 0.0f, -1.0f })
 	{
 	}
 
@@ -13,37 +16,37 @@ namespace forest_escape::input
 	{
 		switch (event_type)
 		{
-			case EventType::KeyPressed:
+		case EventType::KeyPressed:
+		{
+			try
 			{
-				try
-				{
-					std::cout << "Translating camera based on key press event." << std::endl;
-					auto key = std::any_cast<Key>(event_args);
-					handle_key_press(key);
-				}
-				catch (const std::bad_any_cast& e)
-				{
-					// Handle the error, e.g., log it or ignore the event
-					LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
-				}
+				std::cout << "Translating camera based on key press event." << std::endl;
+				auto key = std::any_cast<Key>(event_args);
+				handle_key_press(key);
 			}
-			break;
+			catch (const std::bad_any_cast& e)
+			{
+				// Handle the error, e.g., log it or ignore the event
+				LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+			}
+		}
+		break;
 
-			case EventType::MouseMoved:
+		case EventType::MouseMoved:
+		{
+			try
 			{
-				try
-				{
-					std::cout << "Rotating camera based on mouse movement event." << std::endl;
-					auto coords = std::any_cast<Coordinate2D>(event_args);
-					handle_mouse_movement(coords);
-				}
-				catch (const std::bad_any_cast& e)
-				{
-					// Handle the error, e.g., log it or ignore the event
-					LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
-				}
+				std::cout << "Rotating camera based on mouse movement event." << std::endl;
+				auto coords = std::any_cast<Coordinate2D>(event_args);
+				handle_mouse_movement(coords);
 			}
-			break;
+			catch (const std::bad_any_cast& e)
+			{
+				// Handle the error, e.g., log it or ignore the event
+				LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+			}
+		}
+		break;
 		}
 	}
 
@@ -52,34 +55,34 @@ namespace forest_escape::input
 		// Implement camera movement logic based on the key pressed.
 		switch (key)
 		{
-			case GLFW_KEY_W:
-			{
-				std::cout << "W key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_W:
+		{
+			std::cout << "W key pressed." << std::endl;
+		}
+		break;
 
-			case GLFW_KEY_A:
-			{
-				std::cout << "A key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_A:
+		{
+			std::cout << "A key pressed." << std::endl;
+		}
+		break;
 
-			case GLFW_KEY_S:
-			{
-				std::cout << "S key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_S:
+		{
+			std::cout << "S key pressed." << std::endl;
+		}
+		break;
 
-			case GLFW_KEY_D:
-			{
-				std::cout << "D key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_D:
+		{
+			std::cout << "D key pressed." << std::endl;
+		}
+		break;
 		}
 	}
 
 	void CameraController::handle_mouse_movement(Coordinate2D coords)
 	{
 		// Implement camera rotation logic based on mouse movement.
-	}	
+	}
 }

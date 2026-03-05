@@ -20,6 +20,8 @@ namespace rengage::camera
 
 		inline glm::vec3 position() const { return m_position; }
 		const glm::mat4& view_matrix() const { return m_view_matrix; }
+
+		friend class CameraController;
 	};
 }
 
