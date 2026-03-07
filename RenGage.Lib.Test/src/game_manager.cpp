@@ -44,6 +44,13 @@ namespace forest_escape {
 		m_keyboard_input_handler->add_observer(m_camera_controller.get());
 		m_mouse_input_handler->add_observer(m_camera_controller.get());
 
+		// Set initial cursor position to middle of screen.
+		glfwSetInputMode(m_window->glfw_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // Hide mouse cursor
+		glfwSetCursorPos(m_window->glfw_window(), m_window->width(), m_window->height());
+		double cursor_x, cursor_y;
+		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
+		m_camera_controller->on_notify(input::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
+
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
 	}
@@ -51,8 +58,8 @@ namespace forest_escape {
 	bool GameManager::init_window()
 	{
 		rengage::WindowAttributes window_attribs = { .name = "Forest Escape",
-													.min_width = 1920,
-													.min_height = 1080,
+													.min_width = rengage::RES_1440P.horizontal,
+													.min_height = rengage::RES_1440P.vertical,
 													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 

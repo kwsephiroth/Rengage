@@ -87,7 +87,7 @@ namespace rengage
 		return false;
 	}
 
-	void RenderingWindow::resize(int new_width, int new_height)
+	void RenderingWindow::resize(unsigned int new_width, unsigned int new_height)
 	{
 		if (new_width < 1) {
 			LOG_ERROR("Invalid window width.");

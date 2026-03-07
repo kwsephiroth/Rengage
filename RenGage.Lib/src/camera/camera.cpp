@@ -4,7 +4,10 @@ namespace rengage::camera
 {
 	//TODO: Consider using delegating constructor here.
 	Camera::Camera()
-		: m_position(glm::vec3(0.0f, 0.0f, 0.0f))
+		: m_position({ 0.0f, 0.0f, 0.0f }),
+		  m_right_vector({ 0.0f, 1.0f, 0.0f }),
+		  m_up_vector({ 0.0f, 1.0f, 0.0f }),
+		  m_forward_vector({ 0.0f, 0.0f, -1.0f })
 	{
 		init();
 	}

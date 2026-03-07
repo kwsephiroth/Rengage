@@ -6,9 +6,8 @@ namespace forest_escape::input
 {
 	CameraController::CameraController(Camera* camera) :
 		m_camera(camera),
-		m_up_vector({ 0.0f, 1.0f, 0.0f }),
-		m_right_vector({ 0.0f, 1.0f, 0.0f }),
-		m_forward_vector({ 0.0f, 0.0f, -1.0f })
+		m_movement_speed(0.05f),
+		m_mouse_position({0.0f, 0.0f})
 	{
 	}
 
@@ -50,6 +49,11 @@ namespace forest_escape::input
 		}
 	}
 
+	void CameraController::set_movement_speed(float movement_speed)
+	{
+		m_movement_speed = movement_speed;
+	}
+
 	void CameraController::handle_key_press(Key key)
 	{
 		// Implement camera movement logic based on the key pressed.
@@ -58,12 +62,14 @@ namespace forest_escape::input
 		case GLFW_KEY_W:
 		{
 			std::cout << "W key pressed." << std::endl;
+			m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
 		}
 		break;
 
 		case GLFW_KEY_A:
 		{
 			std::cout << "A key pressed." << std::endl;
+			m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
 		}
 		break;
 
@@ -84,5 +90,21 @@ namespace forest_escape::input
 	void CameraController::handle_mouse_movement(Coordinate2D coords)
 	{
 		// Implement camera rotation logic based on mouse movement.
+		// TODO: Compare new mouse position to previous mouse position.
+		auto delta_x = 0.0f;
+		auto delta_y = 0.0f;
+
+		if (coords.x != m_mouse_position.x) // x-coordinate changed
+		{
+			delta_x = m_mouse_position.x - coords.x;
+		}
+
+		if (coords.y != m_mouse_position.y) // y-coordinate changed
+		{
+			delta_y = m_mouse_position.y - coords.y;
+		}
+
+		// Store new mouse position
+		m_mouse_position = coords;
 	}
 }

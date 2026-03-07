@@ -24,16 +24,16 @@ namespace rengage
 	struct WindowAttributes
 	{
 		std::string name;
-		int min_width;
-		int min_height;
+		unsigned int min_width;
+		unsigned int min_height;
 		glm::vec4 color;
 		int swap_interval;
 	};
 
 	const int GL_VERSION_MAJOR = 4;//TODO: Determine if version information should be hardcoded or variable.
 	const int GL_VERSION_MINOR = 6;
-	const int MIN_WINDOW_WIDTH = 800;
-	const int MIN_WINDOW_HEIGHT = 800;
+	const unsigned int MIN_WINDOW_WIDTH = 800;
+	const unsigned int MIN_WINDOW_HEIGHT = 800;
 	const Resolution RES_1080P{ 1920, 1080 };
 	const Resolution RES_1440P{ 2560, 1440 };
 	const Resolution RES_2160P{ 3840, 2160 };
@@ -60,17 +60,17 @@ namespace rengage
 		GLFWwindow* operator()() { return m_window; }//TODO: Switch to QT instead of GLFW for window management?
 		inline bool initialized() const { return m_initialized; }
 		inline std::string name() const { return m_attributes.name; }
-		inline int min_width() const { return m_attributes.min_width; }
-		inline int min_height() const { return m_attributes.min_height; }
-		inline int width() const { return m_width; }
-		inline int height() const { return m_height; }
+		inline unsigned int min_width() const { return m_attributes.min_width; }
+		inline unsigned int min_height() const { return m_attributes.min_height; }
+		inline unsigned int width() const { return m_width; }
+		inline unsigned int height() const { return m_height; }
 		inline glm::vec4 color() const { return m_attributes.color; }
 		inline int swap_interval() const { return m_attributes.swap_interval; }
 		inline float aspect_ratio() const { return m_aspect_ratio; }
 		inline GLFWwindow* glfw_window() const { return m_window; }
 		void hide() { glfwHideWindow(m_window); }
 		void show() { glfwShowWindow(m_window); }
-		void resize(int new_width, int new_height);
+		void resize(unsigned int new_width, unsigned int new_height);
 
 		//Event handler registration methods
 		void register_resize_handler(ResizeHandler handler);
@@ -117,8 +117,8 @@ namespace rengage
 		WindowAttributes m_attributes;
 		bool m_is_default;
 		bool m_start_fullscreen;
-		int m_width;
-		int m_height;
+		unsigned int m_width;
+		unsigned int m_height;
 		float m_aspect_ratio;
 		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		std::unique_ptr<EventHandler> m_event_handler;

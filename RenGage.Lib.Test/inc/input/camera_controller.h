@@ -1,7 +1,7 @@
 #pragma once
 #include <rengage.lib/camera/camera.h>
 #include "../../inc/interfaces/iobserver.h"
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 
 namespace forest_escape::input
 {
@@ -12,12 +12,13 @@ namespace forest_escape::input
 	public:
 		CameraController(Camera*);
 		void on_notify(EventType, EventArgs) override;
+		void set_movement_speed(float movement_speed);
+		inline float movement_speed() const { return m_movement_speed; }
 
 	private:
 		Camera* m_camera;
-		glm::vec3 m_up_vector;
-		glm::vec3 m_right_vector;
-		glm::vec3 m_forward_vector;
+		float m_movement_speed;
+		glm::vec2 m_mouse_position;
 
 		void handle_key_press(Key);
 		void handle_mouse_movement(Coordinate2D);

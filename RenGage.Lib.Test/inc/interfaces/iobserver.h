@@ -1,6 +1,6 @@
 #pragma once
 #include <any>
-#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 
 namespace forest_escape::input
 {
