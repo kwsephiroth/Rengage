@@ -15,13 +15,14 @@
 #include <rengage.lib/services/service_locator.h>
 #include "input/keyboard_input_handler.h"
 #include "input/mouse_input_handler.h"
-#include "input/camera_controller.h"
+#include <rengage.lib/camera/camera_controller.h>
+#include <rengage.lib/interfaces/iobserver.h>
 #include "renderer.h"
 
 namespace forest_escape {
 
 	using ModelPtr = std::unique_ptr<rengage::model::Model>;
-	class GameManager
+	class GameManager : public rengage::IObserver
 	{
 	private:
 		using ModelMap = std::unordered_map<std::string, ModelPtr>;
@@ -35,7 +36,7 @@ namespace forest_escape {
 		bool m_initialized = false;
 		std::unique_ptr<input::KeyboardInputHandler> m_keyboard_input_handler;
 		std::unique_ptr<input::MouseInputHandler> m_mouse_input_handler;
-		std::unique_ptr<input::CameraController> m_camera_controller;
+		std::unique_ptr<rengage::camera::CameraController> m_camera_controller;
 
 		void init();
 		bool init_window();
@@ -53,6 +54,7 @@ namespace forest_escape {
 		~GameManager();
 		void start_game_loop();
 		void on_window_resize(GLFWwindow*, int, int);
+		void on_notify(rengage::EventType event_type, rengage::EventArgs event_args) override;
 	};
 }
 

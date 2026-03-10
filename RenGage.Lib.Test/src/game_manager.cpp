@@ -1,12 +1,5 @@
 #include "../inc/game_manager.h"
 
-
-#define WINDOW_CALLBACK(function_name)\
-	[](GLFWwindow* window, auto... args) {\
-		auto pointer = static_cast<forest_escape::GameManager*>(glfwGetWindowUserPointer(window));\
-		if(pointer) pointer->function_name(window, args...);\
-	}
-
 namespace forest_escape {
 
 	GameManager::GameManager()
@@ -40,8 +33,10 @@ namespace forest_escape {
 		);
 
 		// Setup camera controller as observer to input handlers.
-		m_camera_controller = std::make_unique<input::CameraController>(m_renderer->m_camera.get());
+		m_camera_controller = std::make_unique < rengage::camera::CameraController > (m_renderer->m_camera.get());
 		m_keyboard_input_handler->add_observer(m_camera_controller.get());
+		//TODO: Consider using Command pattern instead of Observer since we don't want different entities handling the same key press in different ways.
+		m_keyboard_input_handler->add_observer(this);// To observe escape key for closing the main window.
 		m_mouse_input_handler->add_observer(m_camera_controller.get());
 
 		// Set initial cursor position to middle of screen.
@@ -49,7 +44,7 @@ namespace forest_escape {
 		glfwSetCursorPos(m_window->glfw_window(), m_window->width(), m_window->height());
 		double cursor_x, cursor_y;
 		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
-		m_camera_controller->on_notify(input::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
+		m_camera_controller->on_notify(rengage::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
 
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
@@ -222,5 +217,34 @@ namespace forest_escape {
 		//TODO: Refactor how projection matrix is updated.
 		m_ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));
 		m_renderer->set_aspect_ratio(m_window->aspect_ratio());
+	}
+
+	void GameManager::on_notify(rengage::EventType event_type, rengage::EventArgs event_args)
+	{	
+		switch (event_type)
+		{
+			case rengage::EventType::KeyPressed:
+			{
+				try
+				{
+					auto key = std::any_cast<rengage::Key>(event_args);
+
+					switch (key)
+					{
+						case GLFW_KEY_ESCAPE:
+						{
+							glfwSetWindowShouldClose(m_window->glfw_window(), true);
+						}
+						break;
+					}
+				}
+				catch (const std::bad_any_cast& e)
+				{
+					// Handle the error, e.g., log it or ignore the event
+					LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+				}
+			}
+			break;
+		}
 	}
 }

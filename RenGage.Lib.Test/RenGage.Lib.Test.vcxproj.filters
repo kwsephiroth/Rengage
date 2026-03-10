@@ -33,9 +33,6 @@
     <ClCompile Include="src\commands\move_entity_command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\input\camera_controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex_shader.glsl" />
@@ -51,7 +48,7 @@
     <ClInclude Include="inc\input\keyboard_input_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\input\input_handler.h">
+    <ClInclude Include="inc\input\iinput_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\input\mouse_input_handler.h">
@@ -61,15 +58,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\commands\move_entity_command.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\interfaces\iobserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\interfaces\iobservable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\input\camera_controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

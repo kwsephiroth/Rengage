@@ -11,10 +11,10 @@ namespace forest_escape::input
 		Gamepad
 	};
 
-	class InputHandler
+	class IInputHandler
 	{
 	public:
-		virtual ~InputHandler() = default;
+		virtual ~IInputHandler() = default;
 		virtual void enable () = 0;
 		virtual void disable() = 0;
 

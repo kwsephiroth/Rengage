@@ -2,7 +2,7 @@
 #include <any>
 #include <glm/glm.hpp>
 
-namespace forest_escape::input
+namespace rengage
 {
 	enum class EventType
 	{

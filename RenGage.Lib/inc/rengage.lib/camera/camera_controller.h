@@ -1,12 +1,10 @@
 #pragma once
-#include <rengage.lib/camera/camera.h>
-#include "../../inc/interfaces/iobserver.h"
+#include "camera.h"
+#include "../interfaces/iobserver.h"
 #include <glm/glm.hpp>
 
-namespace forest_escape::input
+namespace rengage::camera
 {
-	using namespace rengage::camera;
-
 	class CameraController : public IObserver
 	{
 	public:

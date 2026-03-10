@@ -20,7 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\rengage.lib\camera\camera.h" />
+    <ClInclude Include="inc\rengage.lib\camera\camera_controller.h" />
     <ClInclude Include="inc\rengage.lib\interfaces\ilogger.h" />
+    <ClInclude Include="inc\rengage.lib\interfaces\iobservable.h" />
+    <ClInclude Include="inc\rengage.lib\interfaces\iobserver.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
     <ClInclude Include="inc\rengage.lib\model\model.h" />
     <ClInclude Include="inc\rengage.lib\model\model_factory.h" />
@@ -39,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
+    <ClCompile Include="src\camera\camera_controller.cpp" />
     <ClCompile Include="src\services\logging\console_logger.cpp" />
     <ClCompile Include="src\services\logging\file_logger.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />

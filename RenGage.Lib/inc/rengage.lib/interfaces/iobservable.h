@@ -1,7 +1,7 @@
 #pragma once
 #include "iobserver.h"
 
-namespace forest_escape::input
+namespace rengage
 {
 	class IObservable
 	{

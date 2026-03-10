@@ -16,12 +16,12 @@ namespace forest_escape::input
 	{
 	}
 
-	void MouseInputHandler::add_observer(IObserver* observer)
+	void MouseInputHandler::add_observer(rengage::IObserver* observer)
 	{
 		m_observers.push_back(observer);
 	}
 
-	void MouseInputHandler::remove_observer(IObserver* observer)
+	void MouseInputHandler::remove_observer(rengage::IObserver* observer)
 	{
 		m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), observer), m_observers.end());
 	}
@@ -31,10 +31,10 @@ namespace forest_escape::input
 		std::cout << ("Handling mouse movement event: xpos=" + std::to_string(xpos) + 
 					  ", ypos=" + std::to_string(ypos)) << std::endl;
 
-		auto event_type = EventType::MouseMoved;
+		auto event_type = rengage::EventType::MouseMoved;
 		for (auto observer : m_observers)
 		{
-			observer->on_notify(event_type, Coordinate2D(xpos, ypos));
+			observer->on_notify(event_type, rengage::Coordinate2D(xpos, ypos));
 		}
 	}
 

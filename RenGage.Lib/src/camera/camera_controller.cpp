@@ -1,8 +1,8 @@
-#include "../../inc/input/camera_controller.h"
-#include <rengage.lib/services/logging/logger_macros.h>
+#include "../rengage.lib/camera/camera_controller.h"
+#include "services/logging/logger_macros.h"
 #include <GLFW/glfw3.h>
 
-namespace forest_escape::input
+namespace rengage::camera
 {
 	CameraController::CameraController(Camera* camera) :
 		m_camera(camera),
@@ -59,31 +59,31 @@ namespace forest_escape::input
 		// Implement camera movement logic based on the key pressed.
 		switch (key)
 		{
-		case GLFW_KEY_W:
-		{
-			std::cout << "W key pressed." << std::endl;
-			m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
-		}
-		break;
+			case GLFW_KEY_W:
+			{
+				std::cout << "W key pressed." << std::endl;
+				m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
+			}
+			break;
 
-		case GLFW_KEY_A:
-		{
-			std::cout << "A key pressed." << std::endl;
-			m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
-		}
-		break;
+			case GLFW_KEY_A:
+			{
+				std::cout << "A key pressed." << std::endl;
+				m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
+			}
+			break;
 
-		case GLFW_KEY_S:
-		{
-			std::cout << "S key pressed." << std::endl;
-		}
-		break;
+			case GLFW_KEY_S:
+			{
+				std::cout << "S key pressed." << std::endl;
+			}
+			break;
 
-		case GLFW_KEY_D:
-		{
-			std::cout << "D key pressed." << std::endl;
-		}
-		break;
+			case GLFW_KEY_D:
+			{
+				std::cout << "D key pressed." << std::endl;
+			}
+			break;
 		}
 	}
 
