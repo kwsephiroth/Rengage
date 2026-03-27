@@ -12,8 +12,8 @@
 namespace forest_escape {
 	class GameManager;//forward declaration of GameManager class
 
-	const float DEFAULT_FOV_Y = 1.0472f;//in radians
-	const float DEFAULT_NEAR_PLANE = 0.1f;
+	const float DEFAULT_FOV_Y = glm::radians(90.0f);//expressed in radians.
+	const float DEFAULT_NEAR_PLANE = 1.0f;
 	const float DEFAULT_FAR_PLANE = 1000.0f;
 
 	using ModelPtr = std::unique_ptr<rengage::model::Model>;

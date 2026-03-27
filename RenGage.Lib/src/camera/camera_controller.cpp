@@ -6,8 +6,8 @@ namespace rengage::camera
 {
 	CameraController::CameraController(Camera* camera) :
 		m_camera(camera),
-		m_movement_speed(0.05f),
-		m_mouse_position({0.0f, 0.0f})
+		m_movement_speed(0.5f),
+		m_mouse_position({ 0.0f, 0.0f })
 	{
 	}
 
@@ -16,10 +16,11 @@ namespace rengage::camera
 		switch (event_type)
 		{
 		case EventType::KeyPressed:
+		case EventType::KeyRepeated:
 		{
 			try
 			{
-				std::cout << "Translating camera based on key press event." << std::endl;
+				//std::cout << "Translating camera based on key press event." << std::endl;
 				auto key = std::any_cast<Key>(event_args);
 				handle_key_press(key);
 			}
@@ -35,7 +36,7 @@ namespace rengage::camera
 		{
 			try
 			{
-				std::cout << "Rotating camera based on mouse movement event." << std::endl;
+				//std::cout << "Rotating camera based on mouse movement event." << std::endl;
 				auto coords = std::any_cast<Coordinate2D>(event_args);
 				handle_mouse_movement(coords);
 			}
@@ -59,31 +60,49 @@ namespace rengage::camera
 		// Implement camera movement logic based on the key pressed.
 		switch (key)
 		{
-			case GLFW_KEY_W:
-			{
-				std::cout << "W key pressed." << std::endl;
-				m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
-			}
-			break;
+		case GLFW_KEY_W: // Move forward
+		{
+			//std::cout << "W key pressed." << std::endl;
+			m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
+		}
+		break;
 
-			case GLFW_KEY_A:
-			{
-				std::cout << "A key pressed." << std::endl;
-				m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
-			}
-			break;
+		case GLFW_KEY_A: // Move left
+		{
+			//std::cout << "A key pressed." << std::endl;
+			auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			left_vector = glm::normalize(left_vector);
+			m_camera->m_position += (left_vector * m_movement_speed);
+		}
+		break;
 
-			case GLFW_KEY_S:
-			{
-				std::cout << "S key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_S: // Move backward
+		{
+			//std::cout << "S key pressed." << std::endl;
+			m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
+		}
+		break;
 
-			case GLFW_KEY_D:
-			{
-				std::cout << "D key pressed." << std::endl;
-			}
-			break;
+		case GLFW_KEY_D: // Move right
+		{
+			//std::cout << "D key pressed." << std::endl;
+			auto right_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
+			right_vector = glm::normalize(right_vector);
+			m_camera->m_position += (right_vector * m_movement_speed);
+		}
+		break;
+
+		case GLFW_KEY_R: // Raise the camera up
+		{
+			m_camera->m_position.y += m_movement_speed;
+		}
+		break;
+
+		case GLFW_KEY_F: // Lower the camera down
+		{
+			m_camera->m_position.y -= m_movement_speed;
+		}
+		break;
 		}
 	}
 

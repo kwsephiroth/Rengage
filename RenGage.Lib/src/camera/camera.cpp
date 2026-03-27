@@ -2,25 +2,17 @@
 
 namespace rengage::camera
 {
-	//TODO: Consider using delegating constructor here.
-	Camera::Camera()
-		: m_position({ 0.0f, 0.0f, 0.0f }),
-		  m_right_vector({ 0.0f, 1.0f, 0.0f }),
-		  m_up_vector({ 0.0f, 1.0f, 0.0f }),
-		  m_forward_vector({ 0.0f, 0.0f, -1.0f })
+	Camera::Camera(glm::vec3 init_position) : 
+		m_position(init_position),
+		m_up_vector({ 0.0f, 1.0f, 0.0f }),
+		m_forward_vector({ 0.0f, 0.0f, -1.0f })
 	{
-		init();
-	}
-
-	Camera::Camera(glm::vec3 init_position)
-		: m_position(init_position)
-	{
-		init();
+		//init();
 	}
 
 	bool Camera::init()
 	{
-		m_view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-m_position.x, -m_position.y, -m_position.z));
+		//m_view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-m_position.x, -m_position.y, -m_position.z));
 		return true;
 	}
 }

@@ -28,8 +28,8 @@ namespace forest_escape::input
 
 	void MouseInputHandler::handle_mouse_movement(GLFWwindow* window, double xpos, double ypos)
 	{
-		std::cout << ("Handling mouse movement event: xpos=" + std::to_string(xpos) + 
-					  ", ypos=" + std::to_string(ypos)) << std::endl;
+		//std::cout << ("Handling mouse movement event: xpos=" + std::to_string(xpos) + 
+					  //", ypos=" + std::to_string(ypos)) << std::endl;
 
 		auto event_type = rengage::EventType::MouseMoved;
 		for (auto observer : m_observers)
@@ -60,8 +60,8 @@ namespace forest_escape::input
 
 	void MouseInputHandler::handle_mouse_scroll(GLFWwindow* window, double xoffset, double yoffset)
 	{
-		std::cout << ("Handling mouse scroll event: xoffset=" + std::to_string(xoffset) + 
-					  ", yoffset=" + std::to_string(yoffset)) << std::endl;
+		//std::cout << ("Handling mouse scroll event: xoffset=" + std::to_string(xoffset) + 
+					  //", yoffset=" + std::to_string(yoffset)) << std::endl;
 	}
 
 	void MouseInputHandler::process_mouse_movement(double xpos, double ypos)
@@ -74,17 +74,17 @@ namespace forest_escape::input
 		{
 			case GLFW_MOUSE_BUTTON_LEFT:
 			{
-				std::cout << "Left mouse button pressed." << std::endl;
+				//std::cout << "Left mouse button pressed." << std::endl;
 			}
 			break;
 			case GLFW_MOUSE_BUTTON_RIGHT:
 			{
-				std::cout << "Right mouse button pressed." << std::endl;
+				//std::cout << "Right mouse button pressed." << std::endl;
 			}
 			break;
 			case GLFW_MOUSE_BUTTON_MIDDLE:
 			{
-				std::cout << "Middle mouse button pressed." << std::endl;
+				//std::cout << "Middle mouse button pressed." << std::endl;
 			}
 			break;
 		}

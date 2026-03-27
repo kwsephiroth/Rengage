@@ -22,6 +22,6 @@ namespace rengage::camera
 		void handle_mouse_movement(Coordinate2D);
 		//void translate_camera(glm::vec3 translation);
 		//void rotate_camera(float pitch, float yaw);
-		void build_view_matrix();
+		//void build_view_matrix();
 	};
 }

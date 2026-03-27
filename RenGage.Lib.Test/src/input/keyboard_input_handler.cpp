@@ -75,37 +75,37 @@ namespace forest_escape::input
 		{
 			case GLFW_KEY_ESCAPE:
 			{
-				std::cout << "Escape key pressed." << std::endl;
+				//std::cout << "Escape key pressed." << std::endl;
 			}
 			break;
 
 			case GLFW_KEY_W:
 			{
-				std::cout << "W key pressed." << std::endl;
+				//std::cout << "W key pressed." << std::endl;
 			}
 			break;
 
 			case GLFW_KEY_A:
 			{
-				std::cout << "A key pressed." << std::endl;
+				//std::cout << "A key pressed." << std::endl;
 			}
 			break;
 
 			case GLFW_KEY_S:
 			{
-				std::cout << "S key pressed." << std::endl;
+				//std::cout << "S key pressed." << std::endl;
 			}
 			break;
 
 			case GLFW_KEY_D:
 			{
-				std::cout << "D key pressed." << std::endl;
+				//std::cout << "D key pressed." << std::endl;
 			}
 			break;
 
 			case GLFW_KEY_SPACE:
 			{
-				std::cout << "Space key pressed." << std::endl;
+				//std::cout << "Space key pressed." << std::endl;
 			}
 			break;
 
