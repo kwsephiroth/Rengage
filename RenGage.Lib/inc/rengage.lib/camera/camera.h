@@ -36,7 +36,7 @@ namespace rengage::camera
 			//view_matrix[2][0] = N.x;  view_matrix[2][1] = N.y;  view_matrix[2][2] = N.z;  view_matrix[2][3] = -m_position.z;
 			//view_matrix[3][0] = 0.0f; view_matrix[3][1] = 0.0f; view_matrix[3][2] = 0.0f; view_matrix[3][3] = 1.0f;
 
-			auto view_matrix = glm::lookAt(m_eye_position, m_forward_vector, m_up_vector);
+			auto view_matrix = glm::lookAt(m_eye_position, m_eye_position + m_forward_vector, m_up_vector);
 			//static bool printed;
 			//if (!printed)
 			//{

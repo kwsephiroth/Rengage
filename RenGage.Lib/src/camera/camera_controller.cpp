@@ -1,6 +1,7 @@
 #include "../rengage.lib/camera/camera_controller.h"
 #include "services/logging/logger_macros.h"
 #include <GLFW/glfw3.h>
+#include <glm/gtx/rotate_vector.hpp>
 
 namespace rengage::camera
 {
@@ -63,6 +64,7 @@ namespace rengage::camera
 		case GLFW_KEY_W: // Move forward
 		{
 			//std::cout << "W key pressed." << std::endl;
+			// Move foward along view direction.
 			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);
 			std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
@@ -71,7 +73,8 @@ namespace rengage::camera
 		case GLFW_KEY_A: // Move left
 		{
 			//std::cout << "A key pressed." << std::endl;
-			auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			//auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
 			left_vector = glm::normalize(left_vector);
 			m_camera->m_eye_position += (left_vector * m_movement_speed);
 			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
@@ -89,7 +92,8 @@ namespace rengage::camera
 		case GLFW_KEY_D: // Move right
 		{
 			//std::cout << "D key pressed." << std::endl;
-			auto right_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
+			//auto right_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
+			auto right_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
 			right_vector = glm::normalize(right_vector);
 			m_camera->m_eye_position += (right_vector * m_movement_speed);
 			std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
@@ -116,40 +120,66 @@ namespace rengage::camera
 	{
 		// Implement camera rotation logic based on mouse movement.
 		// TODO: Compare new mouse position to previous mouse position.
+		if (m_mouse_position == coords)
+			return;
+
 		auto delta_x = 0.0f;
 		auto delta_y = 0.0f;
+
+		// TODO: Implement more elegant solution for detecting first look.
+		static bool first_look = true;
+		if (first_look)
+		{
+			m_mouse_position = coords;
+			first_look = false;
+			return;
+		}
 
 		if (coords.x != m_mouse_position.x) // x-coordinate changed
 		{
 			delta_x = m_mouse_position.x - coords.x;
 
-			//if (coords.x > m_mouse_position.x)
-			if (delta_x < 0)
-			{
-				std::cout << "Rotating camera to the right..." << std::endl;
-			}
-			else
-			{
-				std::cout << "Rotation camera to the left..." << std::endl;
-			}
-		}
+			// Compute new forward vector (target) by rotation about the up vector (aligned with y-axis initially)
+			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
 
-		if (coords.y != m_mouse_position.y) // y-coordinate changed
+			//if (coords.x > m_mouse_position.x)
+			//if (delta_x < 0)
+			//{
+			//	std::cout << "Rotating camera to the right..." << std::endl;
+			//}
+			//else
+			//{
+			//	std::cout << "Rotation camera to the left..." << std::endl;
+			//}
+
+			//std::cout << "delta_x = " << delta_x << std::endl;
+			//std::cout << "delta_x (in radians) = " << glm::radians(delta_x) << std::endl;
+			//std::cout << "new forward direction = " << glm::to_string(m_camera->m_forward_vector) << std::endl;
+		}
+		else if (coords.y != m_mouse_position.y) // y-coordinate changed
 		{
+			// TODO: Put limits on this rotation to maintain camera's "up-right" position.
 			delta_y = m_mouse_position.y - coords.y;
 
+			//auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			//left_vector = glm::normalize(left_vector);
+			//m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
+			//m_camera->m_up_vector = glm::normalize(glm::rotate(m_camera->m_up_vector, glm::radians(delta_y), left_vector));
+
 			//if (coords.y < m_mouse_position.y) // Y-value increases downward in 2D Screen Coordinates
-			if (delta_y > 0)
-			{
-				std::cout << "Rotating camera up..." << std::endl;
-			}
-			else
-			{
-				std::cout << "Rotation camera down..." << std::endl;
-			}
+			//if (delta_y > 0)
+			//{
+			//	std::cout << "Rotating camera up..." << std::endl;
+			//}
+			//else
+			//{
+			//	std::cout << "Rotation camera down..." << std::endl;
+			//}
 		}
 
 		// Store new mouse position
 		m_mouse_position = coords;
+
+		//std::cout << "new mouse position = " << glm::to_string(m_mouse_position) << std::endl;
 	}
 }
