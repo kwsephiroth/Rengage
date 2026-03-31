@@ -9,20 +9,20 @@ namespace rengage::camera
 	class Camera
 	{
 	private:
-		glm::vec3 m_position;
+		glm::vec3 m_eye_position;
 		//glm::vec3 m_right_vector;//U
 		glm::vec3 m_up_vector;//V
-		glm::vec3 m_forward_vector;//N
+		glm::vec3 m_forward_vector;//N - the "target" to look at
 		//glm::mat4 m_view_matrix;
 
 		bool init();
 
 	public:
 		//Camera();
-		Camera(glm::vec3 init_position = { 0.0f, 0.0f, 100.0f });
+		Camera(glm::vec3 init_position = { 0.0f, 0.0f, 1.0f });
 		~Camera() = default;
 
-		inline glm::vec3 position() const { return m_position; }
+		inline glm::vec3 position() const { return m_eye_position; }
 		//const glm::mat4& view_matrix() const { return m_view_matrix; }
 		glm::mat4 view_matrix() const 
 		{
@@ -36,14 +36,14 @@ namespace rengage::camera
 			//view_matrix[2][0] = N.x;  view_matrix[2][1] = N.y;  view_matrix[2][2] = N.z;  view_matrix[2][3] = -m_position.z;
 			//view_matrix[3][0] = 0.0f; view_matrix[3][1] = 0.0f; view_matrix[3][2] = 0.0f; view_matrix[3][3] = 1.0f;
 
+			auto view_matrix = glm::lookAt(m_eye_position, m_forward_vector, m_up_vector);
 			//static bool printed;
 			//if (!printed)
 			//{
 			//	std::cout << glm::to_string(view_matrix) << "\n";
 			//	printed = true;
 			//}
-			//return view_matrix;
-			return glm::lookAt(m_position, m_forward_vector, m_up_vector); 
+			return view_matrix;
 		}
 
 		friend class CameraController;

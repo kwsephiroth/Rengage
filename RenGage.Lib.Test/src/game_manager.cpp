@@ -41,10 +41,10 @@ namespace forest_escape {
 
 		// Set initial cursor position to middle of screen.
 		glfwSetInputMode(m_window->glfw_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // Hide mouse cursor
-		glfwSetCursorPos(m_window->glfw_window(), m_window->width(), m_window->height());
-		double cursor_x, cursor_y;
-		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
-		m_camera_controller->on_notify(rengage::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
+		glfwSetCursorPos(m_window->glfw_window(), m_window->width()/2, m_window->height()/2);
+//		double cursor_x, cursor_y;
+//		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
+//		m_camera_controller->on_notify(rengage::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
 
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;

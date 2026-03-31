@@ -63,7 +63,8 @@ namespace rengage::camera
 		case GLFW_KEY_W: // Move forward
 		{
 			//std::cout << "W key pressed." << std::endl;
-			m_camera->m_position += (m_camera->m_forward_vector * m_movement_speed);
+			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);
+			std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
@@ -72,14 +73,16 @@ namespace rengage::camera
 			//std::cout << "A key pressed." << std::endl;
 			auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
 			left_vector = glm::normalize(left_vector);
-			m_camera->m_position += (left_vector * m_movement_speed);
+			m_camera->m_eye_position += (left_vector * m_movement_speed);
+			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_S: // Move backward
 		{
 			//std::cout << "S key pressed." << std::endl;
-			m_camera->m_position -= (m_camera->m_forward_vector * m_movement_speed);
+			m_camera->m_eye_position -= (m_camera->m_forward_vector * m_movement_speed);
+			std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
@@ -88,25 +91,28 @@ namespace rengage::camera
 			//std::cout << "D key pressed." << std::endl;
 			auto right_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
 			right_vector = glm::normalize(right_vector);
-			m_camera->m_position += (right_vector * m_movement_speed);
+			m_camera->m_eye_position += (right_vector * m_movement_speed);
+			std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_R: // Raise the camera up
 		{
-			m_camera->m_position.y += m_movement_speed;
+			m_camera->m_eye_position.y += m_movement_speed;
+			std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_F: // Lower the camera down
 		{
-			m_camera->m_position.y -= m_movement_speed;
+			m_camera->m_eye_position.y -= m_movement_speed;
+			std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 		}
 	}
 
-	void CameraController::handle_mouse_movement(Coordinate2D coords)
+	void CameraController::handle_mouse_movement(Coordinate2D coords) // Receives 2D Screen Coordinates
 	{
 		// Implement camera rotation logic based on mouse movement.
 		// TODO: Compare new mouse position to previous mouse position.
@@ -116,11 +122,31 @@ namespace rengage::camera
 		if (coords.x != m_mouse_position.x) // x-coordinate changed
 		{
 			delta_x = m_mouse_position.x - coords.x;
+
+			//if (coords.x > m_mouse_position.x)
+			if (delta_x < 0)
+			{
+				std::cout << "Rotating camera to the right..." << std::endl;
+			}
+			else
+			{
+				std::cout << "Rotation camera to the left..." << std::endl;
+			}
 		}
 
 		if (coords.y != m_mouse_position.y) // y-coordinate changed
 		{
 			delta_y = m_mouse_position.y - coords.y;
+
+			//if (coords.y < m_mouse_position.y) // Y-value increases downward in 2D Screen Coordinates
+			if (delta_y > 0)
+			{
+				std::cout << "Rotating camera up..." << std::endl;
+			}
+			else
+			{
+				std::cout << "Rotation camera down..." << std::endl;
+			}
 		}
 
 		// Store new mouse position
