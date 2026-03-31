@@ -137,7 +137,7 @@ namespace rengage::camera
 
 		if (coords.x != m_mouse_position.x) // x-coordinate changed
 		{
-			delta_x = m_mouse_position.x - coords.x;
+			delta_x = (m_mouse_position.x - coords.x) * m_movement_speed;
 
 			// Compute new forward vector (target) by rotation about the up vector (aligned with y-axis initially)
 			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
@@ -159,12 +159,12 @@ namespace rengage::camera
 		else if (coords.y != m_mouse_position.y) // y-coordinate changed
 		{
 			// TODO: Put limits on this rotation to maintain camera's "up-right" position.
-			delta_y = m_mouse_position.y - coords.y;
-
-			//auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
-			//left_vector = glm::normalize(left_vector);
-			//m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
-			//m_camera->m_up_vector = glm::normalize(glm::rotate(m_camera->m_up_vector, glm::radians(delta_y), left_vector));
+			delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
+			
+			auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			left_vector = glm::normalize(left_vector);
+			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
+			m_camera->m_up_vector = glm::normalize(glm::cross(left_vector, m_camera->m_forward_vector));
 
 			//if (coords.y < m_mouse_position.y) // Y-value increases downward in 2D Screen Coordinates
 			//if (delta_y > 0)
