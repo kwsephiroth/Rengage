@@ -2,9 +2,11 @@
 #include "camera.h"
 #include "../interfaces/iobserver.h"
 #include <glm/glm.hpp>
+#include <map>
 
 namespace rengage::camera
 {
+	using KeyState = EventType;
 	class CameraController : public IObserver
 	{
 	public:
@@ -12,11 +14,21 @@ namespace rengage::camera
 		void on_notify(EventType, EventArgs) override;
 		void set_movement_speed(float movement_speed);
 		inline float movement_speed() const { return m_movement_speed; }
-
+		void handle_key_states()
+		{
+			for (const auto& [key, state] : m_key_states)
+			{
+				if (state == EventType::KeyPressed)
+				{
+					handle_key_press(key);
+				}
+			}
+		}
 	private:
 		Camera* m_camera;
 		float m_movement_speed;
 		glm::vec2 m_mouse_position;
+		std::map<Key, KeyState> m_key_states; // Map to track the state of keys (pressed, released)
 
 		void handle_key_press(Key);
 		void handle_mouse_movement(Coordinate2D);

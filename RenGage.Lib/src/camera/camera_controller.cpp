@@ -17,13 +17,15 @@ namespace rengage::camera
 		switch (event_type)
 		{
 		case EventType::KeyPressed:
-		case EventType::KeyRepeated:
+		case EventType::KeyReleased:
+		//case EventType::KeyRepeated:
 		{
 			try
 			{
 				//std::cout << "Translating camera based on key press event." << std::endl;
 				auto key = std::any_cast<Key>(event_args);
-				handle_key_press(key);
+				m_key_states[key] = event_type;
+				//handle_key_press(key);
 			}
 			catch (const std::bad_any_cast& e)
 			{
@@ -140,6 +142,7 @@ namespace rengage::camera
 			delta_x = (m_mouse_position.x - coords.x) * m_movement_speed;
 
 			// Compute new forward vector (target) by rotation about the up vector (aligned with y-axis initially)
+			// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
 			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
 
 			//if (coords.x > m_mouse_position.x)
@@ -156,13 +159,14 @@ namespace rengage::camera
 			//std::cout << "delta_x (in radians) = " << glm::radians(delta_x) << std::endl;
 			//std::cout << "new forward direction = " << glm::to_string(m_camera->m_forward_vector) << std::endl;
 		}
-		else if (coords.y != m_mouse_position.y) // y-coordinate changed
+		
+		if (coords.y != m_mouse_position.y) // y-coordinate changed
 		{
 			// TODO: Put limits on this rotation to maintain camera's "up-right" position.
 			delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
 			
-			auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
-			left_vector = glm::normalize(left_vector);
+			// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
+			auto left_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
 			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
 			m_camera->m_up_vector = glm::normalize(glm::cross(left_vector, m_camera->m_forward_vector));
 
