@@ -18,13 +18,13 @@ namespace rengage::camera
 		{
 		case EventType::KeyPressed:
 		case EventType::KeyReleased:
-		//case EventType::KeyRepeated:
+			//case EventType::KeyRepeated:
 		{
 			try
 			{
 				//std::cout << "Translating camera based on key press event." << std::endl;
 				auto key = std::any_cast<Key>(event_args);
-				m_key_states[key] = event_type;
+				store_key_state(key, event_type);
 				//handle_key_press(key);
 			}
 			catch (const std::bad_any_cast& e)
@@ -144,46 +144,48 @@ namespace rengage::camera
 			// Compute new forward vector (target) by rotation about the up vector (aligned with y-axis initially)
 			// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
 			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
-
-			//if (coords.x > m_mouse_position.x)
-			//if (delta_x < 0)
-			//{
-			//	std::cout << "Rotating camera to the right..." << std::endl;
-			//}
-			//else
-			//{
-			//	std::cout << "Rotation camera to the left..." << std::endl;
-			//}
-
-			//std::cout << "delta_x = " << delta_x << std::endl;
-			//std::cout << "delta_x (in radians) = " << glm::radians(delta_x) << std::endl;
-			//std::cout << "new forward direction = " << glm::to_string(m_camera->m_forward_vector) << std::endl;
 		}
-		
-		if (coords.y != m_mouse_position.y) // y-coordinate changed
-		{
-			// TODO: Put limits on this rotation to maintain camera's "up-right" position.
-			delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
-			
-			// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
-			auto left_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
-			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
-			m_camera->m_up_vector = glm::normalize(glm::cross(left_vector, m_camera->m_forward_vector));
 
-			//if (coords.y < m_mouse_position.y) // Y-value increases downward in 2D Screen Coordinates
-			//if (delta_y > 0)
-			//{
-			//	std::cout << "Rotating camera up..." << std::endl;
-			//}
-			//else
-			//{
-			//	std::cout << "Rotation camera down..." << std::endl;
-			//}
-		}
+		//if (coords.y != m_mouse_position.y) // y-coordinate changed
+		//{
+		//	// TODO: Put limits on this rotation to maintain camera's "up-right" position.
+		//	delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
+
+		//	// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
+		//	auto left_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
+		//	m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
+		//	m_camera->m_up_vector = glm::normalize(glm::cross(left_vector, m_camera->m_forward_vector));
+		//}
 
 		// Store new mouse position
 		m_mouse_position = coords;
 
 		//std::cout << "new mouse position = " << glm::to_string(m_mouse_position) << std::endl;
+	}
+
+	void CameraController::store_key_state(Key key, KeyState state)
+	{
+		switch (key)
+		{
+		case GLFW_KEY_W:
+		case GLFW_KEY_A:
+		case GLFW_KEY_S:
+		case GLFW_KEY_D:
+		case GLFW_KEY_R:
+		case GLFW_KEY_F:
+			m_key_states[key] = state; // Only store valid keys for camera movement
+			break; 
+		}
+	}
+
+	void CameraController::handle_key_states()
+	{
+		for (const auto& [key, state] : m_key_states)
+		{
+			if (state == EventType::KeyPressed)
+			{
+				handle_key_press(key);
+			}
+		}
 	}
 }
