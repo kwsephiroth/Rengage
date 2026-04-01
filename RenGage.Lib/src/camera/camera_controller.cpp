@@ -7,7 +7,7 @@ namespace rengage::camera
 {
 	CameraController::CameraController(Camera* camera) :
 		m_camera(camera),
-		m_movement_speed(0.5f),
+		m_movement_speed(0.1f),
 		m_mouse_position({ 0.0f, 0.0f })
 	{
 	}
