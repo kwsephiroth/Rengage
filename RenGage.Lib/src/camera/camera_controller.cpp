@@ -2,6 +2,7 @@
 #include "services/logging/logger_macros.h"
 #include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace rengage::camera
 {
@@ -72,17 +73,6 @@ namespace rengage::camera
 		}
 		break;
 
-		case GLFW_KEY_A: // Move left
-		{
-			//std::cout << "A key pressed." << std::endl;
-			//auto left_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
-			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
-			left_vector = glm::normalize(left_vector);
-			m_camera->m_eye_position += (left_vector * m_movement_speed);
-			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
-		}
-		break;
-
 		case GLFW_KEY_S: // Move backward
 		{
 			//std::cout << "S key pressed." << std::endl;
@@ -91,10 +81,19 @@ namespace rengage::camera
 		}
 		break;
 
+		case GLFW_KEY_A: // Move left
+		{
+			//std::cout << "A key pressed." << std::endl;
+			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
+			left_vector = glm::normalize(left_vector);
+			m_camera->m_eye_position += (left_vector * m_movement_speed);
+			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+		break;
+
 		case GLFW_KEY_D: // Move right
 		{
 			//std::cout << "D key pressed." << std::endl;
-			//auto right_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
 			auto right_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
 			right_vector = glm::normalize(right_vector);
 			m_camera->m_eye_position += (right_vector * m_movement_speed);
@@ -104,14 +103,14 @@ namespace rengage::camera
 
 		case GLFW_KEY_R: // Raise the camera up
 		{
-			m_camera->m_eye_position.y += m_movement_speed;
+			m_camera->m_eye_position += (m_camera->m_up_vector * m_movement_speed);
 			std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_F: // Lower the camera down
 		{
-			m_camera->m_eye_position.y -= m_movement_speed;
+			m_camera->m_eye_position -= (m_camera->m_up_vector * m_movement_speed);
 			std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
@@ -137,30 +136,52 @@ namespace rengage::camera
 			return;
 		}
 
-		if (coords.x != m_mouse_position.x) // x-coordinate changed
+		if (coords.x != m_mouse_position.x) // x-coordinate changed - calculate yaw
 		{
 			delta_x = (m_mouse_position.x - coords.x) * m_movement_speed;
 
 			// Compute new forward vector (target) by rotation about the up vector (aligned with y-axis initially)
 			// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
-			m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
+			glm::quat rotation = glm::angleAxis(glm::radians(delta_x), glm::vec3(0, 1, 0));
+			m_camera->m_orientation = rotation * m_camera->m_orientation; // Update camera orientation by applying the new rotation
+			m_camera->m_forward_vector = glm::normalize(rotation * m_camera->m_forward_vector); // Rotate forward vector by the new rotation
+			//m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_x), m_camera->m_up_vector));
 		}
 
-		//if (coords.y != m_mouse_position.y) // y-coordinate changed
-		//{
-		//	// TODO: Put limits on this rotation to maintain camera's "up-right" position.
-		//	delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
+		if (coords.y != m_mouse_position.y) // y-coordinate changed - calculate pitch
+		{
+			// TODO: Put limits on this rotation to maintain camera's "up-right" position.
+			delta_y = (m_mouse_position.y - coords.y) * m_movement_speed;
 
-		//	// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
-		//	auto left_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
-		//	m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), left_vector));
-		//	m_camera->m_up_vector = glm::normalize(glm::cross(left_vector, m_camera->m_forward_vector));
-		//}
+			//TODO: Constrain pitch rotation to prevent camera from flipping upside down.
+			//This can be done by checking the angle between the forward vector and the up vector before applying the rotation,
+			// and only applying it if it doesn't exceed a certain threshold (e.g., 89 degrees).
+			static float pitchAngle = 0.0f; // Track cumulative pitch angle
+			pitchAngle += delta_y;
+			if (pitchAngle > 89.0f) {
+				delta_y -= (pitchAngle - 89.0f); // Reduce delta_y to not exceed 89 degrees
+				pitchAngle = 89.0f; // Clamp pitch angle
+			}
+			else if (pitchAngle < -89.0f) {
+				delta_y -= (pitchAngle + 89.0f); // Reduce delta_y to not exceed -89 degrees
+				pitchAngle = -89.0f; // Clamp pitch angle
+			}
+
+			auto right_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
+			glm::quat pitchQuat = glm::angleAxis(glm::radians(delta_y), right_vector);
+			m_camera->m_orientation = pitchQuat * m_camera->m_orientation; // Update camera orientation by applying the new rotation
+			m_camera->m_forward_vector = glm::normalize(pitchQuat * m_camera->m_forward_vector); // Rotate forward vector by the new rotation
+
+			//// TODO: Switch to using quaternions for rotation to avoid gimbal lock and other issues with Euler angles.
+			//auto right_vector = glm::normalize(glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector));
+			//m_camera->m_forward_vector = glm::normalize(glm::rotate(m_camera->m_forward_vector, glm::radians(delta_y), right_vector));
+
+			//// Update up vector to maintain orthogonality with forward vector after rotation.
+			//m_camera->m_up_vector = glm::normalize(glm::cross(right_vector, m_camera->m_forward_vector));
+		}
 
 		// Store new mouse position
 		m_mouse_position = coords;
-
-		//std::cout << "new mouse position = " << glm::to_string(m_mouse_position) << std::endl;
 	}
 
 	void CameraController::store_key_state(Key key, KeyState state)

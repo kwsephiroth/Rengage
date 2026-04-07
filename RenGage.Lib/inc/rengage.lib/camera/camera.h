@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <iostream>
 
 namespace rengage::camera
@@ -14,6 +15,7 @@ namespace rengage::camera
 		glm::vec3 m_up_vector;//V
 		glm::vec3 m_forward_vector;//N - the "target" to look at
 		//glm::mat4 m_view_matrix;
+		glm::quat m_orientation; // Current camera orientation
 
 		bool init();
 

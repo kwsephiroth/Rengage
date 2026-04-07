@@ -58,7 +58,7 @@ namespace forest_escape {
 													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f},
 													.swap_interval = 1 };//designated initializer since C++20
 
-		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, std::move(window_attribs));
+		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, std::move(window_attribs), true);
 
 		if (!m_window->initialized()) {
 			LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).");
