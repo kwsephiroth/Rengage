@@ -17,24 +17,24 @@ namespace rengage::camera
 	{
 		switch (event_type)
 		{
-		case EventType::KeyPressed:
-		case EventType::KeyReleased:
-			//case EventType::KeyRepeated:
-		{
-			try
-			{
-				//std::cout << "Translating camera based on key press event." << std::endl;
-				auto key = std::any_cast<Key>(event_args);
-				store_key_state(key, event_type);
-				//handle_key_press(key);
-			}
-			catch (const std::bad_any_cast& e)
-			{
-				// Handle the error, e.g., log it or ignore the event
-				LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
-			}
-		}
-		break;
+		//case EventType::KeyPressed:
+		//case EventType::KeyReleased:
+		//	//case EventType::KeyRepeated:
+		//{
+		//	try
+		//	{
+		//		//std::cout << "Translating camera based on key press event." << std::endl;
+		//		auto key = std::any_cast<Key>(event_args);
+		//		store_key_state(key, event_type);
+		//		//handle_key_press(key);
+		//	}
+		//	catch (const std::bad_any_cast& e)
+		//	{
+		//		// Handle the error, e.g., log it or ignore the event
+		//		LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+		//	}
+		//}
+		//break;
 
 		case EventType::MouseMoved:
 		{
@@ -184,29 +184,69 @@ namespace rengage::camera
 		m_mouse_position = coords;
 	}
 
-	void CameraController::store_key_state(Key key, KeyState state)
-	{
-		switch (key)
-		{
-		case GLFW_KEY_W:
-		case GLFW_KEY_A:
-		case GLFW_KEY_S:
-		case GLFW_KEY_D:
-		case GLFW_KEY_R:
-		case GLFW_KEY_F:
-			m_key_states[key] = state; // Only store valid keys for camera movement
-			break; 
-		}
-	}
+	//void CameraController::store_key_state(Key key, KeyState state)
+	//{
+	//	switch (key)
+	//	{
+	//	case GLFW_KEY_W:
+	//	case GLFW_KEY_A:
+	//	case GLFW_KEY_S:
+	//	case GLFW_KEY_D:
+	//	case GLFW_KEY_R:
+	//	case GLFW_KEY_F:
+	//		m_key_states[key] = state; // Only store valid keys for camera movement
+	//		break; 
+	//	}
+	//}
 
-	void CameraController::handle_key_states()
+	void CameraController::process_key_input()
 	{
-		for (const auto& [key, state] : m_key_states)
+		//for (const auto& [key, state] : m_key_states)
+		//{
+		//	if (state == EventType::KeyPressed)
+		//	{
+		//		handle_key_press(key);
+		//	}
+		//}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS) // Move camera forward.
 		{
-			if (state == EventType::KeyPressed)
-			{
-				handle_key_press(key);
-			}
+			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);
+			std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_S) == GLFW_PRESS) // Move camera backward.
+		{
+			m_camera->m_eye_position -= (m_camera->m_forward_vector * m_movement_speed);
+			std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_A) == GLFW_PRESS) // Move camera left.
+		{
+			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
+			left_vector = glm::normalize(left_vector);
+			m_camera->m_eye_position += (left_vector * m_movement_speed);
+			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_D) == GLFW_PRESS) // Move camera right.
+		{
+			auto right_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
+			right_vector = glm::normalize(right_vector);
+			m_camera->m_eye_position += (right_vector * m_movement_speed);
+			std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_R) == GLFW_PRESS) // Move camera up.
+		{
+			m_camera->m_eye_position += (m_camera->m_up_vector * m_movement_speed);
+			std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+		}
+
+		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_F) == GLFW_PRESS) // Move camera down.
+		{
+			m_camera->m_eye_position -= (m_camera->m_up_vector * m_movement_speed);
+			std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 	}
 }

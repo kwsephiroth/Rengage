@@ -186,7 +186,7 @@ namespace forest_escape {
 			m_ogl_invoker->invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
 			m_ogl_invoker->invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
 			m_ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
-			m_camera_controller->handle_key_states();
+			m_camera_controller->process_key_input();
 			draw_frame();
 			glfwSwapBuffers(glfw_ptr);
 			glfwPollEvents();
