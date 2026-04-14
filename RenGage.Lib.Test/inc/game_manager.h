@@ -43,10 +43,8 @@ namespace forest_escape {
 		bool init_renderer();
 		bool init_shader_program();
 		bool init_models();
-		//bool init_controller();
 		bool init_uniform_indices();
 		bool program_is_valid();
-		void draw_model(const ModelPtr& model_ptr);
 		void draw_frame();
 
 	public:

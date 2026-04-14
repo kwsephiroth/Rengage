@@ -2,6 +2,44 @@
 
 namespace forest_escape {
 
+	namespace
+	{
+		GLuint planeVAO;
+		GLuint planeVBO;
+		void setup_plane_vbo(unsigned int vao, const GLint position_index)
+		{
+			float planeVertices[18] =
+			{
+				//Triangle #1
+				//x, y, z				   //r, g, b, a
+				  100.0f, -0.02f,  100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
+				 -100.0f, -0.02f,  100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
+				 -100.0f, -0.02f, -100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
+
+				 //Triangle #2
+				  100.0f, -0.02f,  100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
+				 -100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
+				  100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
+			};
+			glGenVertexArrays(1, &planeVAO);
+			glBindVertexArray(planeVAO);
+			glGenBuffers(1, &planeVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+			glVertexAttribPointer(position_index, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
+			glEnableVertexAttribArray(position_index);
+			glBindVertexArray(0);
+		}
+
+		void draw_plane(unsigned int vao)
+		{
+			glBindVertexArray(planeVAO);
+			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			glBindVertexArray(0);
+		}
+	}
+
 	GameManager::GameManager()
 	{
 		init();
@@ -33,7 +71,7 @@ namespace forest_escape {
 		);
 
 		// Setup camera controller as observer to input handlers.
-		m_camera_controller = std::make_unique < rengage::camera::CameraController > (m_renderer->m_camera.get());
+		m_camera_controller = std::make_unique < rengage::camera::CameraController >(m_renderer->m_camera.get());
 		m_keyboard_input_handler->add_observer(m_camera_controller.get());
 		//TODO: Consider using Command pattern instead of Observer since we don't want different entities handling the same key press in different ways.
 		m_keyboard_input_handler->add_observer(this);// To observe escape key for closing the main window.
@@ -41,10 +79,10 @@ namespace forest_escape {
 
 		// Set initial cursor position to middle of screen.
 		glfwSetInputMode(m_window->glfw_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // Hide mouse cursor
-		glfwSetCursorPos(m_window->glfw_window(), m_window->width()/2, m_window->height()/2);
-//		double cursor_x, cursor_y;
-//		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
-//		m_camera_controller->on_notify(rengage::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
+		glfwSetCursorPos(m_window->glfw_window(), m_window->width() / 2, m_window->height() / 2);
+		//		double cursor_x, cursor_y;
+		//		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
+		//		m_camera_controller->on_notify(rengage::EventType::MouseMoved, glm::vec2{ cursor_x, cursor_y });
 
 		LOG_INFO("GameManager initialized!");
 		m_initialized = true;
@@ -141,13 +179,29 @@ namespace forest_escape {
 			.textures_dir = "res/textures"
 			});
 
-		if (!model)
+		if (!model || !model->initialized())
 		{
 			return false;
 		}
 
 		m_models.emplace("pine_tree", std::move(model));
+
+		//model = model_factory.load_model({
+		//	.file_path = "res/models/bat.obj",
+		//	.position_index = position_index,
+		//	.normal_index = normal_index,
+		//	.tex_coord_index = tex_coord_index,
+		//	.vao = VAO,
+		//	.textures_dir = "res/textures"
+		//	});
+
+		//if (!model || !model->initialized())
+		//	return false;
+
 		//m_models.emplace("bat", std::move(model));
+
+		//TEST CODE ONLY // TODO: Remove later
+		setup_plane_vbo(VAO, position_index);
 
 		return true;
 	}
@@ -187,6 +241,17 @@ namespace forest_escape {
 			m_ogl_invoker->invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
 			m_ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			m_camera_controller->process_key_input();
+
+
+			// Draw plane first since it should be behind all other objects in the scene. This is a temporary solution until a more robust rendering system with proper depth sorting is implemented.
+			// Think "Painter's Algorithm" for now. We can implement a more robust solution later that utilizes a depth buffer and proper sorting of transparent objects.
+			auto use_texture_location = m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "use_texture"));
+			auto default_color_location = m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "default_color"));
+			m_ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 0));
+			m_ogl_invoker->invoke(glUniform4f, ARGS(default_color_location, 46.0f / 255.0f, 111.0f / 255.0f, 64.0f / 255.0f, 1.0f));
+			draw_plane(0);
+			m_ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 1));
+
 			draw_frame();
 			glfwSwapBuffers(glfw_ptr);
 			glfwPollEvents();
@@ -196,18 +261,10 @@ namespace forest_escape {
 
 	void GameManager::draw_frame()
 	{
-		for (const auto& [model_name, model_ptr] : m_models)
+		for (const auto& [_, model_ptr] : m_models)
 		{
-			//draw_model(model_ptr);
 			m_renderer->draw_model(model_ptr);
 		}
-	}
-
-	void GameManager::draw_model(const ModelPtr& model_ptr)
-	{
-		//opengl_invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));//Have to explicitly "get" optional value.
-		//opengl_invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, model_ptr->total_vertices()));
-		//std::cout << "Total vertices: " << model_ptr->total_vertices() << "\n";
 	}
 
 	void GameManager::on_window_resize(GLFWwindow* window, int width, int height)//TODO: Consider wrapping this in the Command design pattern.
@@ -221,31 +278,31 @@ namespace forest_escape {
 	}
 
 	void GameManager::on_notify(rengage::EventType event_type, rengage::EventArgs event_args)
-	{	
+	{
 		switch (event_type)
 		{
-			case rengage::EventType::KeyPressed:
+		case rengage::EventType::KeyPressed:
+		{
+			try
 			{
-				try
-				{
-					auto key = std::any_cast<rengage::Key>(event_args);
+				auto key = std::any_cast<rengage::Key>(event_args);
 
-					switch (key)
-					{
-						case GLFW_KEY_ESCAPE:
-						{
-							glfwSetWindowShouldClose(m_window->glfw_window(), true);
-						}
-						break;
-					}
-				}
-				catch (const std::bad_any_cast& e)
+				switch (key)
 				{
-					// Handle the error, e.g., log it or ignore the event
-					LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+				case GLFW_KEY_ESCAPE:
+				{
+					glfwSetWindowShouldClose(m_window->glfw_window(), true);
+				}
+				break;
 				}
 			}
-			break;
+			catch (const std::bad_any_cast& e)
+			{
+				// Handle the error, e.g., log it or ignore the event
+				LOG_ERROR(std::format("Failed to cast event arguments for KeyPressed event: {}", e.what()));
+			}
+		}
+		break;
 		}
 	}
 }
