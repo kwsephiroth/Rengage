@@ -77,7 +77,7 @@ namespace rengage::model {
 	//	//TODO: Unbind VBOS
 	//}
 
-	void Mesh::register_VBO(const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
+	void Mesh::register_VBO(GLuint vao, const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
 		if (m_vertices.empty()) {
 			//Log error and return
@@ -86,7 +86,7 @@ namespace rengage::model {
 		}
 
 		// TODO: Parameterize the VAO generation so that it can be done at Model-level once for all meshes.
-		unsigned int vao = 0;
+		//unsigned int vao = 0;
 		m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 		m_vao = vao;
 		m_ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.

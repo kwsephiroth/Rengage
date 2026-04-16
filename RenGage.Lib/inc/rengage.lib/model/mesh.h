@@ -30,7 +30,7 @@ namespace rengage::model {
 		std::optional<GLuint> m_vbo = std::nullopt;//vertex buffer object(VBO) id
 		std::optional<GLuint> m_ebo = std::nullopt;//element buffer object(EBO) id
 
-		void register_VBO(const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
+		void register_VBO(const GLuint vao, const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
 	public:
 		~Mesh() = default;
 		friend class ModelFactory;

@@ -7,6 +7,7 @@ namespace rengage::model {
 	{
 	}
 
+	// TODO: Should VAO be a required parameter for loading a model? If not provided, should the ModelFactory generate a VAO for the model?
 	std::unique_ptr<Model> ModelFactory::load_model(const ModelParameters& params)
 	{
 		LOG_INFO("Loading model from path '" + params.file_path + "'...");
@@ -34,7 +35,10 @@ namespace rengage::model {
 				model_ptr->setup_VAO(params.vao.value(), params.position_index, params.normal_index, params.tex_coord_index);
 			}
 			else {
-				model_ptr->setup_VAO(0, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
+				// Generate a VAO.
+				GLuint vao = 0;
+				m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
 
 			LOG_INFO("Model successfully loaded from path '" + params.file_path + "'.");

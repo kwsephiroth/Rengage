@@ -31,6 +31,7 @@ namespace forest_escape {
 		std::unique_ptr<Renderer> m_renderer;
 		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 		GLuint m_program_id;
+		GLuint m_vao;
 		ModelMap m_models;
 		bool m_game_loop_started = false;
 		bool m_initialized = false;

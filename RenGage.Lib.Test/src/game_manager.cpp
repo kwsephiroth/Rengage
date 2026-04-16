@@ -21,7 +21,7 @@ namespace forest_escape {
 				 -100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 				  100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 			};
-			glGenVertexArrays(1, &planeVAO);
+			//glGenVertexArrays(1, &planeVAO);
 			glBindVertexArray(planeVAO);
 			glGenBuffers(1, &planeVBO);
 			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
@@ -168,14 +168,17 @@ namespace forest_escape {
 		GLint normal_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
 		GLint tex_coord_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
-		unsigned int VAO = 0;
+		m_vao = 0;
+		m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
+		planeVAO = m_vao;//TODO: Remove this later when plane is properly implemented as a model and not just hardcoded vertices in the GameManager.
+
 		rengage::model::ModelFactory model_factory{ m_ogl_invoker };
 		auto model = model_factory.load_model({
 			.file_path = "res/models/pine_tree.obj",
 			.position_index = position_index,
 			.normal_index = normal_index,
 			.tex_coord_index = tex_coord_index,
-			.vao = VAO,
+			.vao = m_vao,
 			.textures_dir = "res/textures"
 			});
 
@@ -201,7 +204,7 @@ namespace forest_escape {
 		//m_models.emplace("bat", std::move(model));
 
 		//TEST CODE ONLY // TODO: Remove later
-		setup_plane_vbo(VAO, position_index);
+		setup_plane_vbo(m_vao, position_index);
 
 		return true;
 	}

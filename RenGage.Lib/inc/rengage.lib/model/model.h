@@ -42,8 +42,8 @@ namespace rengage::model {
 		std::optional<GLint> m_normal_index = std::nullopt;
 		std::optional<GLint> m_tex_coord_index = std::nullopt;
 
-		void setup_VAO(const GLuint VAO, const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
-		void register_VBOs(const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
+		void setup_VAO(const GLuint vao, const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
+		void register_VBOs(const GLuint vao, const GLint position_index, const GLint normal_index, const GLint tex_coord_index);
 	public:
 		~Model() = default;
 		friend class ModelFactory;
