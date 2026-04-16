@@ -208,7 +208,7 @@ namespace rengage::camera
 		//		handle_key_press(key);
 		//	}
 		//}
-
+		
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS) // Move camera forward.
 		{
 			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);

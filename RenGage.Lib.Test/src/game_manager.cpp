@@ -78,7 +78,7 @@ namespace forest_escape {
 		m_mouse_input_handler->add_observer(m_camera_controller.get());
 
 		// Set initial cursor position to middle of screen.
-		glfwSetInputMode(m_window->glfw_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN); // Hide mouse cursor
+		glfwSetInputMode(m_window->glfw_window(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);// Confine cursor to window and hide it.
 		glfwSetCursorPos(m_window->glfw_window(), m_window->width() / 2, m_window->height() / 2);
 		//		double cursor_x, cursor_y;
 		//		glfwGetCursorPos(m_window->glfw_window(), &cursor_x, &cursor_y);
