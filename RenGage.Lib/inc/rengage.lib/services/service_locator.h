@@ -1,5 +1,6 @@
 #pragma once
 #include "../interfaces/ilogger.h"
+#include "ogl_invoker.h"
 #include "logging/null_logger.h"
 #include <unordered_map>
 #include <variant>
@@ -10,9 +11,9 @@
 namespace rengage::services
 {
 	template<typename T>
-	concept ServiceType = std::same_as<T, logging::ILogger>;
+	concept ServiceType = std::same_as<T, logging::ILogger> || std::same_as<T, OGLInvoker>;
 
-	using ServiceVariant = std::variant<std::unique_ptr<logging::ILogger>>;
+	using ServiceVariant = std::variant<std::unique_ptr<logging::ILogger>, std::unique_ptr<OGLInvoker>>;
 	using TypeHashCode = size_t;
 
 	class ServiceLocator

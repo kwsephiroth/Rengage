@@ -87,24 +87,25 @@ namespace rengage::model {
 
 		// TODO: Parameterize the VAO generation so that it can be done at Model-level once for all meshes.
 		//unsigned int vao = 0;
-		m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 		m_vao = vao;
-		m_ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
+		ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
 
 		//Generate buffer/array ids
 		GLuint vbo, ebo;
-		m_ogl_invoker->invoke(glGenBuffers, ARGS(1, &vbo));
-		m_ogl_invoker->invoke(glGenBuffers, ARGS(1, &ebo));
+		ogl_invoker->invoke(glGenBuffers, ARGS(1, &vbo));
+		ogl_invoker->invoke(glGenBuffers, ARGS(1, &ebo));
 		m_vbo = vbo;
 		m_ebo = ebo;
 
 		//Point VBO at vertex data
-		m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
-		m_ogl_invoker->invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
+		ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
+		ogl_invoker->invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
 
 		//Point EBO at face indices
-		m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_ebo.value()));
-		m_ogl_invoker->invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
+		ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_ebo.value()));
+		ogl_invoker->invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
 
 		size_t vertex_stride = sizeof(Vertex);
 		GLintptr vertex_position_offset = 0 * sizeof(float);
@@ -115,24 +116,24 @@ namespace rengage::model {
 		if (position_index >= 0)//negative one index indicates unused attribute.
 		{
 			//setup position attribute
-			m_ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(position_index));
-			m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));//TODO: Switch to using offsetof(...) function.
+			ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(position_index));
+			ogl_invoker->invoke(glVertexAttribPointer, ARGS(position_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));//TODO: Switch to using offsetof(...) function.
 		}
 
 		if (normal_index >= 0)
 		{
 			//setup normal attribute
-			m_ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(normal_index));
-			m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(normal_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_normal_offset));
+			ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(normal_index));
+			ogl_invoker->invoke(glVertexAttribPointer, ARGS(normal_index, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_normal_offset));
 		}
 
 		if (tex_coord_index >= 0)
 		{
 			//setup uv(texture coordinate) attribute
-			m_ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(tex_coord_index));
-			m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(tex_coord_index, 2, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
+			ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(tex_coord_index));
+			ogl_invoker->invoke(glVertexAttribPointer, ARGS(tex_coord_index, 2, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
 		}
 
-		m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));//Unbind VAO
+		ogl_invoker->invoke(glBindVertexArray, ARGS(0));//Unbind VAO
 	}
 }

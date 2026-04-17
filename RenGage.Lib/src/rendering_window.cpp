@@ -9,14 +9,13 @@ namespace rengage
 		if(pointer) pointer->function_name(window, args...);\
 	}
 
-	RenderingWindow::RenderingWindow(std::shared_ptr<OGLInvoker> ogl_invoker, WindowAttributes attributes, bool full_screen) :
+	RenderingWindow::RenderingWindow(WindowAttributes attributes, bool full_screen) :
 		m_window(nullptr),
 		m_initialized(false),
 		m_attributes(attributes),
 		m_start_fullscreen(full_screen),
 		m_width(attributes.min_width),
-		m_height(attributes.min_height),
-		m_ogl_invoker(std::move(ogl_invoker))
+		m_height(attributes.min_height)
 	{
 		init();
 	}

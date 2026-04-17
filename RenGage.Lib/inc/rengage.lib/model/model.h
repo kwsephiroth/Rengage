@@ -3,7 +3,7 @@
 #include <glm/mat4x4.hpp>
 #include <vector>
 #include "mesh.h"
-#include "../tools/ogl_invoker.h"
+#include "../services/ogl_invoker.h"
 
 namespace rengage::model {
 
@@ -31,7 +31,6 @@ namespace rengage::model {
 		size_t m_total_vertices = 0;
 		size_t m_total_indices = 0;
 		ModelParameters m_params;
-		std::shared_ptr<OGLInvoker> m_ogl_invoker;// Used to invoke Open
 
 		//TODO: Refactor the texture cache member to be a service instead.
 		inline static TextureCache m_texture_cache; // Cache of loaded textures to avoid redundant texture loading.

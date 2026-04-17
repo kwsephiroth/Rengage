@@ -42,9 +42,6 @@
     <ClInclude Include="inc\rengage.lib\camera\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\rengage.lib\tools\ogl_invoker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="inc\rengage.lib\model\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,6 +70,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\rengage.lib\interfaces\iobserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\rengage.lib\services\ogl_invoker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\services\service_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,6 +114,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\camera\camera_controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\service_locator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\services\ogl_invoker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

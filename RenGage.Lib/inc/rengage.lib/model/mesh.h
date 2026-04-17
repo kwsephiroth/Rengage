@@ -5,7 +5,7 @@
 #include <optional>
 #include "vertex.h"
 #include "../services/logging/logger_macros.h"
-#include "../tools/ogl_invoker.h"
+#include "../services/service_locator.h"
 #include "texture.h"
 
 namespace rengage::model {
@@ -14,12 +14,7 @@ namespace rengage::model {
 	class Mesh
 	{
 	private:
-		Mesh(std::shared_ptr<OGLInvoker> ogl_invoker) :
-			m_ogl_invoker(std::move(ogl_invoker))
-		{
-		}
-
-		std::shared_ptr<OGLInvoker> m_ogl_invoker;
+		Mesh() = default;
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
 		std::vector<TexturePtr> m_textures;

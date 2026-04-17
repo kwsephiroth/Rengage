@@ -1,8 +1,7 @@
 #include "../inc/renderer.h"
 
 namespace forest_escape {
-	Renderer::Renderer(std::shared_ptr<rengage::OGLInvoker> ogl_invoker, GLint mv_index, GLint proj_index, float aspect_ratio) :
-		m_ogl_invoker(ogl_invoker),
+	Renderer::Renderer(GLint mv_index, GLint proj_index, float aspect_ratio) :
 		m_mv_index(mv_index),
 		m_proj_index(proj_index),
 		m_aspect_ratio(aspect_ratio)
@@ -36,7 +35,8 @@ namespace forest_escape {
 	void Renderer::update_projection_matrix(const float new_aspect_ratio)
 	{
 		m_proj_matrix = glm::perspective(m_fov_y, new_aspect_ratio, m_near_plane_distance, m_far_plane_distance);
-		m_ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_proj_index, 1, GL_FALSE, glm::value_ptr(m_proj_matrix)));
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_proj_index, 1, GL_FALSE, glm::value_ptr(m_proj_matrix)));
 	}
 
 	void Renderer::draw_frame()
@@ -63,7 +63,8 @@ namespace forest_escape {
 		//auto vMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.1f, -(cameraZ + depthOffset)));
 		//auto view_matrix = glm::translate(glm::mat4(1.0f), -m_camera->position());
 		auto model_view_matrix =  m_camera->view_matrix() * model_ptr->model_matrix();
-		m_ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 		//m_ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
 		//std::cout << "model view matrix = " << glm::to_string(model_view_matrix) << "\n";
 		//std::cout << "perspective matrix = " << glm::to_string(m_proj_matrix) << "\n";
@@ -71,18 +72,18 @@ namespace forest_escape {
 		//Draw each mesh of the model.
 		for (const auto& mesh : model_ptr->meshes())
 		{
-			m_ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value())); //TODO: Check how VAO is being dispersed to Mesh.
+			ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value())); //TODO: Check how VAO is being dispersed to Mesh.
 			//m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, mesh.VBO().value()));
 			//m_ogl_invoker->invoke(glVertexAttribPointer, ARGS(0, 3, GL_FLOAT, false, sizeof(rengage::model::Vertex), (GLvoid*)0));
 			//m_ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
 			if (const auto& textures = mesh.Textures(); !textures.empty())
 			{
-				m_ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
-				m_ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, mesh.Textures()[0]->handle()));
+				ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
+				ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, mesh.Textures()[0]->handle()));
 			}
-			m_ogl_invoker->invoke(glDrawElements, ARGS(GL_TRIANGLES, mesh.indices().size(), GL_UNSIGNED_INT, nullptr));
+			ogl_invoker->invoke(glDrawElements, ARGS(GL_TRIANGLES, mesh.indices().size(), GL_UNSIGNED_INT, nullptr));
 			//m_ogl_invoker->invoke(glDrawArrays, ARGS(GL_TRIANGLES, 0, mesh.total_vertices()));
-			m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+			ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 		}
 		//m_ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 	}

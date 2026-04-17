@@ -1,11 +1,14 @@
 #include "../../inc/rengage.lib/shader/shader_program.h"//TODO: Improve file include structure.
+#include "../../inc/rengage.lib/services/logging/logger_macros.h"
+#include "../../inc/rengage.lib/services/logging/file_logger.h"
+
 
 namespace rengage::shader
 {
-	ShaderProgram::ShaderProgram(std::shared_ptr<OGLInvoker> ogl_invoker) :
-		m_ogl_invoker(std::move(ogl_invoker))
+	ShaderProgram::ShaderProgram()
 	{
-		m_id = m_ogl_invoker->get_invoke(glCreateProgram);
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		m_id = ogl_invoker->get_invoke(glCreateProgram);
 	}
 
 	ShaderProgram::~ShaderProgram()
@@ -16,10 +19,9 @@ namespace rengage::shader
 
 	std::unique_ptr<ShaderProgram> ShaderProgram::create_instance(
 		const std::string& vertex_shader_path,
-		const std::string& frag_shader_path,
-		std::shared_ptr<OGLInvoker> ogl_invoker)
+		const std::string& frag_shader_path)
 	{
-		rengage::shader::ShaderFactory shader_factory{ ogl_invoker };//TODO: Inject dependencies into constructor.
+		rengage::shader::ShaderFactory shader_factory{};
 		auto vertex_shader = shader_factory.load_shader_from_file(GL_VERTEX_SHADER, vertex_shader_path);
 		auto frag_shader = shader_factory.load_shader_from_file(GL_FRAGMENT_SHADER, frag_shader_path);
 		GLenum glError = glGetError();
@@ -29,7 +31,7 @@ namespace rengage::shader
 			return nullptr;
 		}
 
-		std::unique_ptr<ShaderProgram> program(new ShaderProgram{ ogl_invoker });
+		std::unique_ptr<ShaderProgram> program(new ShaderProgram{});
 		program->attach_shader(vertex_shader->m_id);
 		program->attach_shader(frag_shader->m_id);
 		if (!program->link_program())
@@ -44,23 +46,25 @@ namespace rengage::shader
 
 	void ShaderProgram::attach_shader(GLuint shader_id)
 	{
-		m_ogl_invoker->invoke(glAttachShader, ARGS(m_id, shader_id));
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		ogl_invoker->invoke(glAttachShader, ARGS(m_id, shader_id));
 	}
 
 	bool ShaderProgram::link_program()
 	{
-		m_ogl_invoker->invoke(glLinkProgram, ARGS(m_id));
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		ogl_invoker->invoke(glLinkProgram, ARGS(m_id));
 
 		//Log any linking errors.
 		GLint success;
 		const unsigned int MAX_LOG_SIZE = 512;
 		GLchar info_log[MAX_LOG_SIZE];
 
-		m_ogl_invoker->invoke(glGetProgramiv, ARGS(m_id, GL_LINK_STATUS, &success));
+		ogl_invoker->invoke(glGetProgramiv, ARGS(m_id, GL_LINK_STATUS, &success));
 
 		if (success != GL_TRUE) {
 			std::stringstream ss;
-			m_ogl_invoker->invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
+			ogl_invoker->invoke(glGetProgramInfoLog, ARGS(m_id, MAX_LOG_SIZE, nullptr, info_log));
 			ss << "Failed to link shader program. Description below:\n";
 			ss << info_log << "\n";
 			LOG_ERROR(ss.str());
@@ -72,6 +76,7 @@ namespace rengage::shader
 
 	void ShaderProgram::use()
 	{
-		m_ogl_invoker->invoke(glUseProgram, ARGS(m_id));
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		ogl_invoker->invoke(glUseProgram, ARGS(m_id));
 	}
 }

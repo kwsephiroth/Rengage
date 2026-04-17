@@ -4,32 +4,17 @@
 #include <string>
 #include <tuple>
 #include "../interfaces/ilogger.h"
-#include "../services/service_locator.h"
+//#include "../services/service_locator.h"
 
-namespace rengage
+namespace rengage::services
 {
 #define ARGS(...) std::make_tuple(__VA_ARGS__)
 
-	namespace {
-		void check_for_opengl_error(std::source_location& location)
-		{
-			unsigned int errorCount = 0;
-			for (GLenum glError = glGetError(); glError != GL_NO_ERROR;) {
-				errorCount++;
-				std::string msg = "glErrorCode(" + std::to_string(glError) + ")";
+	//namespace {
+		//void check_for_opengl_error(std::source_location& location);
+	//}
 
-				auto logger_service_ptr = services::ServiceLocator::get_service<services::logging::ILogger>();
-				logger_service_ptr->log(services::logging::LogSeverity::ERROR, msg, location);
-
-				glError = glGetError();
-			}
-
-			if (errorCount > 0) {
-				std::cout << "Program closed due to OpenGL error(s). Please check log for error code(s).\n";
-				exit(0);
-			}
-		}
-	}
+	extern void check_for_opengl_error(std::source_location& location);
 
 	class OGLInvoker
 	{

@@ -32,19 +32,22 @@
     <ClInclude Include="inc\rengage.lib\services\logging\file_logger.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\logger_macros.h" />
     <ClInclude Include="inc\rengage.lib\services\logging\null_logger.h" />
+    <ClInclude Include="inc\rengage.lib\services\ogl_invoker.h" />
     <ClInclude Include="inc\rengage.lib\services\service_locator.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_factory.h" />
     <ClInclude Include="inc\rengage.lib\model\vertex.h" />
     <ClInclude Include="inc\rengage.lib\shader\shader_program.h" />
-    <ClInclude Include="inc\rengage.lib\tools\ogl_invoker.h" />
     <ClInclude Include="inc\rengage.lib\model\texture.h" />
+    <ClInclude Include="src\services\service_types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\camera\camera_controller.cpp" />
     <ClCompile Include="src\services\logging\console_logger.cpp" />
     <ClCompile Include="src\services\logging\file_logger.cpp" />
+    <ClCompile Include="src\services\ogl_invoker.cpp" />
+    <ClCompile Include="src\services\service_locator.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
     <ClCompile Include="src\model\model.cpp" />

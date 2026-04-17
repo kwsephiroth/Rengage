@@ -2,12 +2,6 @@
 
 namespace rengage::model {
 
-	ModelFactory::ModelFactory(std::shared_ptr<OGLInvoker> ogl_invoker ) :
-		m_ogl_invoker(std::move(ogl_invoker))
-	{
-	}
-
-	// TODO: Should VAO be a required parameter for loading a model? If not provided, should the ModelFactory generate a VAO for the model?
 	std::unique_ptr<Model> ModelFactory::load_model(const ModelParameters& params)
 	{
 		LOG_INFO("Loading model from path '" + params.file_path + "'...");
@@ -37,7 +31,8 @@ namespace rengage::model {
 			else {
 				// Generate a VAO.
 				GLuint vao = 0;
-				m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+				auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+				ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
 
@@ -105,7 +100,7 @@ namespace rengage::model {
 			auto existingTextureItr = model.m_texture_cache.find(full_texture_path.string());
 			if (existingTextureItr == model.m_texture_cache.end()) // Texture with same filepath not found
 			{
-				TexturePtr texture(new Texture{ full_texture_path, m_ogl_invoker });
+				TexturePtr texture(new Texture{ full_texture_path });
 				if (!texture->valid()) {
 					LOG_ERROR("Failed to initialize texture located at path '" + full_texture_path.string() + "'.");
 					return false;
@@ -158,7 +153,7 @@ namespace rengage::model {
 
 	Mesh ModelFactory::generate_rengage_mesh(const aiMesh& ai_mesh)
 	{
-		Mesh rengage_mesh{ m_ogl_invoker };
+		Mesh rengage_mesh{};
 		auto vertices = ai_mesh.mVertices;
 		auto num_vertices = ai_mesh.mNumVertices;
 

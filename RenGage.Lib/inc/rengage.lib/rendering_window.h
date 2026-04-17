@@ -4,7 +4,7 @@
 #include <glm/vec4.hpp>
 #include "services/logging/logger_macros.h"
 #include "interfaces/ilogger.h"
-#include "tools/ogl_invoker.h"
+#include "services/service_locator.h"
 #include <functional>
 
 namespace rengage
@@ -55,7 +55,7 @@ namespace rengage
 	class RenderingWindow//TODO: Maybe this class should be decoupled from the core library and be defined in the game itself?
 	{
 	public:
-		RenderingWindow(std::shared_ptr<OGLInvoker> ogl_invoker, WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
+		RenderingWindow(WindowAttributes attributes = DEFAULT_WINDOW_ATTRIBS, bool full_screen = false);
 		~RenderingWindow();
 		GLFWwindow* operator()() { return m_window; }//TODO: Switch to QT instead of GLFW for window management?
 		inline bool initialized() const { return m_initialized; }
@@ -120,7 +120,6 @@ namespace rengage
 		unsigned int m_width;
 		unsigned int m_height;
 		float m_aspect_ratio;
-		std::shared_ptr<OGLInvoker> m_ogl_invoker;
 		std::unique_ptr<EventHandler> m_event_handler;
 	};
 

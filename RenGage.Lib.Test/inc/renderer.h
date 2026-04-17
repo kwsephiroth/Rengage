@@ -28,7 +28,6 @@ namespace forest_escape {
 		GLint m_proj_index;
 		glm::mat4 m_proj_matrix;
 		std::unique_ptr<rengage::camera::Camera> m_camera;
-		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 
 		bool init();
 		void update_view_matrix(const glm::vec4& new_position);
@@ -36,7 +35,7 @@ namespace forest_escape {
 		void draw_frame();
 
 	public:
-		Renderer(std::shared_ptr<rengage::OGLInvoker> ogl_invoker, GLint mv_index, GLint proj_index, float aspect_ratio);
+		Renderer(GLint mv_index, GLint proj_index, float aspect_ratio);
 		~Renderer();
 		void draw_model(const ModelPtr& model_ptr);
 		void set_aspect_ratio(float aspect_ratio);

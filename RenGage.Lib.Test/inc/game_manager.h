@@ -6,7 +6,6 @@
 #include <rengage.lib/services/logging/logger_macros.h>
 #include <rengage.lib/services/logging/file_logger.h>
 #include <rengage.lib/services/logging/console_logger.h>
-//#include <rengage.lib/tools/opengl_invoke.h>
 #include <rengage.lib/rendering_window.h>
 #include <rengage.lib/shader/shader_program.h>
 #include <rengage.lib/model/model.h>
@@ -29,7 +28,6 @@ namespace forest_escape {
 		std::unique_ptr<rengage::RenderingWindow> m_window;
 		std::unique_ptr<rengage::shader::ShaderProgram> m_program;
 		std::unique_ptr<Renderer> m_renderer;
-		std::shared_ptr<rengage::OGLInvoker> m_ogl_invoker;
 		GLuint m_program_id;
 		GLuint m_vao;
 		ModelMap m_models;

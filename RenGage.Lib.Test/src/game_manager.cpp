@@ -11,7 +11,7 @@ namespace forest_escape {
 			float planeVertices[18] =
 			{
 				//Triangle #1
-				//x, y, z				   //r, g, b, a
+				//x, y, z				   `	 //r, g, b, a
 				  100.0f, -0.02f,  100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
 				 -100.0f, -0.02f,  100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
 				 -100.0f, -0.02f, -100.0f,       //0.0f, 1.0f, 0.0f, 1.0f,
@@ -62,11 +62,10 @@ namespace forest_escape {
 		}
 
 		m_program->use();//Installs the program object as part of the current rendering state.
-		m_ogl_invoker = std::make_shared<rengage::OGLInvoker>();
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
 		m_renderer = std::make_unique<Renderer>(
-			m_ogl_invoker,
-			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
-			m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
+			ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
+			ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
 			m_window->aspect_ratio()
 		);
 
@@ -93,10 +92,10 @@ namespace forest_escape {
 		rengage::WindowAttributes window_attribs = { .name = "Forest Escape",
 													.min_width = rengage::RES_1440P.horizontal,
 													.min_height = rengage::RES_1440P.vertical,
-													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f},
+													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f}, //TODO: Add color helper function somewhere.
 													.swap_interval = 1 };//designated initializer since C++20
 
-		m_window = std::make_unique<rengage::RenderingWindow>(m_ogl_invoker, std::move(window_attribs), true);
+		m_window = std::make_unique<rengage::RenderingWindow>(std::move(window_attribs), true);
 
 		if (!m_window->initialized()) {
 			LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).");
@@ -150,8 +149,7 @@ namespace forest_escape {
 	bool GameManager::init_shader_program()
 	{
 		m_program = rengage::shader::ShaderProgram::create_instance("res/shaders/vertex_shader.glsl",
-			"res/shaders/fragment_shader.glsl",
-			m_ogl_invoker);
+			"res/shaders/fragment_shader.glsl");
 		if (m_program == nullptr || !m_program->is_valid())
 		{
 			LOG_ERROR("Failed to create shader program. Check logs for error(s).");
@@ -164,15 +162,16 @@ namespace forest_escape {
 
 	bool GameManager::init_models()
 	{
-		GLint position_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "position"));
-		GLint normal_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
-		GLint tex_coord_index = m_ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		GLint position_index = ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "position"));
+		GLint normal_index = ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
+		GLint tex_coord_index = ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
 		m_vao = 0;
-		m_ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
+		ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
 		planeVAO = m_vao;//TODO: Remove this later when plane is properly implemented as a model and not just hardcoded vertices in the GameManager.
 
-		rengage::model::ModelFactory model_factory{ m_ogl_invoker };
+		rengage::model::ModelFactory model_factory{};
 		auto model = model_factory.load_model({
 			.file_path = "res/models/pine_tree.obj",
 			.position_index = position_index,
@@ -229,31 +228,32 @@ namespace forest_escape {
 		m_game_loop_started = true;
 		auto glfw_ptr = m_window->glfw_window();
 		auto window_color = m_window->color();
-		m_ogl_invoker->invoke(glEnable, ARGS(GL_DEPTH_TEST));
-		m_ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
-		m_ogl_invoker->invoke(glEnable, ARGS(GL_BLEND));
-		m_ogl_invoker->invoke(glBlendFunc, ARGS(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-		//m_ogl_invoker->invoke(glEnable, ARGS(GL_ALPHA_TEST));
-		//m_ogl_invoker->invoke(glAlphaFunc, ARGS(GL_GREATER, 0.1f));
-		//m_ogl_invoker->invoke(glEnable, ARGS(GL_CULL_FACE));
-		//m_ogl_invoker->invoke(glCullFace, ARGS(GL_FRONT));
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		ogl_invoker->invoke(glEnable, ARGS(GL_DEPTH_TEST));
+		ogl_invoker->invoke(glDepthFunc, ARGS(GL_LESS));
+		ogl_invoker->invoke(glEnable, ARGS(GL_BLEND));
+		ogl_invoker->invoke(glBlendFunc, ARGS(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		//ogl_invoker->invoke(glEnable, ARGS(GL_ALPHA_TEST));
+		//ogl_invoker->invoke(glAlphaFunc, ARGS(GL_GREATER, 0.1f));
+		//ogl_invoker->invoke(glEnable, ARGS(GL_CULL_FACE));
+		//ogl_invoker->invoke(glCullFace, ARGS(GL_FRONT));
 
 		while (!glfwWindowShouldClose(glfw_ptr))
 		{
-			m_ogl_invoker->invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
-			m_ogl_invoker->invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
-			m_ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
+			ogl_invoker->invoke(glClearColor, ARGS(window_color.r, window_color.g, window_color.b, window_color.a));
+			ogl_invoker->invoke(glClear, ARGS(GL_DEPTH_BUFFER_BIT));
+			ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			m_camera_controller->process_key_input();
 
 
 			// Draw plane first since it should be behind all other objects in the scene. This is a temporary solution until a more robust rendering system with proper depth sorting is implemented.
 			// Think "Painter's Algorithm" for now. We can implement a more robust solution later that utilizes a depth buffer and proper sorting of transparent objects.
-			auto use_texture_location = m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "use_texture"));
-			auto default_color_location = m_ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "default_color"));
-			m_ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 0));
-			m_ogl_invoker->invoke(glUniform4f, ARGS(default_color_location, 46.0f / 255.0f, 111.0f / 255.0f, 64.0f / 255.0f, 1.0f));
+			auto use_texture_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "use_texture"));
+			auto default_color_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "default_color"));
+			ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 0));
+			ogl_invoker->invoke(glUniform4f, ARGS(default_color_location, 46.0f / 255.0f, 111.0f / 255.0f, 64.0f / 255.0f, 1.0f));
 			draw_plane(0);
-			m_ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 1));
+			ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 1));
 
 			draw_frame();
 			glfwSwapBuffers(glfw_ptr);
@@ -276,7 +276,8 @@ namespace forest_escape {
 		std::cout << "on_window_resize invoked!\n";
 		m_window->resize(width, height);
 		//TODO: Refactor how projection matrix is updated.
-		m_ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));
+		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		ogl_invoker->invoke(glViewport, ARGS(0, 0, width, height));
 		m_renderer->set_aspect_ratio(m_window->aspect_ratio());
 	}
 

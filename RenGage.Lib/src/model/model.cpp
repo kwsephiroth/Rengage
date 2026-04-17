@@ -23,7 +23,8 @@ namespace rengage::model {
 	
 	void Model::register_VBOs(const GLuint vao, const GLint position_index, const GLint normal_index, const GLint tex_coord_index)
 	{
-		m_ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
+		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
 		for (auto& mesh : m_meshes)
 		{
 			mesh.register_VBO(vao, position_index, normal_index, tex_coord_index);
