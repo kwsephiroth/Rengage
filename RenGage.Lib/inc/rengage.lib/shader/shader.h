@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <string>
+#include "../services/ogl_invoker.h"
 #include "../services/service_locator.h"
 
 namespace rengage::shader

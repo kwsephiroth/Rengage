@@ -4,6 +4,7 @@
 #include <string>
 #include <tuple>
 #include "../interfaces/ilogger.h"
+#include "../interfaces/iservice.h"
 //#include "../services/service_locator.h"
 
 namespace rengage::services
@@ -16,7 +17,7 @@ namespace rengage::services
 
 	extern void check_for_opengl_error(std::source_location& location);
 
-	class OGLInvoker
+	class OGLInvoker final : public IService
 	{
 	public:
 		OGLInvoker() = default;

@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <source_location>
 #include <memory>
+#include "iservice.h"
 
 namespace rengage::services::logging
 {
@@ -86,7 +87,7 @@ namespace rengage::services::logging
 		return ss.str();
 	}
 
-	class ILogger
+	class ILogger : public IService
 	{
 	public:
 		virtual ~ILogger() = default;

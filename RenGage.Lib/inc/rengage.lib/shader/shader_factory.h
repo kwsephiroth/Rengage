@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "../services/logging/logger_macros.h"
 
 namespace rengage::shader
 {

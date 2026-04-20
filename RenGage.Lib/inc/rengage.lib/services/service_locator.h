@@ -1,19 +1,16 @@
 #pragma once
-#include "../interfaces/ilogger.h"
-#include "ogl_invoker.h"
-#include "logging/null_logger.h"
 #include <unordered_map>
 #include <variant>
 #include <format>
 #include <iostream>
 #include <assert.h>
+#include "../interfaces/iservice.h"
 
 namespace rengage::services
 {
 	template<typename T>
-	concept ServiceType = std::same_as<T, logging::ILogger> || std::same_as<T, OGLInvoker>;
+	concept ServiceType = std::derived_from<T, IService>;
 
-	using ServiceVariant = std::variant<std::unique_ptr<logging::ILogger>, std::unique_ptr<OGLInvoker>>;
 	using TypeHashCode = size_t;
 
 	class ServiceLocator
@@ -48,14 +45,15 @@ namespace rengage::services
 				assert(true);
 			}
 			
-			auto service_ptr = std::get<std::unique_ptr<T>>(it->second).get();
+			auto service_ptr = dynamic_cast<T*>(it->second.get());
 			assert(service_ptr != nullptr);
+
 
 			// Return reference to service instance.
 			return service_ptr;
 		}
 
 	private:
-		static inline std::unordered_map<TypeHashCode, ServiceVariant> m_services_map;
+		static inline std::unordered_map<TypeHashCode, std::unique_ptr<IService>> m_services_map;
 	};
 }

@@ -24,6 +24,7 @@
     <ClInclude Include="inc\rengage.lib\interfaces\ilogger.h" />
     <ClInclude Include="inc\rengage.lib\interfaces\iobservable.h" />
     <ClInclude Include="inc\rengage.lib\interfaces\iobserver.h" />
+    <ClInclude Include="inc\rengage.lib\interfaces\iservice.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
     <ClInclude Include="inc\rengage.lib\model\model.h" />
     <ClInclude Include="inc\rengage.lib\model\model_factory.h" />
@@ -47,7 +48,6 @@
     <ClCompile Include="src\services\logging\console_logger.cpp" />
     <ClCompile Include="src\services\logging\file_logger.cpp" />
     <ClCompile Include="src\services\ogl_invoker.cpp" />
-    <ClCompile Include="src\services\service_locator.cpp" />
     <ClCompile Include="src\shader\shader_program.cpp" />
     <ClCompile Include="src\model\mesh.cpp" />
     <ClCompile Include="src\model\model.cpp" />

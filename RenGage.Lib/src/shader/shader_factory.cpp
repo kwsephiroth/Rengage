@@ -1,5 +1,5 @@
 #include "../../inc/rengage.lib/shader/shader_factory.h"//TODO: Improve file include structure.
-#include "../../inc/rengage.lib/services/logging/logger_macros.h"
+#include "../../inc/rengage.lib/services/ogl_invoker.h"
 
 namespace rengage::shader
 {

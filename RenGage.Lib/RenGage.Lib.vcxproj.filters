@@ -78,6 +78,9 @@
     <ClInclude Include="src\services\service_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="inc\rengage.lib\interfaces\iservice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_window.cpp">
@@ -114,9 +117,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\camera\camera_controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\services\service_locator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\services\ogl_invoker.cpp">

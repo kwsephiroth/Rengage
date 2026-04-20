@@ -21,7 +21,7 @@ namespace rengage::camera
 
 	public:
 		//Camera();
-		Camera(glm::vec3 init_position = { 0.0f, 1.0f, 1.0f });
+		Camera(glm::vec3 init_position = { 0.0f, 3.0f, 1.0f });
 		~Camera() = default;
 
 		inline glm::vec3 position() const { return m_eye_position; }
@@ -37,7 +37,7 @@ namespace rengage::camera
 			//view_matrix[1][0] = V.x;  view_matrix[1][1] = V.y;  view_matrix[1][2] = V.z;  view_matrix[1][3] = -m_position.y;
 			//view_matrix[2][0] = N.x;  view_matrix[2][1] = N.y;  view_matrix[2][2] = N.z;  view_matrix[2][3] = -m_position.z;
 			//view_matrix[3][0] = 0.0f; view_matrix[3][1] = 0.0f; view_matrix[3][2] = 0.0f; view_matrix[3][3] = 1.0f;
-			m_eye_position.y = 1.0f;//TODO: Remove this hack to keep camera at constant height for now since we don't have any terrain implemented yet.
+			m_eye_position.y = 3.0f;//TODO: Remove this hack to keep camera at constant height for now since we don't have any terrain implemented yet.
 			auto view_matrix = glm::lookAt(m_eye_position, m_eye_position + m_forward_vector, m_up_vector);
 			//static bool printed;
 			//if (!printed)

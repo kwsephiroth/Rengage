@@ -1,4 +1,5 @@
 #include "../../inc/rengage.lib/model/mesh.h"
+#include "../../inc/rengage.lib/services/ogl_invoker.h"
 
 namespace rengage::model {
 	std::ostream& operator<<(std::ostream& os, const Mesh& mesh)

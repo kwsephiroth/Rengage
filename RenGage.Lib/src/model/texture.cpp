@@ -1,4 +1,5 @@
 #include "../../inc/rengage.lib/model/texture.h"
+#include "../../inc/rengage.lib/services/ogl_invoker.h"
 
 namespace rengage::model {
 	Texture::Texture(const std::filesystem::path& filename) :
