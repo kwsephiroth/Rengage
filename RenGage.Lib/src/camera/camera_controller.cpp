@@ -23,7 +23,7 @@ namespace rengage::camera
 		//{
 		//	try
 		//	{
-		//		//std::cout << "Translating camera based on key press event." << std::endl;
+		//		////std::cout << "Translating camera based on key press event." << std::endl;
 		//		auto key = std::any_cast<Key>(event_args);
 		//		store_key_state(key, event_type);
 		//		//handle_key_press(key);
@@ -40,7 +40,7 @@ namespace rengage::camera
 		{
 			try
 			{
-				//std::cout << "Rotating camera based on mouse movement event." << std::endl;
+				////std::cout << "Rotating camera based on mouse movement event." << std::endl;
 				auto coords = std::any_cast<Coordinate2D>(event_args);
 				handle_mouse_movement(coords);
 			}
@@ -66,52 +66,52 @@ namespace rengage::camera
 		{
 		case GLFW_KEY_W: // Move forward
 		{
-			//std::cout << "W key pressed." << std::endl;
+			////std::cout << "W key pressed." << std::endl;
 			// Move foward along view direction.
 			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);
-			std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_S: // Move backward
 		{
-			//std::cout << "S key pressed." << std::endl;
+			////std::cout << "S key pressed." << std::endl;
 			m_camera->m_eye_position -= (m_camera->m_forward_vector * m_movement_speed);
-			std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_A: // Move left
 		{
-			//std::cout << "A key pressed." << std::endl;
+			////std::cout << "A key pressed." << std::endl;
 			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
 			left_vector = glm::normalize(left_vector);
 			m_camera->m_eye_position += (left_vector * m_movement_speed);
-			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_D: // Move right
 		{
-			//std::cout << "D key pressed." << std::endl;
+			////std::cout << "D key pressed." << std::endl;
 			auto right_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
 			right_vector = glm::normalize(right_vector);
 			m_camera->m_eye_position += (right_vector * m_movement_speed);
-			std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_R: // Raise the camera up
 		{
 			m_camera->m_eye_position += (m_camera->m_up_vector * m_movement_speed);
-			std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 
 		case GLFW_KEY_F: // Lower the camera down
 		{
 			m_camera->m_eye_position -= (m_camera->m_up_vector * m_movement_speed);
-			std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 		break;
 		}
@@ -212,13 +212,13 @@ namespace rengage::camera
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS) // Move camera forward.
 		{
 			m_camera->m_eye_position += (m_camera->m_forward_vector * m_movement_speed);
-			std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving forward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_S) == GLFW_PRESS) // Move camera backward.
 		{
 			m_camera->m_eye_position -= (m_camera->m_forward_vector * m_movement_speed);
-			std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving backward: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_A) == GLFW_PRESS) // Move camera left.
@@ -226,7 +226,7 @@ namespace rengage::camera
 			auto left_vector = glm::cross(m_camera->m_up_vector, m_camera->m_forward_vector);
 			left_vector = glm::normalize(left_vector);
 			m_camera->m_eye_position += (left_vector * m_movement_speed);
-			std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving left: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_D) == GLFW_PRESS) // Move camera right.
@@ -234,19 +234,19 @@ namespace rengage::camera
 			auto right_vector = glm::cross(m_camera->m_forward_vector, m_camera->m_up_vector);
 			right_vector = glm::normalize(right_vector);
 			m_camera->m_eye_position += (right_vector * m_movement_speed);
-			std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving right: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_R) == GLFW_PRESS) // Move camera up.
 		{
 			m_camera->m_eye_position += (m_camera->m_up_vector * m_movement_speed);
-			std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving up: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 
 		if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_F) == GLFW_PRESS) // Move camera down.
 		{
 			m_camera->m_eye_position -= (m_camera->m_up_vector * m_movement_speed);
-			std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
+			//std::cout << "Camera position after moving down: " << glm::to_string(m_camera->m_eye_position) << std::endl;
 		}
 	}
 }

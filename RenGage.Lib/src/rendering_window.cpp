@@ -47,8 +47,8 @@ namespace rengage
 		}
 
 		//Set OpenGL version
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GL_VERSION_MAJOR);
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GL_VERSION_MINOR);
 
 		//Attempt to create the window
 		GLFWmonitor* main_monitor = nullptr;

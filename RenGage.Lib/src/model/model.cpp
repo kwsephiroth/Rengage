@@ -29,5 +29,6 @@ namespace rengage::model {
 		{
 			mesh.register_VBO(vao, position_index, normal_index, tex_coord_index);
 		}
+		ogl_invoker->invoke(glBindVertexArray, ARGS(0));//Unbind VAO
 	}
 }

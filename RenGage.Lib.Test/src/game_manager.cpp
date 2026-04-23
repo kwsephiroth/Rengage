@@ -6,7 +6,7 @@ namespace forest_escape {
 	{
 		GLuint planeVAO;
 		GLuint planeVBO;
-		void setup_plane_vbo(unsigned int vao, const GLint position_index)
+		void setup_plane_vbo(const GLint position_index)
 		{
 			float planeVertices[18] =
 			{
@@ -21,7 +21,7 @@ namespace forest_escape {
 				 -100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 				  100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 			};
-			//glGenVertexArrays(1, &planeVAO);
+			glGenVertexArrays(1, &planeVAO);
 			glBindVertexArray(planeVAO);
 			glGenBuffers(1, &planeVBO);
 			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
@@ -31,7 +31,7 @@ namespace forest_escape {
 			glBindVertexArray(0);
 		}
 
-		void draw_plane(unsigned int vao)
+		void draw_plane()
 		{
 			glBindVertexArray(planeVAO);
 			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
@@ -95,7 +95,7 @@ namespace forest_escape {
 													.color = {135.0f / 255.0f, 206.0f / 255.0f, 235.0f / 244.0f, 1.0f}, //TODO: Add color helper function somewhere.
 													.swap_interval = 1 };//designated initializer since C++20
 
-		m_window = std::make_unique<rengage::RenderingWindow>(std::move(window_attribs), true);
+		m_window = std::make_unique<rengage::RenderingWindow>(std::move(window_attribs), false);
 
 		if (!m_window->initialized()) {
 			LOG_ERROR("Rendering window was not properly initialized. Check logs for error(s).");
@@ -167,9 +167,9 @@ namespace forest_escape {
 		GLint normal_index = ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "normal"));
 		GLint tex_coord_index = ogl_invoker->get_invoke(glGetAttribLocation, ARGS(m_program->id(), "tex_coord"));
 
-		m_vao = 0;
-		ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
-		planeVAO = m_vao;//TODO: Remove this later when plane is properly implemented as a model and not just hardcoded vertices in the GameManager.
+		//m_vao = 0;
+		//ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
+		//planeVAO = m_vao;//TODO: Remove this later when plane is properly implemented as a model and not just hardcoded vertices in the GameManager.
 
 		rengage::model::ModelFactory model_factory{};
 		auto model = model_factory.load_model({
@@ -177,7 +177,6 @@ namespace forest_escape {
 			.position_index = position_index,
 			.normal_index = normal_index,
 			.tex_coord_index = tex_coord_index,
-			.vao = m_vao,
 			.textures_dir = "res/textures"
 			});
 
@@ -203,7 +202,7 @@ namespace forest_escape {
 		//m_models.emplace("bat", std::move(model));
 
 		//TEST CODE ONLY // TODO: Remove later
-		setup_plane_vbo(m_vao, position_index);
+		setup_plane_vbo(position_index);
 
 		return true;
 	}
@@ -245,14 +244,13 @@ namespace forest_escape {
 			ogl_invoker->invoke(glClear, ARGS(GL_COLOR_BUFFER_BIT));
 			m_camera_controller->process_key_input();
 
-
 			// Draw plane first since it should be behind all other objects in the scene. This is a temporary solution until a more robust rendering system with proper depth sorting is implemented.
 			// Think "Painter's Algorithm" for now. We can implement a more robust solution later that utilizes a depth buffer and proper sorting of transparent objects.
 			auto use_texture_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "use_texture"));
 			auto default_color_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "default_color"));
 			ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 0));
 			ogl_invoker->invoke(glUniform4f, ARGS(default_color_location, 46.0f / 255.0f, 111.0f / 255.0f, 64.0f / 255.0f, 1.0f));
-			draw_plane(0);
+			draw_plane();
 			ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 1));
 
 			draw_frame();

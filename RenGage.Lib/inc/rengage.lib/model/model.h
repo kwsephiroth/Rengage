@@ -52,6 +52,9 @@ namespace rengage::model {
 		size_t total_vertices() const { return m_total_vertices; }
 		size_t total_indices() const { return m_total_indices; }
 		size_t  total_meshes() const { return m_meshes.size(); }
+		std::optional<GLuint> position_index () const { return m_position_index; }
+		std::optional<GLuint> normal_index() const { return m_normal_index; }
+		std::optional<GLuint> tex_coord_index() const { return m_tex_coord_index; }
 		const std::vector<Mesh>& meshes() const { return m_meshes; }
 		const ModelParameters& parameters() const { return m_params; }
 	};

@@ -13,7 +13,7 @@ namespace rengage::shader
 
 	ShaderProgram::~ShaderProgram()
 	{
-		std::cout << "~ShaderProgram() invoked!\n";
+		//std::cout << "~ShaderProgram() invoked!\n";
 		//opengl_invoke(glDeleteProgram, ARGS(m_id));
 	}
 

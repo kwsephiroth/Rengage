@@ -1,4 +1,5 @@
 #include "../../inc/rengage.lib/model/model_factory.h"
+#include <algorithm>
 
 namespace rengage::model {
 
@@ -35,7 +36,11 @@ namespace rengage::model {
 				ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
-
+			// TODO: Sort meshes by depth. Temporary logic. Use ordered map to store meshes instead or sorting a vector.
+			std::sort(model_ptr->m_meshes.begin(), model_ptr->m_meshes.end(), [](const Mesh& mesh1, const Mesh& mesh2)
+				{
+					return mesh1.m_depth < mesh2.m_depth;
+				});
 			LOG_INFO("Model successfully loaded from path '" + params.file_path + "'.");
 		}
 		else {
@@ -156,6 +161,7 @@ namespace rengage::model {
 		Mesh rengage_mesh{};
 		auto vertices = ai_mesh.mVertices;
 		auto num_vertices = ai_mesh.mNumVertices;
+		double max_depth = 0;
 
 		//Extract positions, normals, and texture coordinates from aiScene mesh objects
 		//then use that info to create RenGage mesh objects
@@ -166,6 +172,8 @@ namespace rengage::model {
 
 			if (ai_mesh.HasPositions()) {
 				rengage_vertex.m_position = { current_vertex.x, current_vertex.y, current_vertex.z };
+				if (current_vertex.z < max_depth)
+					max_depth = current_vertex.z;
 			}
 			else {
 				continue;
@@ -196,6 +204,8 @@ namespace rengage::model {
 				rengage_mesh.m_indices.push_back(current_face.mIndices[vert_index]);
 			}
 		}
+
+		rengage_mesh.m_depth = max_depth;
 		rengage_mesh.m_initialized = true;
 		return rengage_mesh;
 	}

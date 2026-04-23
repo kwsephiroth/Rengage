@@ -88,10 +88,10 @@ namespace rengage::model {
 
 		// TODO: Parameterize the VAO generation so that it can be done at Model-level once for all meshes.
 		//unsigned int vao = 0;
-		auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
-		ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+		static auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+		//ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 		m_vao = vao;
-		ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
+		//ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
 
 		//Generate buffer/array ids
 		GLuint vbo, ebo;
@@ -135,6 +135,52 @@ namespace rengage::model {
 			ogl_invoker->invoke(glVertexAttribPointer, ARGS(tex_coord_index, 2, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
 		}
 
-		ogl_invoker->invoke(glBindVertexArray, ARGS(0));//Unbind VAO
+		//ogl_invoker->invoke(glBindVertexArray, ARGS(0));//Unbind VAO
+	}
+
+	void Mesh::bind () const
+	{
+		static size_t vertex_stride = sizeof(Vertex);
+		static GLintptr vertex_position_offset = 0 * sizeof(float);
+		static GLintptr vertex_normal_offset = 3 * sizeof(float);
+		static GLintptr vertex_texcoord_offset = 6 * sizeof(float);
+		static auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+
+		//Point VBO at vertex data
+		ogl_invoker->invoke(glBindBuffer, ARGS(GL_ARRAY_BUFFER, m_vbo.value()));
+		//ogl_invoker->invoke(glBufferData, ARGS(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW));
+
+		//Point EBO at face indices
+		ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_ebo.value()));
+		//ogl_invoker->invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
+
+
+		if (const auto& textures = Textures(); !textures.empty())//TODO: Figure out why there can be more than one texture per mesh.
+		{
+			//ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
+			ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, Textures()[0]->handle()));
+		}
+
+		// TODO: Does this binding logic need to be done per draw call or just once after VBO/EBO setup?
+		//if (position_index >= 0)//negative one index indicates unused attribute.
+		//{
+			//setup position attribute
+			ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(0));
+			ogl_invoker->invoke(glVertexAttribPointer, ARGS(0, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_position_offset));//TODO: Switch to using offsetof(...) function.
+		//}
+
+		//if (normal_index >= 0)
+		//{
+			//setup normal attribute
+			//ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(1));
+			//ogl_invoker->invoke(glVertexAttribPointer, ARGS(1, 3, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_normal_offset));
+		//}
+
+		//if (tex_coord_index >= 0)
+		//{
+			//setup uv(texture coordinate) attribute
+			ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(2));
+			ogl_invoker->invoke(glVertexAttribPointer, ARGS(2, 2, GL_FLOAT, false, vertex_stride, (GLvoid*)vertex_texcoord_offset));
+		//}
 	}
 }
