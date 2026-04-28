@@ -59,7 +59,7 @@ namespace forest_escape {
 		ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 
 		//Draw each mesh of the model.
-		ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
+		//ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
 		for (const auto& mesh : model_ptr->meshes())
 		{	
 			ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value()));
@@ -74,8 +74,8 @@ namespace forest_escape {
 			//ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
 			//mesh.bind();
 			ogl_invoker->invoke(glDrawElements, ARGS(GL_TRIANGLES, mesh.indices().size(), GL_UNSIGNED_INT, nullptr));
-			//ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+			ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 		}
-		ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+		//ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 	}
 }
