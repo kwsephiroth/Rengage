@@ -62,7 +62,7 @@ namespace forest_escape {
 		ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
 		for (const auto& mesh : model_ptr->meshes())
 		{	
-			//ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value()));
+			ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value()));
 			//if (const auto& textures = mesh.Textures(); !textures.empty())//TODO: Figure out why there can be more than one texture per mesh.
 			//{
 			//	//ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
@@ -72,7 +72,7 @@ namespace forest_escape {
 			//ogl_invoker->invoke(glEnableVertexAttribArray, ARGS(model_ptr->position_index().value()));
 			//ogl_invoker->invoke(glVertexAttribPointer, ARGS(model_ptr->position_index().value(), 3, GL_FLOAT, false, sizeof(rengage::model::Vertex), (GLvoid*)0));
 			//ogl_invoker->invoke(glBindBuffer, ARGS(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO().value()));
-			mesh.bind();
+			//mesh.bind();
 			ogl_invoker->invoke(glDrawElements, ARGS(GL_TRIANGLES, mesh.indices().size(), GL_UNSIGNED_INT, nullptr));
 			//ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 		}

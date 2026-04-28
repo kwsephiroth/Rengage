@@ -89,9 +89,9 @@ namespace rengage::model {
 		// TODO: Parameterize the VAO generation so that it can be done at Model-level once for all meshes.
 		//unsigned int vao = 0;
 		static auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
-		//ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+		ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
 		m_vao = vao;
-		//ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
+		ogl_invoker->invoke(glBindVertexArray, ARGS(vao));//Bind VAO - associates following buffers/atrrib pointers with this vao's state.
 
 		//Generate buffer/array ids
 		GLuint vbo, ebo;

@@ -19,7 +19,7 @@ namespace rengage::model {
 		std::vector<unsigned int> m_indices;
 		std::vector<TexturePtr> m_textures;
 		bool m_initialized = false;
-		double m_depth = 0; 
+		double m_max_depth = 0; 
 
 		//IDs are only initialized when mesh is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
@@ -41,7 +41,7 @@ namespace rengage::model {
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }
 		const std::vector<TexturePtr>& Textures() const { return m_textures; }
-		double depth() const { return m_depth; }
+		double max_depth() const { return m_max_depth; }
 		void bind() const;
 	};
 }

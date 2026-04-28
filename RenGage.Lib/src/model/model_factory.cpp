@@ -37,10 +37,10 @@ namespace rengage::model {
 				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
 			}
 			// TODO: Sort meshes by depth. Temporary logic. Use ordered map to store meshes instead or sorting a vector.
-			std::sort(model_ptr->m_meshes.begin(), model_ptr->m_meshes.end(), [](const Mesh& mesh1, const Mesh& mesh2)
-				{
-					return mesh1.m_depth < mesh2.m_depth;
-				});
+			//std::sort(model_ptr->m_meshes.begin(), model_ptr->m_meshes.end(), [](const Mesh& mesh1, const Mesh& mesh2)
+			//	{
+			//		return mesh1.m_depth < mesh2.m_depth;
+			//	});
 			LOG_INFO("Model successfully loaded from path '" + params.file_path + "'.");
 		}
 		else {
@@ -205,7 +205,7 @@ namespace rengage::model {
 			}
 		}
 
-		rengage_mesh.m_depth = max_depth;
+		rengage_mesh.m_max_depth = max_depth;
 		rengage_mesh.m_initialized = true;
 		return rengage_mesh;
 	}
