@@ -16,7 +16,6 @@ namespace rengage::shader
 		std::unique_ptr<Shader> load_shader_from_source(const GLenum type, const std::string& source);
 
 	private:
-		std::shared_ptr<services::logging::ILogger> m_logger;
 		GLint compile_shader_source(const GLuint shader_id, const std::string& source, const std::string& filename = "");
 	};
 }

@@ -17,7 +17,6 @@ namespace rengage::model {
 	private:
 		bool load();
 		std::filesystem::path m_filepath;
-		std::shared_ptr<services::logging::ILogger> m_logger;
 		GLuint m_handle;// The Opengl texture handle
 		bool m_valid;
 	};

@@ -25,7 +25,6 @@ namespace rengage::shader
 
 		GLuint m_id;
 		bool m_is_valid = false;
-		std::shared_ptr<services::logging::ILogger> m_logger;
 	};
 }
 
