@@ -10,6 +10,15 @@ layout (location=2) in vec2 tex_coord;
 uniform mat4 mv_matrix; // Model-View matrix uniform
 uniform mat4 proj_matrix; // Projection matrix uniform
 
+struct Material
+{	vec4 ambient;  
+	vec4 diffuse;  
+	vec4 specular;  
+	float shininess;
+};
+uniform vec4 globalAmbient;
+uniform Material material;
+
 // Texture sampler uniform. 
 layout (binding=0) uniform sampler2D tex_sampler; // Binding 0 here indicates this sampler is to be associated with texture unit 0 (GL_TEXTURE0)
 

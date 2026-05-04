@@ -32,9 +32,9 @@ namespace rengage::model {
 			else {
 				// Generate a VAO.
 				GLuint vao = 0;
-				auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
-				ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
-				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);//Use default VAO object 0
+				//auto ogl_invoker = services::ServiceLocator::get_service<services::OGLInvoker>();
+				//ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &vao));
+				model_ptr->setup_VAO(vao, params.position_index, params.normal_index, params.tex_coord_index);
 			}
 			// TODO: Sort meshes by depth. Temporary logic. Use ordered map to store meshes instead or sorting a vector.
 			//std::sort(model_ptr->m_meshes.begin(), model_ptr->m_meshes.end(), [](const Mesh& mesh1, const Mesh& mesh2)
@@ -119,6 +119,11 @@ namespace rengage::model {
 				mesh.m_textures.emplace_back(existingTextureItr->second);
 			}
 		}
+		return true;
+	}
+
+	bool ModelFactory::init_materials(const aiMaterial& ai_material, Model& model, Mesh& mesh)
+	{
 		return true;
 	}
 

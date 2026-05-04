@@ -10,6 +10,7 @@ namespace rengage::model {
 	struct ModelParameters
 	{
 		std::string file_path;
+		std::string name;
 		GLint position_index;
 		GLint normal_index;
 		GLint tex_coord_index;
@@ -19,6 +20,7 @@ namespace rengage::model {
 	};
 
 	using TextureCache = std::unordered_map<std::string, TexturePtr>;
+	using MaterialCache = std::unordered_map<std::string, MaterialPtr>;
 
 	class Model
 	{
@@ -32,8 +34,9 @@ namespace rengage::model {
 		size_t m_total_indices = 0;
 		ModelParameters m_params;
 
-		//TODO: Refactor the texture cache member to be a service instead.
+		//TODO: Refactor cache members to be a service instead.
 		inline static TextureCache m_texture_cache; // Cache of loaded textures to avoid redundant texture loading.
+		inline static MaterialCache m_material_cache; // Cache of loaded materials to avoid redundant material loading.
 
 		//VAO should be generated ONLY after the model is successfully initialized.
 		std::optional<GLuint> m_vao = std::nullopt;//vertex attribute object(VAO) id
@@ -57,5 +60,6 @@ namespace rengage::model {
 		std::optional<GLuint> tex_coord_index() const { return m_tex_coord_index; }
 		const std::vector<Mesh>& meshes() const { return m_meshes; }
 		const ModelParameters& parameters() const { return m_params; }
+		const std::string& name() const { return m_params.name; }
 	};
 }

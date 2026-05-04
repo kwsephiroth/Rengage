@@ -7,9 +7,11 @@
 #include "../services/logging/logger_macros.h"
 #include "../services/service_locator.h"
 #include "texture.h"
+#include "material.h"
 
 namespace rengage::model {
 	using TexturePtr = std::shared_ptr<Texture>;
+	using MaterialPtr = std::shared_ptr<Material>;
 
 	class Mesh
 	{
@@ -18,6 +20,7 @@ namespace rengage::model {
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
 		std::vector<TexturePtr> m_textures;
+		std::vector<MaterialPtr> m_materials;
 		bool m_initialized = false;
 		double m_max_depth = 0; 
 
@@ -41,6 +44,7 @@ namespace rengage::model {
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }
 		const std::vector<TexturePtr>& Textures() const { return m_textures; }
+		const std::vector<MaterialPtr>& Materials() const { return m_materials; }
 		double max_depth() const { return m_max_depth; }
 		void bind() const;
 	};

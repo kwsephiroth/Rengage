@@ -23,11 +23,12 @@ namespace rengage::model {
 		std::unique_ptr<Model> build_model_from_scene(const aiScene& scene, const ModelParameters& params);
 		bool init_meshes(const aiScene& scene, Model& model);
 		bool init_textures(const aiMaterial& ai_material, Model& model, Mesh& mesh, std::filesystem::path textures_dir = "");
+		bool init_materials(const aiMaterial& ai_material, Model& model, Mesh& mesh);
 		void process_node(const aiNode& node, const aiScene& scene, Model& model);
 		Mesh generate_rengage_mesh(const aiMesh& ai_mesh);
 
 	public:
-		explicit ModelFactory() = default;
+		ModelFactory() = default;
 		std::unique_ptr<Model> load_model(const ModelParameters& params);
 	};
 }

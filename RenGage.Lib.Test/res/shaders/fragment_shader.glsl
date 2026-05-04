@@ -8,6 +8,15 @@ out vec4 color;
 uniform bool use_texture; // Flag to indicate whether to use texture or not
 uniform vec4 default_color; // Color uniform, used when not using texture
 
+struct Material
+{	vec4 ambient;  
+	vec4 diffuse;  
+	vec4 specular;  
+	float shininess;
+};
+uniform vec4 globalAmbient;
+uniform Material material;
+
 void main(void)
 {
 	if (use_texture)

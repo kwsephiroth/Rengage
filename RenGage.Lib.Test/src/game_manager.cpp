@@ -20,7 +20,7 @@ namespace forest_escape {
 				  100.0f, -0.02f,  100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 				 -100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
 				  100.0f, -0.02f, -100.0f,      // 0.0f, 1.0f, 0.0f, 1.0f,
-			};
+			}; 
 			glGenVertexArrays(1, &planeVAO);
 			glBindVertexArray(planeVAO);
 			glGenBuffers(1, &planeVBO);
@@ -34,7 +34,7 @@ namespace forest_escape {
 		void draw_plane()
 		{
 			glBindVertexArray(planeVAO);
-			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+			//glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 			glBindVertexArray(0);
 		}
@@ -171,9 +171,9 @@ namespace forest_escape {
 		//ogl_invoker->invoke(glGenVertexArrays, ARGS(1, &m_vao));
 		//planeVAO = m_vao;//TODO: Remove this later when plane is properly implemented as a model and not just hardcoded vertices in the GameManager.
 
-		rengage::model::ModelFactory model_factory{};
-		auto model = model_factory.load_model({
+		auto model = rengage::model::ModelFactory().load_model({
 			.file_path = "res/models/pine_tree.obj",
+			.name = "pine_tree",
 			.position_index = position_index,
 			.normal_index = normal_index,
 			.tex_coord_index = tex_coord_index,
@@ -187,19 +187,19 @@ namespace forest_escape {
 
 		m_models.emplace("pine_tree", std::move(model));
 
-		//model = model_factory.load_model({
-		//	.file_path = "res/models/bat.obj",
-		//	.position_index = position_index,
-		//	.normal_index = normal_index,
-		//	.tex_coord_index = tex_coord_index,
-		//	.vao = VAO,
-		//	.textures_dir = "res/textures"
-		//	});
+		model = rengage::model::ModelFactory().load_model({
+			.file_path = "res/models/bat.obj",
+			.name = "bat",
+			.position_index = position_index,
+			.normal_index = normal_index,
+			.tex_coord_index = tex_coord_index,
+			.textures_dir = "res/textures"
+			});
 
-		//if (!model || !model->initialized())
-		//	return false;
+		if (!model || !model->initialized())
+			return false;
 
-		//m_models.emplace("bat", std::move(model));
+		m_models.emplace("bat", std::move(model));
 
 		//TEST CODE ONLY // TODO: Remove later
 		setup_plane_vbo(position_index);
@@ -262,8 +262,20 @@ namespace forest_escape {
 
 	void GameManager::draw_frame()
 	{
+		static auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
+		static auto use_texture_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "use_texture"));
+		static auto default_color_location = ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "default_color"));
 		for (const auto& [_, model_ptr] : m_models)
 		{
+			if (model_ptr->name() == "bat")
+			{
+				ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 0));
+				ogl_invoker->invoke(glUniform4f, ARGS(default_color_location, 150.0f / 255.0f, 75.0f / 255.0f, 0.0f / 255.0f, 1.0f));
+			}
+			else
+			{
+				ogl_invoker->invoke(glUniform1i, ARGS(use_texture_location, 1));
+			}
 			m_renderer->draw_model(model_ptr);
 		}
 	}

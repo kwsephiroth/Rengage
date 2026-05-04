@@ -54,14 +54,22 @@ namespace forest_escape {
 			//TODO: Log error then return.
 		}
 
-		auto model_view_matrix =  m_camera->view_matrix() * model_ptr->model_matrix();
+		auto model_matrix = glm::mat4(1.0f);
+		if (model_ptr->name() == "bat")
+		{
+			model_matrix = glm::translate(model_matrix, glm::vec3{ 5.0f, 3.0f, -2.0f });
+			model_matrix *= glm::scale(model_matrix, glm::vec3{ 3.0f, 3.0f, 3.0f });
+		}
+
+		auto model_view_matrix = m_camera->view_matrix() * model_matrix;
+		//auto model_view_matrix =  m_camera->view_matrix() * model_ptr->model_matrix();
 		static auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
 		ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 
 		//Draw each mesh of the model.
 		//ogl_invoker->invoke(glBindVertexArray, ARGS(model_ptr->VAO().value()));
 		for (const auto& mesh : model_ptr->meshes())
-		{	
+		{
 			ogl_invoker->invoke(glBindVertexArray, ARGS(mesh.VAO().value()));
 			//if (const auto& textures = mesh.Textures(); !textures.empty())//TODO: Figure out why there can be more than one texture per mesh.
 			//{
@@ -77,5 +85,9 @@ namespace forest_escape {
 			ogl_invoker->invoke(glBindVertexArray, ARGS(0));
 		}
 		//ogl_invoker->invoke(glBindVertexArray, ARGS(0));
+
+		//Reset model matrix. Temporary logic. TODO: remove later.
+		model_view_matrix = m_camera->view_matrix() * glm::mat4{ 1.0f };
+		ogl_invoker->invoke(glUniformMatrix4fv, ARGS(m_mv_index, 1, GL_FALSE, glm::value_ptr(model_view_matrix)));
 	}
 }

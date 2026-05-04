@@ -25,6 +25,7 @@
     <ClInclude Include="inc\rengage.lib\interfaces\iobservable.h" />
     <ClInclude Include="inc\rengage.lib\interfaces\iobserver.h" />
     <ClInclude Include="inc\rengage.lib\interfaces\iservice.h" />
+    <ClInclude Include="inc\rengage.lib\model\material.h" />
     <ClInclude Include="inc\rengage.lib\model\mesh.h" />
     <ClInclude Include="inc\rengage.lib\model\model.h" />
     <ClInclude Include="inc\rengage.lib\model\model_factory.h" />
