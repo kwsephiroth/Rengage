@@ -124,6 +124,66 @@ namespace rengage::model {
 
 	bool ModelFactory::init_materials(const aiMaterial& ai_material, Model& model, Mesh& mesh)
 	{
+		aiString material_name = ai_material.GetName();
+		aiColor3D ambient_color;
+		aiColor3D diffuse_color;
+		aiColor3D specular_color;
+		double specular_exponent;
+		bool has_material_properties = false;
+
+		// Fill in material properties struct with whatever material properties we can get from the aiMaterial object.
+		MaterialProperties material_props{};
+		if (ai_material.Get(AI_MATKEY_COLOR_AMBIENT, ambient_color) == AI_SUCCESS)
+		{
+			material_props.ambient_color = { ambient_color.r, ambient_color.g, ambient_color.b };
+			//std::cout << "Loaded ambient color for material '" << material_name.C_Str() << "': "
+			//	<< ambient_color.r << ", " << ambient_color.g << ", " << ambient_color.b << std::endl;
+			has_material_properties = true;
+		}
+		if (ai_material.Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color) == AI_SUCCESS)
+		{
+			material_props.diffuse_color = { diffuse_color.r, diffuse_color.g, diffuse_color.b };
+			//std::cout << "Loaded diffuse color for material '" << material_name.C_Str() << "': "
+			//	<< diffuse_color.r << ", " << diffuse_color.g << ", " << diffuse_color.b << std::endl;
+			has_material_properties = true;
+		}
+		if (ai_material.Get(AI_MATKEY_COLOR_SPECULAR, specular_color) == AI_SUCCESS)
+		{
+			material_props.specular_component.color = { specular_color.r, specular_color.g, specular_color.b };
+			//std::cout << "Loaded specular color for material '" << material_name.C_Str() << "': "
+			//	<< specular_color.r << ", " << specular_color.g << ", " << specular_color.b << std::endl;
+			has_material_properties = true;
+		}
+		if (ai_material.Get(AI_MATKEY_SHININESS, specular_exponent) == AI_SUCCESS)
+		{
+			material_props.specular_component.exponent = specular_exponent;
+			//std::cout << "Loaded shininess for material '" << material_name.C_Str() << "': "
+				//<< specular_exponent << std::endl;
+			has_material_properties = true;
+		}
+
+		if (!has_material_properties)
+		{
+			LOG_WARNING("No material properties found for material '" + std::string(material_name.C_Str()) + "'.");
+			std::cout << "No material properties found for material '" << material_name.C_Str() << "'." << std::endl;
+			return false;
+		}
+
+		// Check if material with same name already exists in mesh's material collection before adding.
+		// We need to reuse existing material to avoid redundant material loading.
+		auto existingMaterialItr = model.m_material_cache.find(material_name.C_Str());
+		if (existingMaterialItr == model.m_material_cache.end()) // Material with same name not found
+		{
+			MaterialPtr material(new Material{ material_name.C_Str(), material_props });
+			LOG_INFO("Loaded material '" + std::string(material_name.C_Str()) + "'.");
+			std::cout << *material << std::endl;
+			auto newElementItr = model.m_material_cache.emplace(material_name.C_Str(), std::move(material));
+			mesh.m_materials.emplace_back(newElementItr.first->second);
+		}
+		else // Found an existing material with same name
+		{
+			mesh.m_materials.emplace_back(existingMaterialItr->second);
+		}
 		return true;
 	}
 
@@ -145,6 +205,7 @@ namespace rengage::model {
 			if (auto material_index = ai_mesh->mMaterialIndex; material_index >= 0) {
 				aiMaterial* ai_material = scene.mMaterials[material_index];
 				init_textures(*ai_material, model, rengage_mesh, textures_dir);
+				init_materials(*ai_material, model, rengage_mesh);
 			}
 
 			model.m_meshes.push_back(std::move(rengage_mesh));//Copy meshes that make up this parent node.
