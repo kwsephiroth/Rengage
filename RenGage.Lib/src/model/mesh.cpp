@@ -155,10 +155,10 @@ namespace rengage::model {
 		//ogl_invoker->invoke(glBufferData, ARGS(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW));
 
 
-		if (const auto& textures = Textures(); !textures.empty())//TODO: Figure out why there can be more than one texture per mesh.
+		if (textures().empty())//TODO: Figure out why there can be more than one texture per mesh.
 		{
 			//ogl_invoker->invoke(glActiveTexture, ARGS(GL_TEXTURE0));
-			ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, Textures()[0]->handle()));
+			ogl_invoker->invoke(glBindTexture, ARGS(GL_TEXTURE_2D, textures()[0]->handle()));
 		}
 
 		// TODO: Does this binding logic need to be done per draw call or just once after VBO/EBO setup?

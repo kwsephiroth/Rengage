@@ -43,8 +43,8 @@ namespace rengage::model {
 		std::optional<GLuint> VAO() const { return m_vao; }
 		std::optional<GLuint> EBO() const { return m_ebo; }
 		std::optional<GLuint> VBO() const { return m_vbo; }
-		const std::vector<TexturePtr>& Textures() const { return m_textures; }
-		const std::vector<MaterialPtr>& Materials() const { return m_materials; }
+		const std::vector<TexturePtr>& textures() const { return m_textures; }
+		const std::vector<MaterialPtr>& materials() const { return m_materials; }
 		double max_depth() const { return m_max_depth; }
 		void bind() const;
 	};

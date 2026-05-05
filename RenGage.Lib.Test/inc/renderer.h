@@ -24,6 +24,7 @@ namespace forest_escape {
 		float m_near_plane_distance = DEFAULT_NEAR_PLANE;
 		float m_far_plane_distance = DEFAULT_FAR_PLANE;
 		float m_aspect_ratio;
+		GLint m_program_id;
 		GLint m_mv_index;
 		GLint m_proj_index;
 		glm::mat4 m_proj_matrix;
@@ -33,9 +34,10 @@ namespace forest_escape {
 		void update_view_matrix(const glm::vec4& new_position);
 		void update_projection_matrix(const float new_aspect_ratio);
 		void draw_frame();
+		void apply_material(const rengage::model::Mesh& mesh);
 
 	public:
-		Renderer(GLint mv_index, GLint proj_index, float aspect_ratio);
+		Renderer(GLint program_id, GLint mv_index, GLint proj_index, float aspect_ratio);
 		~Renderer();
 		void draw_model(const ModelPtr& model_ptr);
 		void set_aspect_ratio(float aspect_ratio);

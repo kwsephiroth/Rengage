@@ -64,6 +64,7 @@ namespace forest_escape {
 		m_program->use();//Installs the program object as part of the current rendering state.
 		auto ogl_invoker = rengage::services::ServiceLocator::get_service<rengage::services::OGLInvoker>();
 		m_renderer = std::make_unique<Renderer>(
+			m_program_id,
 			ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "mv_matrix")),
 			ogl_invoker->get_invoke(glGetUniformLocation, ARGS(m_program_id, "proj_matrix")),
 			m_window->aspect_ratio()

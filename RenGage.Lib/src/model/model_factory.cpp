@@ -43,11 +43,15 @@ namespace rengage::model {
 			//	});
 			LOG_INFO("Model successfully loaded from path '" + params.file_path + "'.");
 		}
-		else {
+		else
+		{
 			std::string errorMsg = "Failed to load model from path '" + params.file_path + "' - ";
 			LOG_ERROR(errorMsg);
 			return nullptr;
 		}
+
+		const auto& texture_cache = model_ptr->m_texture_cache;
+		const auto& material_cache = model_ptr->m_material_cache;
 
 		return model_ptr;
 	}
@@ -136,29 +140,21 @@ namespace rengage::model {
 		if (ai_material.Get(AI_MATKEY_COLOR_AMBIENT, ambient_color) == AI_SUCCESS)
 		{
 			material_props.ambient_color = { ambient_color.r, ambient_color.g, ambient_color.b };
-			//std::cout << "Loaded ambient color for material '" << material_name.C_Str() << "': "
-			//	<< ambient_color.r << ", " << ambient_color.g << ", " << ambient_color.b << std::endl;
 			has_material_properties = true;
 		}
 		if (ai_material.Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color) == AI_SUCCESS)
 		{
 			material_props.diffuse_color = { diffuse_color.r, diffuse_color.g, diffuse_color.b };
-			//std::cout << "Loaded diffuse color for material '" << material_name.C_Str() << "': "
-			//	<< diffuse_color.r << ", " << diffuse_color.g << ", " << diffuse_color.b << std::endl;
 			has_material_properties = true;
 		}
 		if (ai_material.Get(AI_MATKEY_COLOR_SPECULAR, specular_color) == AI_SUCCESS)
 		{
 			material_props.specular_component.color = { specular_color.r, specular_color.g, specular_color.b };
-			//std::cout << "Loaded specular color for material '" << material_name.C_Str() << "': "
-			//	<< specular_color.r << ", " << specular_color.g << ", " << specular_color.b << std::endl;
 			has_material_properties = true;
 		}
 		if (ai_material.Get(AI_MATKEY_SHININESS, specular_exponent) == AI_SUCCESS)
 		{
 			material_props.specular_component.exponent = specular_exponent;
-			//std::cout << "Loaded shininess for material '" << material_name.C_Str() << "': "
-				//<< specular_exponent << std::endl;
 			has_material_properties = true;
 		}
 
