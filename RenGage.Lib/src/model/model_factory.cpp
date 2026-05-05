@@ -50,9 +50,6 @@ namespace rengage::model {
 			return nullptr;
 		}
 
-		const auto& texture_cache = model_ptr->m_texture_cache;
-		const auto& material_cache = model_ptr->m_material_cache;
-
 		return model_ptr;
 	}
 
